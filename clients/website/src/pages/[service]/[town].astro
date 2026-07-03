@@ -1,0 +1,108 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import TrustBar from '@/components/TrustBar.astro';
+import Testimonials from '@/components/Testimonials.astro';
+import FinancingBand from '@/components/FinancingBand.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import LeadForm from '@/components/LeadForm.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { serviceSchema, faqSchema, breadcrumbSchema } from '@/lib/schema';
+import { business } from '@/config/business';
+
+export async function getStaticPaths() {
+  const combos = await getCollection('combos');
+  return combos.map((entry) => ({
+    params: { service: entry.data.service, town: entry.data.town },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const service = await getEntry('services', entry.data.service);
+const town = await getEntry('towns', entry.data.town);
+if (!service || !town) throw new Error(`Missing refs for combo ${entry.id}`);
+
+const url = `/${entry.data.service}/${entry.data.town}/`;
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: service.data.title, url: `/${service.id}/` },
+  { name: town.data.town, url },
+];
+const nearby = (await getCollection('combos', (c) => c.data.service === entry.data.service && c.data.town !== entry.data.town)).slice(0, 10);
+const townNames = new Map((await getCollection('towns')).map((t) => [t.id, t.data.town]));
+---
+
+<Base
+  title={entry.data.metaTitle}
+  description={entry.data.metaDescription}
+  ogImage={town.data.image}
+  schemas={[
+    serviceSchema({
+      name: `${service.data.serviceName} in ${town.data.town}, NJ`,
+      description: entry.data.metaDescription,
+      url: `${business.url}${url}`,
+      areaName: `${town.data.town}, NJ`,
+    }),
+    faqSchema(entry.data.faqs),
+    breadcrumbSchema(crumbs),
+  ]}
+>
+  <section class="relative isolate overflow-hidden bg-navy-950 text-white">
+    <img src={town.data.image} alt="" class="absolute inset-0 -z-10 h-full w-full object-cover opacity-25" loading="eager" />
+    <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+      <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-300">
+        {town.data.town} · {town.data.county} County, NJ
+      </p>
+      <h1 class="h-display mt-4 max-w-3xl text-4xl sm:text-5xl">{entry.data.h1}</h1>
+      <p class="mt-5 max-w-2xl text-lg text-white/85">
+        Local crews. {business.license}. Free same-week estimates in {town.data.town}.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a href="#estimate" class="btn-gold">Get a Free Estimate</a>
+        <a href={business.phoneHref} class="btn-outline">Call {business.phone}</a>
+      </div>
+    </div>
+  </section>
+  <TrustBar />
+  <Breadcrumbs items={crumbs} />
+
+  <article class="prose-paragon mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <Content />
+  </article>
+
+  <Testimonials />
+  <FinancingBand />
+  <FaqAccordion faqs={entry.data.faqs} heading={`${service.data.serviceName} in ${town.data.town} — FAQs`} />
+
+  <section class="bg-navy-950 py-16" id="estimate">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6">
+      <LeadForm heading={`Free estimate in ${town.data.town}`} />
+    </div>
+  </section>
+
+  {
+    nearby.length > 0 && (
+      <nav class="mx-auto max-w-7xl px-4 py-10 sm:px-6" aria-label="Nearby service areas">
+        <h2 class="h-display text-xl text-navy-950">{service.data.serviceName} in nearby towns</h2>
+        <ul class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+          {nearby.map((c) => (
+            <li>
+              <a href={`/${c.data.service}/${c.data.town}/`} class="text-navy-800 hover:text-gold-600 hover:underline">
+                {townNames.get(c.data.town) ?? c.data.town}
+              </a>
+            </li>
+          ))}
+          <li>
+            <a href={`/service-areas/${town.id}/`} class="font-semibold text-navy-800 hover:text-gold-600 hover:underline">
+              All services in {town.data.town} →
+            </a>
+          </li>
+        </ul>
+      </nav>
+    )
+  }
+  <CtaBand />
+</Base>

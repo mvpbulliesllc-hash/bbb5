@@ -1,0 +1,21 @@
+---
+import { integrations } from '@/config/business';
+
+/**
+ * AI voice agent ("Paragon Assistant"). Renders the ElevenLabs
+ * Conversational AI widget when PUBLIC_ELEVENLABS_AGENT_ID is configured.
+ * The agent is prompted (in the ElevenLabs dashboard) to qualify roofing
+ * leads and hand off to the CRM capture endpoint via its webhook tool.
+ * See docs/voice-agent.md at the repo root of clients/website.
+ */
+const agentId = integrations.elevenLabsAgentId;
+---
+
+{
+  agentId && (
+    <>
+      <elevenlabs-convai agent-id={agentId} />
+      <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript" />
+    </>
+  )
+}

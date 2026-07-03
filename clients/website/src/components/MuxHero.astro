@@ -1,0 +1,90 @@
+---
+import { business, integrations } from '@/config/business';
+
+/**
+ * Homepage hero built around the "30 roofs in 30 days" drone reel
+ * (instagram.com/p/DYDPAwvvVZx).
+ *
+ * Rendering strategy, best-available first:
+ *  1. PUBLIC_MUX_PLAYBACK_ID set → <mux-player> streaming from Mux.
+ *  2. Local fallback video (public/media/hero-reel.mp4, fetched from the
+ *     original reel) → plain <video> loop.
+ *  3. Neither → static hero image.
+ * The video is decorative background: muted, looped, no controls in
+ * fallback mode, with a poster + reduced-motion respect.
+ */
+const muxId = integrations.muxPlaybackId;
+const heroHeadline = 'The Jersey Shore’s New Standard in Roofing & Exteriors';
+---
+
+<section class="relative isolate overflow-hidden bg-navy-950 text-white">
+  <div class="absolute inset-0 -z-10" aria-hidden="true">
+    {
+      muxId ? (
+        <mux-player
+          playback-id={muxId}
+          autoplay="muted"
+          loop
+          muted
+          preload="auto"
+          disable-tracking
+          poster="/media/hero-poster.jpg"
+          style="--controls: none; width: 100%; height: 100%; object-fit: cover; pointer-events: none;"
+        />
+      ) : (
+        <video
+          class="h-full w-full object-cover motion-reduce:hidden"
+          autoplay
+          muted
+          loop
+          playsinline
+          poster="/media/hero-poster.jpg"
+        >
+          <source src="/media/hero-reel.mp4" type="video/mp4" />
+        </video>
+      )
+    }
+    <img
+      src="/media/hero-poster.jpg"
+      alt=""
+      class="hidden h-full w-full object-cover motion-reduce:block"
+      loading="eager"
+    />
+    <div class="absolute inset-0 bg-gradient-to-b from-navy-950/80 via-navy-950/60 to-navy-950/90"></div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-4 pb-24 pt-20 sm:px-6 sm:pt-28 lg:pb-32">
+    <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-300">
+      Roofing · Siding · Windows · Doors · Decks
+    </p>
+    <h1 class="h-display mt-4 max-w-3xl text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">
+      {heroHeadline}
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg text-white/85">
+      {business.tagline} Family-run, {business.license} licensed &amp; insured, serving {business.areaServed} — with
+      workmanship that speaks from every ridge line.
+    </p>
+    <div class="mt-9 flex flex-wrap items-center gap-4">
+      <a href="/contact/" class="btn-gold text-lg" data-cta="hero-estimate">Get a Free Estimate</a>
+      <a href={business.phoneHref} class="btn-outline text-lg" data-cta="hero-call">
+        Call {business.phone}
+      </a>
+    </div>
+    <dl class="mt-12 grid max-w-2xl grid-cols-3 gap-6 border-t border-white/15 pt-8">
+      <div>
+        <dt class="text-xs uppercase tracking-wider text-white/60">Recent pace</dt>
+        <dd class="font-display text-2xl font-extrabold text-gold-300">30 roofs / 30 days</dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-wider text-white/60">Combined experience</dt>
+        <dd class="font-display text-2xl font-extrabold text-gold-300">55+ years</dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-wider text-white/60">Estimates</dt>
+        <dd class="font-display text-2xl font-extrabold text-gold-300">Always free</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+{muxId && <script>import '@mux/mux-player';</script>}

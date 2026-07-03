@@ -1,0 +1,40 @@
+{
+  "$comment": "Source URLs for site media. Consumed by .github/workflows/fetch-assets.yml, which downloads, optimizes, and commits these into clients/website/public/media/. Wix URLs are the original first-party project photos from the previous site; CloudFront URLs are brand imagery generated for the rebuild and the hero reel (re-hosted from instagram.com/p/DYDPAwvvVZx/).",
+  "images": [
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093756_11408851-9ce2-49ad-a66c-1c0c941b538e.png", "dest": "hero-poster.jpg", "width": 1920 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093757_9021dbef-7184-40d1-a65e-6ff9a32996d0.png", "dest": "og-default.jpg", "width": 1200 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093759_3e99b222-d765-4d23-97ce-accec734ff3d.png", "dest": "service-roof-replacement.jpg", "width": 1280 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093952_0651eca0-eaaf-49a6-8966-beb00868cbee.png", "dest": "service-roof-repair.jpg", "width": 1280 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093810_aba8c335-cfc5-461f-a99d-e009f4c77fb4.png", "dest": "service-siding.jpg", "width": 1280 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093811_c13ba93f-d8fa-4120-b851-db41458fd3c0.png", "dest": "service-windows.jpg", "width": 1280 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093827_0b3cc5fe-e2ea-41a7-815e-ce463eb615a3.png", "dest": "service-doors.jpg", "width": 1280 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093829_a2b86eb0-8459-437f-8f6d-61be6628affa.png", "dest": "service-decks.jpg", "width": 1280 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093912_2632ca15-bcac-4163-95ad-06a12a10cf0a.png", "dest": "service-gutters.jpg", "width": 1280 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093913_0cf20522-74aa-418a-83fa-2026618c8bc7.png", "dest": "service-commercial.jpg", "width": 1280 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093926_d295e35b-993d-40cc-9d0c-fd9e728e88e8.png", "dest": "service-storm-damage.jpg", "width": 1280 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093927_ea72e187-7953-4805-8eb0-f59031c5e39b.png", "dest": "area-coastal.jpg", "width": 1600 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093954_514b7ea0-78b2-4200-903f-1ca9b3215707.png", "dest": "area-wooded.jpg", "width": 1600 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093938_7568e8c7-638f-4025-8fb4-dce3a1b07eae.png", "dest": "area-suburban.jpg", "width": 1600 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093936_60aca600-779f-4cd3-a3be-d1dbfe198b28.png", "dest": "about-crew.jpg", "width": 1600 },
+    { "url": "https://static.wixstatic.com/media/e699bb_1815ab23d81a4e18ab759a21032d20fc~mv2.jpg", "dest": "projects/project-01.jpg", "width": 1200 },
+    { "url": "https://static.wixstatic.com/media/e699bb_d00db8d2478a42abb8dc4a690fd238a8~mv2.jpg", "dest": "projects/project-02.jpg", "width": 1200 },
+    { "url": "https://static.wixstatic.com/media/e699bb_9cc1756b995f461c97b46179a7f47f73~mv2.jpg", "dest": "projects/project-03.jpg", "width": 1200 },
+    { "url": "https://static.wixstatic.com/media/e699bb_ef0bec0fe6574985bd2dee262c592cfa~mv2.jpg", "dest": "projects/project-04.jpg", "width": 1200 },
+    { "url": "https://static.wixstatic.com/media/e699bb_97b6a7dbded84e3f8f4b6005e63d6894~mv2.jpg", "dest": "projects/project-05.jpg", "width": 1200 },
+    { "url": "https://static.wixstatic.com/media/e699bb_81a3a1d871984578a42a21b580010b2f~mv2.jpg", "dest": "projects/project-06.jpg", "width": 1200 },
+    { "url": "https://static.wixstatic.com/media/e699bb_883047320d874601be25428349e4c0f4~mv2.jpg", "dest": "projects/project-07.jpg", "width": 1200 },
+    { "url": "https://static.wixstatic.com/media/e699bb_996849fd832b47fe92ddd593595c0f8d~mv2.jpg", "dest": "projects/project-08.jpg", "width": 1200 },
+    { "url": "https://static.wixstatic.com/media/e699bb_a12c5ad7c9764a289ebbcf779ec7666a~mv2.jpg", "dest": "projects/project-09.jpg", "width": 1200 },
+    { "url": "https://static.wixstatic.com/media/e699bb_4f429f8707ce4a24a348bcdf1eba7cfc~mv2.png", "dest": "logo.png", "width": 400, "keepFormat": true },
+    { "url": "https://static.wixstatic.com/media/88aac0_ce326710d21542229e624c3b6ed5dcd1~mv2.png", "dest": "logo-mark.png", "width": 350, "keepFormat": true },
+    { "url": "https://static.wixstatic.com/media/e699bb_79ab86802d1b45bf931f45f7606d6784~mv2.png", "dest": "team-joe.jpg", "width": 800 },
+    { "url": "https://static.wixstatic.com/media/e699bb_caccc16527904912934ad58e27c5f0c3~mv2.jpg", "dest": "team-franchi.jpg", "width": 800 }
+  ],
+  "videos": [
+    {
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/031472f1-c39d-4f62-9d22-8c57b8d89848.mp4",
+      "dest": "hero-reel.mp4",
+      "note": "The '30 roofs in 30 days' Instagram reel (instagram.com/p/DYDPAwvvVZx). Local fallback for the Mux hero; also the file to upload to Mux for the real playback ID."
+    }
+  ]
+}

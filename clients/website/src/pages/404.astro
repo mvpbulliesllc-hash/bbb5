@@ -1,0 +1,20 @@
+---
+import Base from '@/layouts/Base.astro';
+import { business } from '@/config/business';
+---
+
+<Base title="Page Not Found | Paragon Exteriors" description="That page blew off in the storm." noindex>
+  <section class="mx-auto flex max-w-3xl flex-col items-center px-4 py-24 text-center sm:px-6">
+    <p class="font-display text-7xl font-extrabold text-gold-500">404</p>
+    <h1 class="h-display mt-4 text-3xl text-navy-950">This page blew off in the last nor'easter.</h1>
+    <p class="mt-4 max-w-md text-navy-900/75">
+      Unlike your roof, we can't fix this one. Here's where you probably wanted to go:
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-4">
+      <a href="/" class="btn-navy">Home</a>
+      <a href="/services/" class="btn-navy">Services</a>
+      <a href="/contact/" class="btn-gold">Free Estimate</a>
+    </div>
+    <p class="mt-8 text-sm text-navy-900/60">Or call us: <a href={business.phoneHref} class="font-bold">{business.phone}</a></p>
+  </section>
+</Base>

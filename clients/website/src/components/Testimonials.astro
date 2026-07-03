@@ -1,0 +1,52 @@
+---
+/** Real reviews carried over from the previous site. */
+const reviews = [
+  {
+    quote:
+      'From the initial meeting with Joe and Frank, all the way through the completion of our new roof and chimney cap, the process was seamless. Their team is professional, showed up when they said, delivered on all deadlines and the clean up was impeccable. The workmanship and warranty far exceeded anything we were offered by the other roofing companies.',
+    name: 'Rob & Linda',
+    detail: 'Roof replacement',
+  },
+  {
+    quote:
+      'We are extremely satisfied with the work done by Paragon Exteriors. Their team was professional, efficient, and the results exceeded our expectations.',
+    name: 'Dan Marone',
+    detail: 'Exterior renovation',
+  },
+  {
+    quote:
+      'Professionalism, reliability, and excellence define the people at Paragon Exteriors. They transformed our roof with skill and precision.',
+    name: "Lisa O'Neill",
+    detail: 'Roof replacement',
+  },
+];
+---
+
+<section class="bg-navy-950 py-16" aria-label="Customer reviews">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
+    <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-300">Homeowners on Paragon</p>
+    <h2 class="h-display mt-3 text-3xl text-white sm:text-4xl">Our neighbors say it best</h2>
+    <div class="mt-10 grid gap-6 lg:grid-cols-3">
+      {
+        reviews.map((r) => (
+          <figure class="flex flex-col justify-between rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
+            <div>
+              <div class="flex gap-1 text-gold-400" aria-label="5 out of 5 stars">
+                {Array.from({ length: 5 }).map(() => (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" />
+                  </svg>
+                ))}
+              </div>
+              <blockquote class="mt-4 leading-relaxed text-white/85">“{r.quote}”</blockquote>
+            </div>
+            <figcaption class="mt-5 border-t border-white/10 pt-4">
+              <p class="font-display font-bold text-white">{r.name}</p>
+              <p class="text-sm text-white/60">{r.detail}</p>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>

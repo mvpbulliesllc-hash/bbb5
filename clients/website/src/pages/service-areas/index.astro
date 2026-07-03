@@ -1,0 +1,27 @@
+---
+import Base from '@/layouts/Base.astro';
+import TownGrid from '@/components/TownGrid.astro';
+import Testimonials from '@/components/Testimonials.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { breadcrumbSchema } from '@/lib/schema';
+import { business } from '@/config/business';
+---
+
+<Base
+  title="Service Areas | Roofing Contractor for Ocean & Monmouth County NJ"
+  description="Paragon Exteriors serves the entire Jersey Shore: Toms River, Brick, Jackson, Lakewood, Howell, Freehold, Point Pleasant, Manahawkin and 20+ more NJ towns. Find your town."
+  schemas={[breadcrumbSchema([{ name: 'Home', url: '/' }, { name: 'Service Areas', url: '/service-areas/' }])]}
+>
+  <section class="bg-navy-950 py-16 text-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <h1 class="h-display text-4xl sm:text-5xl">Where we work</h1>
+      <p class="mt-4 max-w-2xl text-lg text-white/80">
+        Based at the Jersey Shore and serving {business.areaServed}. Pick your town for local pricing notes, recent
+        projects nearby, and answers specific to your neighborhood's housing stock.
+      </p>
+    </div>
+  </section>
+  <TownGrid heading="Find your town" />
+  <Testimonials />
+  <CtaBand />
+</Base>

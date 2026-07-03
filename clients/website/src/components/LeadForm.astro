@@ -1,0 +1,186 @@
+---
+import { business, integrations } from '@/config/business';
+
+interface Props {
+  /** Pre-select a service, e.g. from a service page CTA. */
+  service?: string;
+  heading?: string;
+  id?: string;
+}
+
+const { service = '', heading = 'Get your free estimate', id = 'lead-form' } = Astro.props;
+const services = [
+  ['Roofing', 'Roofing'],
+  ['RoofRepair', 'Roof Repair'],
+  ['RoofReplacement', 'Roof Replacement'],
+  ['Siding', 'Siding'],
+  ['Windows', 'Windows'],
+  ['Doors', 'Doors'],
+  ['Decks', 'Decks'],
+  ['Gutters', 'Gutters'],
+  ['Commercial', 'Commercial'],
+  ['Other', 'Something else'],
+] as const;
+---
+
+<div class="rounded-2xl bg-white p-6 shadow-lift ring-1 ring-navy-100 sm:p-8" id={id}>
+  <h2 class="h-display text-2xl text-navy-950">{heading}</h2>
+  <p class="mt-1 text-sm text-navy-900/70">
+    Tell us about your project — we respond fast, usually the same day.
+  </p>
+
+  <form
+    class="mt-6 grid gap-4 sm:grid-cols-2"
+    data-lead-form
+    data-endpoint={integrations.leadsApi}
+    data-tenant={integrations.tenant}
+    novalidate
+  >
+    <div>
+      <label for={`${id}-first`} class="mb-1 block text-sm font-semibold">First name *</label>
+      <input id={`${id}-first`} name="firstName" required autocomplete="given-name" class="w-full rounded-lg border border-navy-200 px-3.5 py-2.5 focus:border-gold-500 focus:outline-none" />
+    </div>
+    <div>
+      <label for={`${id}-last`} class="mb-1 block text-sm font-semibold">Last name *</label>
+      <input id={`${id}-last`} name="lastName" required autocomplete="family-name" class="w-full rounded-lg border border-navy-200 px-3.5 py-2.5 focus:border-gold-500 focus:outline-none" />
+    </div>
+    <div>
+      <label for={`${id}-phone`} class="mb-1 block text-sm font-semibold">Phone *</label>
+      <input id={`${id}-phone`} name="phone" type="tel" required autocomplete="tel" class="w-full rounded-lg border border-navy-200 px-3.5 py-2.5 focus:border-gold-500 focus:outline-none" />
+    </div>
+    <div>
+      <label for={`${id}-email`} class="mb-1 block text-sm font-semibold">Email</label>
+      <input id={`${id}-email`} name="email" type="email" autocomplete="email" class="w-full rounded-lg border border-navy-200 px-3.5 py-2.5 focus:border-gold-500 focus:outline-none" />
+    </div>
+    <div class="sm:col-span-2">
+      <label for={`${id}-address`} class="mb-1 block text-sm font-semibold">Project address (town/zip)</label>
+      <input id={`${id}-address`} name="address" autocomplete="street-address" class="w-full rounded-lg border border-navy-200 px-3.5 py-2.5 focus:border-gold-500 focus:outline-none" />
+    </div>
+    <div>
+      <label for={`${id}-service`} class="mb-1 block text-sm font-semibold">What do you need? *</label>
+      <select id={`${id}-service`} name="serviceType" required class="w-full rounded-lg border border-navy-200 bg-white px-3.5 py-2.5 focus:border-gold-500 focus:outline-none">
+        {services.map(([value, label]) => <option value={value} selected={value === service}>{label}</option>)}
+      </select>
+    </div>
+    <div>
+      <label for={`${id}-contact`} class="mb-1 block text-sm font-semibold">Preferred contact</label>
+      <select id={`${id}-contact`} name="preferredContactMethod" class="w-full rounded-lg border border-navy-200 bg-white px-3.5 py-2.5 focus:border-gold-500 focus:outline-none">
+        <option value="Phone">Phone</option>
+        <option value="Text">Text</option>
+        <option value="Email">Email</option>
+      </select>
+    </div>
+    <div class="sm:col-span-2">
+      <label for={`${id}-message`} class="mb-1 block text-sm font-semibold">Tell us more</label>
+      <textarea id={`${id}-message`} name="message" rows="3" class="w-full rounded-lg border border-navy-200 px-3.5 py-2.5 focus:border-gold-500 focus:outline-none"></textarea>
+    </div>
+    <!-- Honeypot: bots fill this, humans never see it -->
+    <input type="text" name="company" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+    <div class="sm:col-span-2">
+      <button type="submit" class="btn-gold w-full text-lg" data-cta="lead-submit">Request My Free Estimate</button>
+      <p class="mt-3 text-center text-xs text-navy-900/60">
+        No spam, no pressure. Or just call <a href={business.phoneHref} class="font-bold text-navy-800">{business.phone}</a>.
+      </p>
+      <p class="mt-2 hidden rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800" data-form-error>
+        Something went wrong sending your request — please call us at {business.phone} and we'll take care of you.
+      </p>
+    </div>
+  </form>
+</div>
+
+<script>
+  // UTM/referrer attribution: first-touch params persist in localStorage so
+  // the lead carries campaign data even when the form is submitted from a
+  // different page than the landing page.
+  const ATTR_KEY = 'paragon-attribution';
+  try {
+    const params = new URLSearchParams(location.search);
+    const utm = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+    if (utm.some((k) => params.has(k)) && !localStorage.getItem(ATTR_KEY)) {
+      localStorage.setItem(
+        ATTR_KEY,
+        JSON.stringify({
+          utmSource: params.get('utm_source'),
+          utmMedium: params.get('utm_medium'),
+          utmCampaign: params.get('utm_campaign'),
+          utmTerm: params.get('utm_term'),
+          utmContent: params.get('utm_content'),
+          landingPage: location.pathname,
+          referrer: document.referrer || null,
+        })
+      );
+    }
+  } catch {
+    /* storage unavailable — attribution is best-effort */
+  }
+
+  document.querySelectorAll<HTMLFormElement>('form[data-lead-form]').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+      if (data.company) return; // honeypot tripped
+      delete data.company;
+
+      let attribution: Record<string, string | null> = {};
+      try {
+        attribution = JSON.parse(localStorage.getItem(ATTR_KEY) ?? '{}');
+      } catch {
+        /* ignore */
+      }
+
+      const endpoint = form.dataset.endpoint;
+      const payload = {
+        ...data,
+        source: 'Website',
+        landingPage: attribution.landingPage ?? location.pathname,
+        referrer: attribution.referrer ?? document.referrer ?? null,
+        utmSource: attribution.utmSource ?? null,
+        utmMedium: attribution.utmMedium ?? null,
+        utmCampaign: attribution.utmCampaign ?? null,
+        utmTerm: attribution.utmTerm ?? null,
+        utmContent: attribution.utmContent ?? null,
+      };
+
+      const errorBox = form.querySelector<HTMLElement>('[data-form-error]');
+      const button = form.querySelector<HTMLButtonElement>('button[type=submit]');
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Sending…';
+      }
+
+      try {
+        if (endpoint) {
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              // FSH.Starter CRM resolves the tenant from this header (Finbuckle).
+              tenant: form.dataset.tenant ?? 'root',
+            },
+            body: JSON.stringify(payload),
+          });
+          if (!res.ok) throw new Error(`Lead API returned ${res.status}`);
+        } else {
+          // No CRM endpoint configured yet: fall back to a pre-filled email.
+          const body = encodeURIComponent(
+            Object.entries(payload)
+              .filter(([, v]) => v)
+              .map(([k, v]) => `${k}: ${v}`)
+              .join('\n')
+          );
+          location.href = `mailto:Paragonexteriors.co@gmail.com?subject=${encodeURIComponent('Website estimate request')}&body=${body}`;
+        }
+        window.gtag?.('event', 'generate_lead', { method: 'lead_form' });
+        location.href = '/thank-you/';
+      } catch (err) {
+        console.error(err);
+        errorBox?.classList.remove('hidden');
+        if (button) {
+          button.disabled = false;
+          button.textContent = 'Request My Free Estimate';
+        }
+      }
+    });
+  });
+</script>

@@ -1,0 +1,90 @@
+---
+import Base from '@/layouts/Base.astro';
+import TrustBar from '@/components/TrustBar.astro';
+import Testimonials from '@/components/Testimonials.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { business } from '@/config/business';
+import { breadcrumbSchema } from '@/lib/schema';
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'About', url: '/about/' },
+];
+---
+
+<Base
+  title="About Paragon Exteriors LLC | Family-Run NJ Roofing Contractor"
+  description="Meet Joe Ballaccomo & Franchi Vacchiano — 55+ combined years of roofing and construction experience behind the Jersey Shore's most trusted family-run exterior contractor."
+  schemas={[breadcrumbSchema(crumbs)]}
+>
+  <section class="bg-navy-950 py-16 text-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-300">Our story</p>
+      <h1 class="h-display mt-4 max-w-3xl text-4xl sm:text-5xl">Family-run. Craft-obsessed. Jersey through and through.</h1>
+      <p class="mt-5 max-w-2xl text-lg text-white/85">{business.tagline}</p>
+    </div>
+  </section>
+  <TrustBar />
+  <Breadcrumbs items={crumbs} />
+
+  <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+    <div class="prose-paragon">
+      <p>
+        Paragon Exteriors is a trusted contractor specializing in residential and commercial exterior solutions —
+        roofing, siding, windows, doors, and decks. With a focus on quality workmanship, attention to detail, and
+        durable materials, our experienced team delivers exceptional results on every project, every time.
+      </p>
+      <p>
+        We're not a franchise and we're not a sales operation with subcontracted crews. We're a family business built
+        on two lifetimes in construction, and our name goes on every roof we install. That's why our commitment to
+        excellence drives us to go above and beyond — from roof installations to brand-new decks — ensuring each job is
+        completed with the highest standards of craftsmanship and professionalism.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-sand-50 py-14">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <h2 class="h-display text-3xl text-navy-950">Meet the partners</h2>
+      <div class="mt-8 grid gap-8 md:grid-cols-2">
+        {
+          business.founders.map((f, i) => (
+            <div class="overflow-hidden rounded-2xl bg-white ring-1 ring-sand-200">
+              <img
+                src={i === 0 ? '/media/team-joe.jpg' : '/media/team-franchi.jpg'}
+                alt={`${f.name}, ${f.role} of Paragon Exteriors`}
+                width="800"
+                height="690"
+                loading="lazy"
+                class="aspect-[7/6] w-full object-cover object-top"
+              />
+              <div class="p-8">
+                <h3 class="h-display text-2xl text-navy-950">{f.name}</h3>
+                <p class="mt-1 font-display text-sm font-bold uppercase tracking-wider text-gold-600">{f.role}</p>
+                <p class="mt-4 leading-relaxed text-navy-900/80">{f.bio}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <div class="mt-10 grid gap-6 rounded-2xl bg-navy-950 p-8 text-white md:grid-cols-3">
+        <div>
+          <p class="font-display text-3xl font-extrabold text-gold-300">55+ years</p>
+          <p class="mt-1 text-sm text-white/70">combined construction experience</p>
+        </div>
+        <div>
+          <p class="font-display text-3xl font-extrabold text-gold-300">30 roofs / 30 days</p>
+          <p class="mt-1 text-sm text-white/70">our record pace, quality intact</p>
+        </div>
+        <div>
+          <p class="font-display text-3xl font-extrabold text-gold-300">{business.license}</p>
+          <p class="mt-1 text-sm text-white/70">licensed & fully insured</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Testimonials />
+  <CtaBand heading="Work with a crew that treats your home like family" />
+</Base>

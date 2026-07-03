@@ -1,0 +1,60 @@
+name: Fetch Website Assets
+
+# One-shot utility: downloads the media in clients/website/scripts/asset-manifest.json
+# (brand imagery, real project photos from the previous site, the hero reel),
+# optimizes it, and commits it to the branch it was dispatched on. Exists because
+# the remote dev environment cannot reach these CDNs directly, while Actions
+# runners can.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick ffmpeg jq
+
+      - name: Download and optimize images
+        working-directory: clients/website
+        run: |
+          set -euo pipefail
+          mkdir -p public/media/projects tmp-assets
+          jq -c '.images[]' scripts/asset-manifest.json | while read -r item; do
+            url=$(echo "$item" | jq -r .url)
+            dest=$(echo "$item" | jq -r .dest)
+            width=$(echo "$item" | jq -r '.width // 1600')
+            keep=$(echo "$item" | jq -r '.keepFormat // false')
+            echo "→ $dest"
+            curl -fsSL --retry 3 -A "Mozilla/5.0 (compatible; ParagonAssetFetcher/1.0)" -o "tmp-assets/src" "$url"
+            if [ "$keep" = "true" ]; then
+              convert "tmp-assets/src" -resize "${width}>" "public/media/$dest"
+            else
+              convert "tmp-assets/src" -resize "${width}>" -quality 82 -strip "public/media/$dest"
+            fi
+          done
+          rm -rf tmp-assets
+
+      - name: Download and compress hero reel
+        working-directory: clients/website
+        run: |
+          set -euo pipefail
+          url=$(jq -r '.videos[0].url' scripts/asset-manifest.json)
+          curl -fsSL --retry 3 -o hero-src.mp4 "$url"
+          ffmpeg -y -i hero-src.mp4 -vf "scale='min(1280,iw)':-2" -c:v libx264 -crf 27 -preset slow -movflags +faststart -an public/media/hero-reel.mp4
+          rm hero-src.mp4
+          ls -la public/media/hero-reel.mp4
+
+      - name: Commit assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add clients/website/public/media
+          git diff --cached --quiet && echo "No changes" || git commit -m "chore(website): fetch and optimize media assets"
+          git push

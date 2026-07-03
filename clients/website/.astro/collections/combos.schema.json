@@ -1,0 +1,58 @@
+{
+  "$ref": "#/definitions/combos",
+  "definitions": {
+    "combos": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "type": "string"
+        },
+        "town": {
+          "type": "string"
+        },
+        "metaTitle": {
+          "type": "string"
+        },
+        "metaDescription": {
+          "type": "string",
+          "maxLength": 175
+        },
+        "h1": {
+          "type": "string"
+        },
+        "faqs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "q": {
+                "type": "string"
+              },
+              "a": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "q",
+              "a"
+            ],
+            "additionalProperties": false
+          },
+          "default": []
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "service",
+        "town",
+        "metaTitle",
+        "metaDescription",
+        "h1"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

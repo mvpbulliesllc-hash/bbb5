@@ -1,0 +1,24 @@
+---
+import { business } from '@/config/business';
+
+const items = [
+  { label: business.license, sub: 'NJ licensed contractor' },
+  { label: 'Fully Insured', sub: 'Liability & workers comp' },
+  { label: 'Financing Available', sub: 'Flexible monthly payments' },
+  { label: 'Residential + Commercial', sub: 'Homes, HOAs & businesses' },
+  { label: 'Free Estimates', sub: 'Fast, honest quotes' },
+];
+---
+
+<section class="border-b border-sand-200 bg-sand-50" aria-label="Credentials">
+  <div class="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-4 px-4 py-6 sm:px-6 md:grid-cols-5">
+    {
+      items.map((item) => (
+        <div class="text-center">
+          <p class="font-display text-sm font-extrabold text-navy-900">{item.label}</p>
+          <p class="mt-0.5 text-xs text-navy-900/60">{item.sub}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>
