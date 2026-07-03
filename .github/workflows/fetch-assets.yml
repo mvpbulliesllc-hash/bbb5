@@ -8,12 +8,18 @@ name: Fetch Website Assets
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'clients/website/scripts/asset-manifest.json'
+      - '.github/workflows/fetch-assets.yml'
 
 permissions:
   contents: write
 
 jobs:
   fetch:
+    # Never auto-commit media onto main; run there only via manual dispatch.
+    if: github.event_name == 'workflow_dispatch' || github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
