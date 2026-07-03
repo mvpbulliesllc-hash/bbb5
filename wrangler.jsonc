@@ -1,0 +1,19 @@
+{
+  // Cloudflare Workers Builds config for the connected "bbb5" Workers project.
+  // Builds the Paragon Exteriors marketing site and serves it as static assets.
+  // The Git integration runs `npx wrangler deploy`, which executes the custom
+  // build below and then uploads clients/website/dist.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bbb5",
+  "compatibility_date": "2026-06-01",
+  "assets": {
+    "directory": "./clients/website/dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "build": {
+    "command": "npm ci --no-audit --no-fund && npm run build",
+    "cwd": "clients/website",
+    "watch_dir": "clients/website/src"
+  }
+}

@@ -77,6 +77,15 @@ export const WebhooksPermissions = Object.freeze({
   },
 } as const);
 
+export const CrmPermissions = Object.freeze({
+  Leads: {
+    View: "Permissions.Leads.View",
+    Update: "Permissions.Leads.Update",
+    UpdateStatus: "Permissions.Leads.UpdateStatus",
+    Note: "Permissions.Leads.Note",
+  },
+} as const);
+
 // ─── Catalog (drives the Role editor) ───────────────────────────────────
 
 export type PermissionEntry = {
@@ -181,6 +190,16 @@ export const PERMISSION_CATALOG: readonly PermissionGroup[] = [
       { name: WebhooksPermissions.Subscriptions.Create, description: "Create webhook subscriptions" },
       { name: WebhooksPermissions.Subscriptions.Delete, description: "Delete webhook subscriptions" },
       { name: WebhooksPermissions.Subscriptions.Test, description: "Send test webhook deliveries" },
+    ],
+  },
+  {
+    category: "Leads",
+    blurb: "Work the CRM lead pipeline — inspect, move, and annotate captured leads.",
+    entries: [
+      { name: CrmPermissions.Leads.View, description: "View leads & pipeline analytics", basic: true },
+      { name: CrmPermissions.Leads.Update, description: "Edit lead contact & job details" },
+      { name: CrmPermissions.Leads.UpdateStatus, description: "Move leads through the pipeline" },
+      { name: CrmPermissions.Leads.Note, description: "Add notes to leads" },
     ],
   },
 ];

@@ -38,6 +38,10 @@ export const ADMIN_PERMS = [
   "Permissions.Webhooks.Create",
   "Permissions.Webhooks.Delete",
   "Permissions.Webhooks.Test",
+  "Permissions.Leads.View",
+  "Permissions.Leads.Update",
+  "Permissions.Leads.UpdateStatus",
+  "Permissions.Leads.Note",
 ] as const;
 
 export const ADMIN_PROFILE = {

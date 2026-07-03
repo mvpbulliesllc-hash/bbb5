@@ -10,6 +10,7 @@ import { NotFoundPage } from "@/pages/not-found";
 import {
   AuditingPermissions,
   BillingPermissions,
+  CrmPermissions,
   IdentityPermissions,
   MultitenancyPermissions,
   WebhooksPermissions,
@@ -38,6 +39,7 @@ const PlansListPage = lazyNamed(() => import("@/pages/billing/plans-list"), "Pla
 const InvoicesListPage = lazyNamed(() => import("@/pages/billing/invoices-list"), "InvoicesListPage");
 const InvoiceDetailPage = lazyNamed(() => import("@/pages/billing/invoice-detail"), "InvoiceDetailPage");
 const AuditsListPage = lazyNamed(() => import("@/pages/audits/list"), "AuditsListPage");
+const LeadsListPage = lazyNamed(() => import("@/pages/leads/list"), "LeadsListPage");
 const HealthPage = lazyNamed(() => import("@/pages/health/page"), "HealthPage");
 const ImpersonationListPage = lazyNamed(() => import("@/pages/impersonation/list"), "ImpersonationListPage");
 const WebhooksListPage = lazyNamed(() => import("@/pages/webhooks/list"), "WebhooksListPage");
@@ -166,6 +168,21 @@ export const router = createBrowserRouter([
               { path: "invoices", element: <InvoicesListPage /> },
               { path: "invoices/:invoiceId", element: <InvoiceDetailPage /> },
             ],
+          },
+
+          // Leads — CRM pipeline. Detail opens as a side sheet on the list
+          // page; redirect any bookmarked /leads/:id links back to /leads.
+          {
+            path: "leads",
+            element: (
+              <RouteGuard perms={[CrmPermissions.Leads.View]}>
+                <LeadsListPage />
+              </RouteGuard>
+            ),
+          },
+          {
+            path: "leads/:id",
+            element: <Navigate to="/leads" replace />,
           },
 
           // Impersonation
