@@ -55,4 +55,4 @@ Middletown's defining quirk is water on two sides. To the north, the bayshore to
 
 ## Nearby
 
-We cover this whole corner of Monmouth County: [Red Bank](/service-areas/red-bank/) across the Swimming River, [Rumson](/service-areas/rumson/) and [Fair Haven](/service-areas/fair-haven/) over the Oceanic Bridge, and [Holmdel](/service-areas/holmdel/) next door — often on the same week's schedule.
+We cover this whole corner of Monmouth County: [Red Bank](/service-areas/red-bank/) across the Navesink, [Rumson](/service-areas/rumson/) and [Fair Haven](/service-areas/fair-haven/) over the Oceanic Bridge, and [Holmdel](/service-areas/holmdel/) next door — often on the same week's schedule.

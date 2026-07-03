@@ -2,60 +2,62 @@
 town: 'Marlboro'
 county: 'Monmouth'
 metaTitle: 'Roofing Contractor Marlboro NJ | Paragon Exteriors'
-metaDescription: 'Marlboro NJ roofing contractor: roof replacement, repair, siding & gutters. Licensed NJ HIC #13VH13814500, most roofs done in a day. Free estimate: 848-633-6440.'
+metaDescription: 'Marlboro NJ roofing & exteriors: one-day roof replacement, repair, siding & gutters for the township''s big colonials. NJ HIC #13VH13814500. Call 848-633-6440.'
 zipCodes: ['07746', '07751']
 neighborhoods: ['Morganville', 'Robertsville', 'Wickatunk', 'Bradevelt', 'Marlboro Village']
 landmarks: ['Big Brook Park', 'Old Brick Reformed Church', 'Henry Hudson Trail', 'Marlboro Township Municipal Complex']
-housingNotes: 'Dominated by large 1980s–2000s colonials built on former farmland, with older farmhouses around Wickatunk and Robertsville and 1960s–70s ranches and splits in Morganville. Wooded inland lots mean heavy tree debris, shade-side algae, and ice-dam cycles rather than salt exposure.'
+housingNotes: 'Mostly large 1980s–2000s colonials built on former farmland, with 1960s–70s ranches and splits around Morganville and older farmhouses near Wickatunk and Bradevelt. Wooded inland lots trade salt air for tree debris, shade-side algae, and hard freeze-thaw winters.'
 coastal: false
 image: '/media/area-suburban.jpg'
 lat: 40.3154
 lng: -74.2465
 faqs:
-  - q: 'What does a roof replacement cost in Marlboro NJ?'
-    a: 'Most Marlboro roof replacements run $10,000–$20,000. The township is full of 2,500–4,000 sq ft colonials with hips, dormers, and long valleys, which puts many homes mid-to-upper range; smaller Morganville ranches and splits can come in under $10,000. Every estimate is free and itemized to the line.'
-  - q: 'Do I need a permit to replace a roof in Marlboro Township?'
-    a: 'Yes — Marlboro Township requires a construction permit for re-roofing. We prepare and file the paperwork with the Building Department at the Marlboro Township Municipal Complex and schedule the inspections, so the job costs you zero trips to Township Drive.'
-  - q: 'My Marlboro roof is shaded by big trees — does that matter?'
-    a: 'A lot. Heavy shade keeps shingles damp longer, which feeds the black algae streaks and moss you see on wooded lots all over Marlboro, and constant leaf debris clogs valleys and gutters. Algae-resistant shingles and gutter protection on the next replacement solve most of it.'
-  - q: 'How fast can you get to a roof leak in Marlboro?'
-    a: 'Marlboro is a straight run up Route 9 from our home base. For active leaks we can usually tarp within 24 hours — often same day if you call in the morning. Call 848-633-6440 and send photos if you have them.'
+  - q: 'What does a new roof cost in Marlboro NJ?'
+    a: 'Plan on $10,000–$20,000 for most Marlboro roof replacements. The township skews toward 2,500–4,000 sq ft colonials with hip roofs, dormers, and long valleys, which pushes many homes into the middle and upper part of that range; Morganville ranches and splits often come in under $10,000. Every estimate is free and itemized down to the plywood.'
+  - q: 'Who pulls the roofing permit in Marlboro Township?'
+    a: 'We do. Marlboro Township requires a construction permit for re-roofing, filed with the Building Department at the Municipal Complex on Township Drive. We prepare the application, pay the fees, and schedule the inspections — the permit process costs you zero trips and zero phone calls.'
+  - q: 'What wears out roofs fastest in Marlboro?'
+    a: 'Trees and temperature swings, not salt. Mature oaks keep north-facing slopes damp and streaked with algae, valleys and gutters fill with debris every fall, summer thunderstorms drop limbs, and deep-overhang colonials build ice dams in January — especially over the under-vented attics most 80s and 90s builders left behind.'
+  - q: 'How quickly can you look at a roof leak in Marlboro?'
+    a: 'Marlboro sits right on our Route 9 corridor, so active leaks are usually tarped within 24 hours — same day if you call in the morning. Estimate visits typically happen within a day or two. Call 848-633-6440 and text photos of the stain or the shingles if you can.'
 ---
 
-## The roofing crew for Marlboro's big colonials
+## Roofing Marlboro, from Morganville to Wickatunk
 
-Paragon Exteriors is a family-run, licensed roofing and exteriors contractor (NJ HIC #13VH13814500) serving all of Marlboro Township — Morganville, Robertsville, Wickatunk, and the colonial subdivisions off Routes 9, 79, and 520. Most Marlboro roofs we replace are torn off and finished in a single day, with typical asphalt replacements running **$10,000–$20,000** for the township's larger homes. Estimates are free and itemized, and [financing](/financing/) is available: **848-633-6440**.
+Paragon Exteriors LLC is a family-run, licensed roofing and exteriors contractor (NJ HIC #13VH13814500) serving all of Marlboro Township — Morganville, Robertsville, Wickatunk, Bradevelt, and the subdivisions off Routes 9, 79, and 520. We tear off and re-shingle most Marlboro roofs in a single day, with typical replacements running **$10,000–$20,000** for the township's larger colonials. Estimates are free and itemized, [financing](/financing/) is available, and the number is **848-633-6440**.
 
-## Why whole Marlboro streets re-roof at the same time
+## A town named for what's under it
 
-Marlboro turned farmland into subdivisions faster than almost anywhere in Monmouth County. From the early 1980s through the early 2000s, builders put up entire neighborhoods of 2,500–4,000 sq ft colonials in a season — and shingled every one of them with the same builder-grade shingle, in the same year. Those shingles have a 20–25 year working life, so re-roofing here happens street by street: when the first house on the cul-de-sac gets a new roof, four or five neighbors usually follow within two years.
+Marlboro is literally named for marl — the greensand fertilizer its farmers dug from stream banks like Big Brook, where fossil hunters still sift the same deposits for Cretaceous shark teeth. The farms that marl fed are mostly gone: from the early 1980s through the mid-2000s they became subdivision after subdivision of 2,500–4,000 sq ft colonials, every street shingled in one season with whatever builder-grade material kept the sale price down. Those shingles retire at 20–25 years, so if a dumpster just appeared on your cul-de-sac, your roof probably shares its birthday. Check yours against [how long roofs actually last in NJ](/blog/how-long-does-a-roof-last-nj/) before a ceiling stain runs the test for you.
 
-Use that pattern to your advantage. If your development is hitting that age, get the inspection before the leak — [our roof-lifespan guide](/blog/how-long-does-a-roof-last-nj/) covers the warning signs — and compare your quote with a neighbor's line by line. [Roof replacement in Marlboro](/roof-replacement/marlboro/) from us is always itemized for exactly that reason.
+## Know your section, know your roof
 
-## Marlboro's housing stock, roof by roof
-
-| Where | Built | What we typically find |
+| Section | Housing | Roof reality |
 |---|---|---|
-| Wickatunk & Robertsville farmhouses | pre-1960 | Steep pitches, tired chimney flashing, plank decking needing selective replacement |
-| Morganville ranches & splits | 1960s–70s | Second or third roof cycle, undersized ventilation, old layovers that must come off |
-| Route 9 / 79 / 520 subdivisions | 1980s–2000s | First or second full replacement; big hip roofs, dormers, long valleys |
-| Newer luxury builds | 2000s+ | Storm repairs, flashing details, gutter protection for wooded lots |
+| Morganville (07751) | 1960s–70s ranches and splits | Second or third cycle; old layovers that must come off; ventilation retrofits |
+| Robertsville & the Route 520 corridor | 1980s–90s colonials | Builder shingles at end of life; hips, dormers, long valleys to flash right |
+| Route 9-side developments | 1990s–2000s colonials and estate homes | First full replacements arriving now; attic ventilation corrections |
+| Wickatunk & Bradevelt | Farmhouses and rural wooded lots | Steep pitches, plank decking, heavy tree exposure — case-by-case inspections |
 
-One thing nearly every Marlboro roof shares: you can't see most of it from the driveway. Two-story colonials with hip roofs hide their wear well. We fly a drone on inspections and estimates, so you're looking at photos of your actual shingles — not taking anyone's word for anything.
+Most of a Marlboro roof is invisible from the driveway — two-story colonials with hip roofs hide their wear well. We fly a drone on every inspection and estimate, so you're looking at close-up photos of your actual shingles, not taking a salesman's word from the lawn.
 
-## Inland doesn't mean easy duty
+## Builder-grade shingles under a premium house
 
-There's no salt air in Marlboro, but the township's mature oaks and maples work roofs hard in their own way. Wooded lots drop debris into valleys and [gutters](/gutters/) every fall, shaded north-facing slopes grow the black algae streaks you see all over town, and the thunderstorms that roll across western Monmouth each summer put limbs through shingles somewhere in the township every year. Winter adds freeze-thaw cycling and ice dams along the deep overhangs common on 80s and 90s colonials — [here's how ice dams form and how we prevent them](/blog/ice-dams-winter-roof-problems-nj/). Big two-story attics also run hot in July; if the builder installed minimum ventilation (most did), the shingles age from below as fast as from above.
+Here's the quiet mismatch all over Marlboro: some of the most valuable housing in western Monmouth County is still wearing the cheapest roof the original developer could legally install. At replacement time, stepping up to a high-performance architectural shingle — algae-resistant granules for those shaded lots, 130 mph wind rating, six-nail fastening — costs little against the value of the house, and even less as a monthly payment. We'll walk you through the real brand differences ([GAF vs CertainTeed vs Owens Corning](/blog/gaf-vs-certainteed-vs-owens-corning/)) and fix the code-minimum attic ventilation that helped kill the first roof early. [Roof replacement in Marlboro](/roof-replacement/marlboro/) is a one-day job for most homes here, permit and inspections included.
 
-## What Marlboro homeowners call us for
+## What actually ages a Marlboro roof
 
-- **[Roof replacement](/roof-replacement/marlboro/)** — one-day tear-offs on big colonials, permits filed with the Township
-- **[Roof repair](/roof-repair/marlboro/)** — wind-lifted shingles, chimney and skylight flashing, limb-strike damage
-- **[Siding](/siding/)** — swapping faded 90s vinyl for modern, thicker panels
-- **[Windows](/windows/) & [doors](/doors/)** — builder-grade units from the boom years rarely make 30
+No salt air this far inland — the wear comes from the trees and the thermometer. Mature oaks and maples keep north slopes damp and algae-streaked, pack valleys and [gutters](/gutters/) every October, and lose limbs in the thunderstorms that roll across the old farm terrain each summer. Winter flips the script: the deep overhangs on 80s and 90s colonials are classic [ice dam](/blog/ice-dams-winter-roof-problems-nj/) territory once meltwater refreezes at a clogged gutter line. And in July, a dark roof over an under-vented two-story attic cooks from below. Good ventilation and guarded gutters aren't upsells in Marlboro — they're the difference between a 17-year roof and a 25-year roof.
+
+## The work we do most in Marlboro
+
+- **[Roof replacement](/roof-replacement/marlboro/)** — full tear-off, deck repairs on the spot, done in a day, Township permit handled
+- **[Roof repair](/roof-repair/marlboro/)** — wind-lifted shingles, chimney and skylight flashing, limb-strike punctures
+- **[Siding](/siding/)** — replacing faded 90s vinyl with modern, thicker panels
+- **[Windows](/windows/) & [doors](/doors/)** — builder-grade units from the boom years rarely make it to 30
 - **[Gutters and guards](/gutters/)** — the single best upgrade for a wooded Marlboro lot
 - **[Decks](/decks/)** — rebuilds and new builds, permitted and inspected
 
-## Nearby
+## Also on our route
 
-We cover western Monmouth with the same crews that work Marlboro: [Manalapan](/service-areas/manalapan/), [Colts Neck](/service-areas/colts-neck/), [Holmdel](/service-areas/holmdel/), and [Old Bridge](/service-areas/old-bridge/), plus [Freehold](/service-areas/freehold/) down Route 9. Wherever you are in 07746 or 07751, the estimate is free, itemized, and holds.
+Our western Monmouth crews cross Marlboro's borders daily: [Manalapan](/service-areas/manalapan/) to the southwest, [Colts Neck](/service-areas/colts-neck/) and [Holmdel](/service-areas/holmdel/) to the east, and [Old Bridge](/service-areas/old-bridge/) over the Middlesex line. Wherever you are in 07746 or 07751, the estimate is free, itemized, and it holds.
