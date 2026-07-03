@@ -9,6 +9,7 @@ using FSH.Modules.Multitenancy.Contracts.v1.GetTenantStatus;
 using FSH.Modules.Webhooks;
 using FSH.Modules.Billing;
 using FSH.Modules.Catalog;
+using FSH.Modules.Crm;
 using FSH.Modules.Tickets;
 using FSH.Modules.Multitenancy.Features.v1.GetTenantStatus;
 using System.Reflection;
@@ -57,6 +58,8 @@ builder.Services.AddMediator(o =>
         typeof(FSH.Modules.Catalog.CatalogModule),
         typeof(FSH.Modules.Tickets.Contracts.TicketsContractsMarker),
         typeof(FSH.Modules.Tickets.TicketsModule),
+        typeof(FSH.Modules.Crm.Contracts.CrmContractsMarker),
+        typeof(FSH.Modules.Crm.CrmModule),
         typeof(FSH.Modules.Files.Contracts.v1.Commands.RequestUploadUrlCommand),
         typeof(FSH.Modules.Files.FilesModule),
         typeof(FSH.Modules.Chat.Contracts.v1.Commands.CreateChannelCommand),
@@ -75,6 +78,7 @@ var moduleAssemblies = new Assembly[]
     typeof(BillingModule).Assembly,
     typeof(CatalogModule).Assembly,
     typeof(TicketsModule).Assembly,
+    typeof(CrmModule).Assembly,
     typeof(FSH.Modules.Chat.ChatModule).Assembly,
     typeof(FSH.Modules.Notifications.NotificationsModule).Assembly,
 };
