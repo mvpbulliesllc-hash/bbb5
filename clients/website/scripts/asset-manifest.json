@@ -1,7 +1,7 @@
 {
   "$comment": "Source URLs for site media. Consumed by .github/workflows/fetch-assets.yml, which downloads, optimizes, and commits these into clients/website/public/media/. Wix URLs are the original first-party project photos from the previous site; CloudFront URLs are brand imagery generated for the rebuild and the hero reel (re-hosted from instagram.com/p/DYDPAwvvVZx/).",
   "hookVideo": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_184203_5bead8c2-f5f9-4878-be0c-a4d457b04878.mp4",
-  "hookVoice": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_195259_7e81ad9d-7ca4-44d0-a0ff-ca8d128b948d.wav",
+  "hookVoice": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_200249_14366048-b965-4a20-b371-2f0aa5aaa858.wav",
   "images": [
     { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_074039_dede4c00-0884-432c-ba77-ff9660e99fab.png", "dest": "hero-static.jpg", "width": 2400 },
     { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093756_11408851-9ce2-49ad-a66c-1c0c941b538e.png", "dest": "hero-poster.jpg", "width": 1920 },
@@ -30,8 +30,10 @@
     { "url": "https://static.wixstatic.com/media/e699bb_a12c5ad7c9764a289ebbcf779ec7666a~mv2.jpg", "dest": "projects/project-09.jpg", "width": 1200 },
     { "url": "https://static.wixstatic.com/media/e699bb_4f429f8707ce4a24a348bcdf1eba7cfc~mv2.png", "dest": "logo.png", "width": 400, "keepFormat": true },
     { "url": "https://static.wixstatic.com/media/88aac0_ce326710d21542229e624c3b6ed5dcd1~mv2.png", "dest": "logo-mark.png", "width": 350, "keepFormat": true },
-    { "url": "https://static.wixstatic.com/media/e699bb_79ab86802d1b45bf931f45f7606d6784~mv2.png", "dest": "team-joe.jpg", "width": 800 },
-    { "url": "https://static.wixstatic.com/media/e699bb_caccc16527904912934ad58e27c5f0c3~mv2.jpg", "dest": "team-franchi.jpg", "width": 800 }
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_200414_7d206bd1-b88c-41fd-a9b8-f6c87ae74633.png", "dest": "team-joe.jpg", "width": 900 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_200415_db9ada5d-0fde-47bd-9770-24af6db8bd53.png", "dest": "team-franchi.jpg", "width": 900 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_200414_efd914ab-9139-4e3e-a142-74d45dbec547.png", "dest": "preview-team-joe-jobsite-b.jpg", "width": 900 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_200415_a526e1bf-cd4a-45bf-bd60-1675395df7e5.png", "dest": "preview-team-franchi-jobsite-b.jpg", "width": 900 }
   ],
   "videos": [
     {
