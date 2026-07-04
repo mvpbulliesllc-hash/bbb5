@@ -30,16 +30,8 @@
     { "url": "https://static.wixstatic.com/media/e699bb_a12c5ad7c9764a289ebbcf779ec7666a~mv2.jpg", "dest": "projects/project-09.jpg", "width": 1200 },
     { "url": "https://static.wixstatic.com/media/e699bb_4f429f8707ce4a24a348bcdf1eba7cfc~mv2.png", "dest": "logo.png", "width": 400, "keepFormat": true },
     { "url": "https://static.wixstatic.com/media/88aac0_ce326710d21542229e624c3b6ed5dcd1~mv2.png", "dest": "logo-mark.png", "width": 350, "keepFormat": true },
-    { "url": "https://static.wixstatic.com/media/e699bb_79ab86802d1b45bf931f45f7606d6784~mv2.png", "dest": "team-joe.jpg", "width": 800 },
-    { "url": "https://static.wixstatic.com/media/e699bb_caccc16527904912934ad58e27c5f0c3~mv2.jpg", "dest": "team-franchi.jpg", "width": 800 },
-    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_201200_2569bc3d-14fd-408b-9440-bc4670cc4db7.png", "dest": "preview-joe-1.jpg", "width": 900 },
-    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_201200_9ed57ba8-85f8-440e-89b3-9e62b3fc633b.png", "dest": "preview-joe-2.jpg", "width": 900 },
-    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_201200_2b4a3596-2bfa-4378-bd76-a57f73f73b9b.png", "dest": "preview-joe-3.jpg", "width": 900 },
-    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_201200_2900fe9c-b273-4cdd-9b99-e1cabb565ce3.png", "dest": "preview-joe-4.jpg", "width": 900 },
-    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_201204_6b83b0eb-4962-415c-8ea3-82bb263fdc18.png", "dest": "preview-franchi-1.jpg", "width": 900 },
-    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_201203_f3d6d3e4-6aee-4aab-9b4a-de92a4e0337d.png", "dest": "preview-franchi-2.jpg", "width": 900 },
-    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_201204_8072c6b6-ba27-4dc8-85fb-9ab0f5c72833.png", "dest": "preview-franchi-3.jpg", "width": 900 },
-    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_201203_f7e0e225-1f15-4b1f-9207-41b0beea1992.png", "dest": "preview-franchi-4.jpg", "width": 900 }
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_202008_4718a3a9-aef5-4439-b3de-9e1b756c2fbd.png", "dest": "team-joe.jpg", "width": 900 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_200415_a526e1bf-cd4a-45bf-bd60-1675395df7e5.png", "dest": "team-franchi.jpg", "width": 900 }
   ],
   "videos": [
     {
