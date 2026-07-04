@@ -4,18 +4,18 @@ import { business, integrations } from '@/config/business';
 /**
  * Full-width hook-video block below the hero — a purpose-built 10s cinematic
  * hook ("30 ROOFS. / 30 DAYS. / ZERO SHORTCUTS. / YOUR ROOF. DONE IN A DAY.")
- * with text beats + logo end card baked in and a loud, clearly-audible music
- * bed.
+ * with text beats + logo end card baked in and a spoken voiceover reading the
+ * hook, loudness-normalized.
  *
- * Source: /media/hero-hook.mp4 (16:9, has a real music bed + narration-free
- * cinematic audio, loudness-normalized). Poster is hero-static.jpg so there's
- * no blank flash. The real Instagram reel stays lower on the page.
+ * Source: /media/hero-hook.mp4 (16:9, AAC voiceover track). A `?v=` query on
+ * the src cache-busts the immutable /media cache whenever the clip is rebuilt
+ * — without it, browsers keep serving the previously-cached (older) file.
+ * Poster is hero-static.jpg so there's no blank flash.
  *
  * SOUND: browsers forbid autoplay WITH sound, so the clip autostarts muted and
- * loops, and we unmute on the viewer's very first interaction anywhere on the
- * page (click / tap / scroll / key) AND via an unmissable center button. Once
- * unmuted it stays unmuted. Uses <mux-player> when PUBLIC_MUX_PLAYBACK_ID is
- * set, else the local file.
+ * loops. The center button is an explicit, reliable toggle; as a fallback the
+ * first interaction anywhere else on the page unmutes once. Uses <mux-player>
+ * when PUBLIC_MUX_PLAYBACK_ID is set, else the local file.
  */
 const muxId = integrations.muxPlaybackId;
 ---
@@ -47,7 +47,7 @@ const muxId = integrations.muxPlaybackId;
             poster="/media/hero-static.jpg"
             data-feature-video
           >
-            <source src="/media/hero-hook.mp4" type="video/mp4" />
+            <source src="/media/hero-hook.mp4?v=2" type="video/mp4" />
           </video>
         )
       }
@@ -86,60 +86,78 @@ const muxId = integrations.muxPlaybackId;
 
 {muxId && <script>import '@mux/mux-player';</script>}
 
-<script>
-  const vid = document.querySelector<HTMLVideoElement>('#feature-video');
-  const muxEl = document.querySelector('mux-player[data-feature-video]') as
-    | (HTMLElement & { muted?: boolean; play?: () => void; volume?: number })
-    | null;
-  const btn = document.getElementById('feature-sound');
-  const pill = document.getElementById('feature-sound-pill');
-  const iconOff = document.getElementById('feature-sound-off');
-  const iconOn = document.getElementById('feature-sound-on');
-  const label = document.getElementById('feature-sound-label');
+<!--
+  is:inline is deliberate. This logic must ship verbatim on the page. When it
+  was a bundled <script>, Astro hoisted it into the same chunk as the sibling
+  `import '@mux/mux-player'` script and the logic was dropped from the build
+  entirely — the "Tap for sound" button had no handler, so tapping did nothing.
+  Inline + plain JS keeps it independent and guaranteed-present.
+-->
+<script is:inline>
+  (function () {
+    var vid = document.getElementById('feature-video');
+    var muxEl = document.querySelector('mux-player[data-feature-video]');
+    var btn = document.getElementById('feature-sound');
+    var pill = document.getElementById('feature-sound-pill');
+    var iconOff = document.getElementById('feature-sound-off');
+    var iconOn = document.getElementById('feature-sound-on');
+    var label = document.getElementById('feature-sound-label');
+    var soundOn = false;
+    var decided = false; // latched once the viewer explicitly toggles via the button
+    var EVENTS = ['pointerdown', 'touchstart', 'keydown', 'wheel'];
 
-  let soundOn = false;
-
-  const setMuted = (muted: boolean) => {
-    if (vid) {
-      vid.muted = muted;
-      vid.volume = 1;
-      if (!muted) void vid.play().catch(() => {});
+    function render() {
+      if (iconOff) iconOff.classList.toggle('hidden', soundOn);
+      if (iconOn) iconOn.classList.toggle('hidden', !soundOn);
+      if (label) label.textContent = soundOn ? 'Sound on' : 'Tap for sound';
+      if (pill) {
+        pill.classList.toggle('bg-gold-500/95', !soundOn);
+        pill.classList.toggle('bg-navy-900/80', soundOn);
+        pill.classList.toggle('text-white', soundOn);
+      }
     }
-    if (muxEl) {
-      muxEl.muted = muted;
-      if (!muted) muxEl.play?.();
-    }
-    soundOn = !muted;
-    iconOff?.classList.toggle('hidden', soundOn);
-    iconOn?.classList.toggle('hidden', !soundOn);
-    if (label) label.textContent = soundOn ? 'Sound on' : 'Tap for sound';
-    pill?.classList.toggle('bg-gold-500/95', !soundOn);
-    pill?.classList.toggle('bg-navy-900/80', soundOn);
-    pill?.classList.toggle('text-white', soundOn);
-  };
 
-  // Explicit button = toggle.
-  btn?.addEventListener('click', (e) => {
-    e.preventDefault();
-    setMuted(soundOn);
-    window.gtag?.('event', soundOn ? 'feature_video_unmute' : 'feature_video_mute');
-  });
-
-  // First interaction anywhere on the page turns sound on once (autoplay-policy
-  // safe: this runs inside a real user gesture). Removed after it fires.
-  const unmuteOnce = () => {
-    if (!soundOn) {
-      setMuted(false);
-      window.gtag?.('event', 'feature_video_unmute', { trigger: 'first_interaction' });
+    function apply(on) {
+      soundOn = on;
+      if (vid) {
+        vid.muted = !on;
+        vid.volume = 1;
+        if (on) { var p = vid.play(); if (p && p.catch) p.catch(function () {}); }
+      }
+      if (muxEl) {
+        muxEl.muted = !on;
+        if (on && muxEl.play) muxEl.play();
+      }
+      render();
     }
-    remove();
-  };
-  const remove = () => {
-    ['pointerdown', 'touchstart', 'keydown', 'wheel'].forEach((ev) =>
-      window.removeEventListener(ev, unmuteOnce)
-    );
-  };
-  ['pointerdown', 'touchstart', 'keydown', 'wheel'].forEach((ev) =>
-    window.addEventListener(ev, unmuteOnce, { once: false, passive: true })
-  );
+
+    function stopAuto() {
+      EVENTS.forEach(function (ev) { window.removeEventListener(ev, autoUnmute); });
+    }
+
+    // First interaction ELSEWHERE on the page unmutes once (autoplay-policy
+    // safe: it runs inside a real user gesture). Taps on the button are handled
+    // by the explicit toggle below; skip them here so the two don't fight.
+    function autoUnmute(e) {
+      if (decided) { stopAuto(); return; }
+      if (btn && e.target && btn.contains(e.target)) return;
+      apply(true);
+      if (window.gtag) window.gtag('event', 'feature_video_unmute', { trigger: 'first_interaction' });
+      stopAuto();
+    }
+
+    // The overlay button is the primary, reliable control: an explicit toggle.
+    if (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        decided = true;
+        apply(!soundOn);
+        stopAuto();
+        if (window.gtag) window.gtag('event', soundOn ? 'feature_video_unmute' : 'feature_video_mute');
+      });
+    }
+
+    EVENTS.forEach(function (ev) { window.addEventListener(ev, autoUnmute, { passive: true }); });
+  })();
 </script>
