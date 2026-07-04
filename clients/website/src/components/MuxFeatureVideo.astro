@@ -1,27 +1,31 @@
 ---
-import { integrations } from '@/config/business';
+import { business, integrations } from '@/config/business';
 
 /**
  * Full-width video band directly below the hero — the "30 roofs in 30 days"
- * reel, playable WITH AUDIO.
+ * reel.
+ *
+ * Audio note: the downloadable copy of the Instagram reel is video-only
+ * (Instagram served the stream without its audio track), so the LOCAL
+ * fallback has no sound to play. Real audio comes through Mux — upload the
+ * original reel to Mux and set PUBLIC_MUX_PLAYBACK_ID, and this band plays it
+ * with full controls (including volume). Until then the local file plays as a
+ * muted cinematic loop, and we link viewers to the reel on Instagram to hear
+ * the sound.
  *
  * Rendering, best-available first:
- *  1. PUBLIC_MUX_PLAYBACK_ID set → <mux-player> streaming from Mux, with full
- *     controls (including volume) so viewers can hear it.
- *  2. Local fallback (public/media/hero-reel.mp4) → native <video controls>.
- *
- * Autoplay policy: browsers only allow autoplay while muted, so the clip
- * autostarts muted and loops for life on the page; a prominent Unmute button
- * (and the native controls) let the viewer turn the sound on with one tap.
+ *  1. PUBLIC_MUX_PLAYBACK_ID set → <mux-player> with controls (audio playable).
+ *  2. Local fallback (public/media/hero-reel.mp4) → muted autoplay loop.
  */
 const muxId = integrations.muxPlaybackId;
+const reelUrl = 'https://www.instagram.com/p/DYDPAwvvVZx/';
 ---
 
 <section class="bg-navy-950">
   <div class="mx-auto max-w-3xl px-4 pt-14 text-center sm:px-6">
     <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-300">Watch it happen</p>
-    <h2 class="h-display mt-3 text-3xl text-white sm:text-4xl">30 roofs. 30 days. Sound on.</h2>
-    <p class="mt-3 text-white/70">Real crews, real drone footage — tap the sound on and see how we work.</p>
+    <h2 class="h-display mt-3 text-3xl text-white sm:text-4xl">30 roofs. 30 days.</h2>
+    <p class="mt-3 text-white/70">Real crews, real drone footage — this is how we work.</p>
   </div>
 
   <div class="relative mt-8 w-full">
@@ -36,70 +40,49 @@ const muxId = integrations.muxPlaybackId;
             playsinline
             poster="/media/hero-poster.jpg"
             style="width:100%;height:100%;--media-object-fit:cover;"
-            data-feature-video
           />
         ) : (
           <video
-            id="feature-video"
             class="h-full w-full object-cover"
             autoplay
             muted
             loop
             playsinline
-            controls
             preload="metadata"
             poster="/media/hero-poster.jpg"
-            data-feature-video
           >
             <source src="/media/hero-reel.mp4" type="video/mp4" />
           </video>
         )
       }
 
-      <!-- Unmute affordance (hidden once the user turns sound on) -->
-      <button
-        id="feature-unmute"
-        type="button"
-        class="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-gold-500/95 px-4 py-2 font-display text-sm font-bold text-navy-950 shadow-lift transition hover:bg-gold-400"
-        aria-label="Unmute video"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M3 10v4h4l5 5V5L7 10H3Zm13.5 2a4.5 4.5 0 0 0-2.5-4.03v8.06A4.5 4.5 0 0 0 16.5 12Z" />
-          <path d="m19 4-1.4 1.4a9 9 0 0 1 0 13.2L19 20a11 11 0 0 0 0-16Z" />
-        </svg>
-        Tap for sound
-      </button>
+      {
+        /* Local copy is silent → send viewers to the reel on Instagram for sound.
+           With Mux configured, the player's own controls handle audio. */
+        !muxId && (
+          <a
+            href={reelUrl}
+            target="_blank"
+            rel="noopener"
+            class="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-gold-500/95 px-4 py-2 font-display text-sm font-bold text-navy-950 shadow-lift transition hover:bg-gold-400"
+            data-cta="feature-video-instagram"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M3 10v4h4l5 5V5L7 10H3Zm13.5 2a4.5 4.5 0 0 0-2.5-4.03v8.06A4.5 4.5 0 0 0 16.5 12Z" />
+              <path d="m19 4-1.4 1.4a9 9 0 0 1 0 13.2L19 20a11 11 0 0 0 0-16Z" />
+            </svg>
+            Watch with sound on Instagram
+          </a>
+        )
+      }
     </div>
+  </div>
+
+  <div class="mx-auto max-w-3xl px-4 pb-14 pt-6 text-center sm:px-6">
+    <a href="/contact/" class="btn-gold" data-cta="feature-video-estimate">Get your free estimate</a>
+    <span class="mx-3 text-white/40">or</span>
+    <a href={business.phoneHref} class="font-display font-bold text-gold-300">{business.phone}</a>
   </div>
 </section>
 
 {muxId && <script>import '@mux/mux-player';</script>}
-
-<script>
-  const vid = document.querySelector<HTMLVideoElement>('#feature-video');
-  const muxEl = document.querySelector('mux-player[data-feature-video]') as
-    | (HTMLElement & { muted?: boolean; play?: () => void })
-    | null;
-  const btn = document.getElementById('feature-unmute');
-
-  const enableSound = () => {
-    if (vid) {
-      vid.muted = false;
-      vid.volume = 1;
-      void vid.play().catch(() => {});
-    }
-    if (muxEl) {
-      muxEl.muted = false;
-      muxEl.play?.();
-    }
-    btn?.classList.add('hidden');
-    window.gtag?.('event', 'feature_video_unmute');
-  };
-
-  btn?.addEventListener('click', enableSound);
-
-  // If the viewer unmutes via the native controls, hide our button too.
-  vid?.addEventListener('volumechange', () => {
-    if (!vid.muted) btn?.classList.add('hidden');
-  });
-</script>
