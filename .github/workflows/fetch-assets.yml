@@ -59,6 +59,31 @@ jobs:
           rm hero-src.mp4
           ls -la public/media/hero-reel.mp4
 
+      - name: Build hero hook video (text beats + logo end card, keep audio)
+        working-directory: clients/website
+        run: |
+          set -euo pipefail
+          url=$(jq -r '.hookVideo // empty' scripts/asset-manifest.json)
+          if [ -z "$url" ]; then echo "no hookVideo in manifest; skipping"; exit 0; fi
+          curl -fsSL --retry 3 -o hook-src.mp4 "$url"
+          # Archivo Black display font (matches the site); fall back to DejaVu.
+          curl -fsSL -o hook.ttf "https://github.com/googlefonts/archivo/raw/main/fonts/ttf/Archivo-Black.ttf" \
+            || cp /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf hook.ttf
+          F=hook.ttf
+          # Timed text beats per the hook script + logo end card at 7.5-10s.
+          # Keep the clip's cinematic audio (-map 0:a?); 1080p 16:9, web-optimized.
+          ffmpeg -y -i hook-src.mp4 -i public/media/logo.png -filter_complex "\
+          [0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,setsar=1,format=yuv420p,\
+          drawtext=fontfile=$F:text='30 ROOFS.':fontcolor=white:fontsize=155:x=(w-tw)/2:y=(h-th)/2:shadowcolor=black@0.7:shadowx=3:shadowy=3:enable='between(t,0.2,2.4)',\
+          drawtext=fontfile=$F:text='30 DAYS.':fontcolor=white:fontsize=155:x=(w-tw)/2:y=(h-th)/2:shadowcolor=black@0.7:shadowx=3:shadowy=3:enable='between(t,2.5,4.9)',\
+          drawtext=fontfile=$F:text='ZERO SHORTCUTS.':fontcolor=white:fontsize=120:x=(w-tw)/2:y=(h-th)/2:shadowcolor=black@0.7:shadowx=3:shadowy=3:enable='between(t,5.0,7.4)',\
+          drawtext=fontfile=$F:text='YOUR ROOF. DONE IN A DAY.':fontcolor=0xE7B339:fontsize=92:x=(w-tw)/2:y=h*0.28:shadowcolor=black@0.75:shadowx=3:shadowy=3:enable='between(t,7.5,10)',\
+          drawtext=fontfile=$F:text='Free Estimate   848-633-6440':fontcolor=white:fontsize=52:x=(w-tw)/2:y=h*0.74:shadowcolor=black@0.7:shadowx=2:shadowy=2:enable='between(t,7.7,10)'[v0];\
+          [1:v]scale=-1:110[logo];[v0][logo]overlay=x=(W-w)/2:y=H*0.50:enable='between(t,7.5,10)'[vout]" \
+            -map "[vout]" -map 0:a? -t 10 -c:v libx264 -crf 26 -preset slow -pix_fmt yuv420p -movflags +faststart -c:a aac -b:a 128k public/media/hero-hook.mp4
+          rm -f hook-src.mp4 hook.ttf
+          ls -la public/media/hero-hook.mp4
+
       - name: Commit assets
         run: |
           git config user.name "github-actions[bot]"
