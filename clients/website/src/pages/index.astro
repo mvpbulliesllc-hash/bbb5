@@ -1,6 +1,7 @@
 ---
 import Base from '@/layouts/Base.astro';
 import MuxHero from '@/components/MuxHero.astro';
+import MuxFeatureVideo from '@/components/MuxFeatureVideo.astro';
 import TrustBar from '@/components/TrustBar.astro';
 import ServicesGrid from '@/components/ServicesGrid.astro';
 import InstagramBand from '@/components/InstagramBand.astro';
@@ -44,6 +45,7 @@ const faqs = [
   schemas={[faqSchema(faqs)]}
 >
   <MuxHero />
+  <MuxFeatureVideo />
   <TrustBar />
   <ServicesGrid heading="Roofing & exteriors, done to a higher standard" />
   <InstagramBand />

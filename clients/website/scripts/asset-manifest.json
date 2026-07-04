@@ -1,6 +1,7 @@
 {
   "$comment": "Source URLs for site media. Consumed by .github/workflows/fetch-assets.yml, which downloads, optimizes, and commits these into clients/website/public/media/. Wix URLs are the original first-party project photos from the previous site; CloudFront URLs are brand imagery generated for the rebuild and the hero reel (re-hosted from instagram.com/p/DYDPAwvvVZx/).",
   "images": [
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_074039_dede4c00-0884-432c-ba77-ff9660e99fab.png", "dest": "hero-static.jpg", "width": 2400 },
     { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093756_11408851-9ce2-49ad-a66c-1c0c941b538e.png", "dest": "hero-poster.jpg", "width": 1920 },
     { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093757_9021dbef-7184-40d1-a65e-6ff9a32996d0.png", "dest": "og-default.jpg", "width": 1200 },
     { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260703_093759_3e99b222-d765-4d23-97ce-accec734ff3d.png", "dest": "service-roof-replacement.jpg", "width": 1280 },
