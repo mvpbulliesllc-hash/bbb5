@@ -1,0 +1,105 @@
+@import 'tailwindcss';
+
+/*
+ * Paragon Exteriors design system.
+ * Deep coastal navy + craftsman gold on warm neutrals. Archivo for
+ * display (condensed, confident), Inter for body copy.
+ */
+@theme {
+  --font-display: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-navy-50: #f0f5fa;
+  --color-navy-100: #dbe7f2;
+  --color-navy-200: #bcd2e6;
+  --color-navy-300: #91b4d4;
+  --color-navy-400: #5f8fbd;
+  --color-navy-500: #3d72a6;
+  --color-navy-600: #2d5a8a;
+  --color-navy-700: #274a70;
+  --color-navy-800: #24405e;
+  --color-navy-900: #16293e;
+  --color-navy-950: #0b1a2b;
+
+  --color-gold-50: #fdf9ed;
+  --color-gold-100: #f9efcc;
+  --color-gold-200: #f2dd95;
+  --color-gold-300: #ecc75e;
+  --color-gold-400: #e7b339;
+  --color-gold-500: #df9722;
+  --color-gold-600: #c5761b;
+  --color-gold-700: #a4571a;
+  --color-gold-800: #86451b;
+  --color-gold-900: #6f3a1a;
+  --color-gold-950: #401d0b;
+
+  --color-sand-50: #faf8f5;
+  --color-sand-100: #f2eee6;
+  --color-sand-200: #e5ddce;
+
+  --shadow-lift: 0 12px 32px -12px rgb(11 26 43 / 0.25);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply font-sans text-navy-900 bg-white antialiased;
+}
+
+/* Display headings */
+.h-display {
+  @apply font-display font-extrabold tracking-tight;
+}
+
+/* Primary CTA */
+.btn-gold {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-gold-500 px-6 py-3.5 font-display font-bold text-navy-950 shadow-lift transition hover:bg-gold-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-600;
+}
+
+.btn-outline {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border-2 border-white/80 px-6 py-3 font-display font-bold text-white transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white;
+}
+
+.btn-navy {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-navy-800 px-6 py-3.5 font-display font-bold text-white shadow-lift transition hover:bg-navy-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-800;
+}
+
+/* Content prose for markdown-rendered pages */
+.prose-paragon {
+  @apply max-w-none text-navy-900/90 leading-relaxed;
+}
+.prose-paragon h2 {
+  @apply font-display font-extrabold tracking-tight mt-12 mb-4 text-3xl text-navy-900;
+}
+.prose-paragon h3 {
+  @apply font-display font-extrabold tracking-tight mt-8 mb-3 text-xl text-navy-900;
+}
+.prose-paragon p {
+  @apply my-4;
+}
+.prose-paragon ul {
+  @apply my-4 list-disc pl-6 space-y-1.5;
+}
+.prose-paragon ol {
+  @apply my-4 list-decimal pl-6 space-y-1.5;
+}
+.prose-paragon a {
+  @apply font-semibold text-navy-700 underline decoration-gold-400 decoration-2 underline-offset-2 hover:text-navy-600;
+}
+.prose-paragon strong {
+  @apply font-semibold text-navy-950;
+}
+.prose-paragon blockquote {
+  @apply my-6 border-l-4 border-gold-400 bg-sand-50 px-5 py-3 italic;
+}
+.prose-paragon table {
+  @apply my-6 w-full text-sm;
+}
+.prose-paragon th {
+  @apply bg-navy-900 px-3 py-2 text-left font-display text-white;
+}
+.prose-paragon td {
+  @apply border-b border-sand-200 px-3 py-2;
+}

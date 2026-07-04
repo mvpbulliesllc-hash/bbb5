@@ -1,0 +1,30 @@
+---
+import Base from '@/layouts/Base.astro';
+import { business } from '@/config/business';
+---
+
+<Base
+  title="Thank You | Paragon Exteriors"
+  description="Your estimate request was received — we'll reach out shortly."
+  noindex
+>
+  <section class="mx-auto flex max-w-3xl flex-col items-center px-4 py-24 text-center sm:px-6">
+    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" class="text-gold-500" aria-hidden="true">
+      <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1.5" />
+      <path d="m7 12.5 3.5 3.5L17 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+    <h1 class="h-display mt-6 text-4xl text-navy-950">Got it — you're on the list.</h1>
+    <p class="mt-4 max-w-lg text-lg text-navy-900/75">
+      Thanks for reaching out to Paragon Exteriors. We usually respond the same day. If it's urgent — an active leak
+      or storm damage — call us right now:
+    </p>
+    <a href={business.phoneHref} class="btn-gold mt-8 text-lg">Call {business.phone}</a>
+    <p class="mt-8 text-sm text-navy-900/60">
+      While you wait, see <a href="/projects/" class="font-semibold underline">our recent projects</a> or read
+      <a href="/blog/" class="font-semibold underline">our homeowner guides</a>.
+    </p>
+  </section>
+  <script>
+    window.gtag?.('event', 'conversion_thank_you');
+  </script>
+</Base>

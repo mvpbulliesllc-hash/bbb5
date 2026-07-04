@@ -1,0 +1,98 @@
+{
+  "$ref": "#/definitions/towns",
+  "definitions": {
+    "towns": {
+      "type": "object",
+      "properties": {
+        "town": {
+          "type": "string"
+        },
+        "county": {
+          "type": "string",
+          "enum": [
+            "Ocean",
+            "Monmouth",
+            "Middlesex"
+          ]
+        },
+        "metaTitle": {
+          "type": "string"
+        },
+        "metaDescription": {
+          "type": "string",
+          "maxLength": 175
+        },
+        "zipCodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "neighborhoods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "landmarks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "housingNotes": {
+          "type": "string"
+        },
+        "coastal": {
+          "type": "boolean",
+          "default": false
+        },
+        "image": {
+          "type": "string",
+          "default": "/media/area-suburban.jpg"
+        },
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        },
+        "faqs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "q": {
+                "type": "string"
+              },
+              "a": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "q",
+              "a"
+            ],
+            "additionalProperties": false
+          },
+          "default": []
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "town",
+        "county",
+        "metaTitle",
+        "metaDescription",
+        "housingNotes"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

@@ -1,0 +1,28 @@
+---
+import Base from '@/layouts/Base.astro';
+import ServicesGrid from '@/components/ServicesGrid.astro';
+import ProcessSteps from '@/components/ProcessSteps.astro';
+import FinancingBand from '@/components/FinancingBand.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { breadcrumbSchema } from '@/lib/schema';
+---
+
+<Base
+  title="Roofing, Siding, Windows, Doors & Decks in NJ | Paragon Exteriors Services"
+  description="Full-service exterior contractor for Ocean & Monmouth County NJ: roof replacement, roof repair, siding, windows, doors, decks, gutters and commercial roofing. Free estimates."
+  schemas={[breadcrumbSchema([{ name: 'Home', url: '/' }, { name: 'Services', url: '/services/' }])]}
+>
+  <section class="bg-navy-950 py-16 text-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <h1 class="h-display text-4xl sm:text-5xl">One trusted crew for your whole exterior</h1>
+      <p class="mt-4 max-w-2xl text-lg text-white/80">
+        Residential and commercial. Repair or full replacement. If it protects your home from the weather, we build it —
+        and we build it right.
+      </p>
+    </div>
+  </section>
+  <ServicesGrid heading="Explore our services" />
+  <ProcessSteps />
+  <FinancingBand />
+  <CtaBand />
+</Base>

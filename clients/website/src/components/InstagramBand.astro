@@ -1,0 +1,45 @@
+---
+import { business } from '@/config/business';
+
+/**
+ * Social proof band anchored on the "30 roofs / 30 days" reel. Uses
+ * Instagram's official embed so the real post (likes, comments) renders —
+ * no scraping, always current.
+ */
+---
+
+<section class="bg-sand-50 py-16">
+  <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2">
+    <div>
+      <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-600">As seen on Instagram</p>
+      <h2 class="h-display mt-3 text-3xl text-navy-950 sm:text-4xl">30 roofs. 30 days. Zero shortcuts.</h2>
+      <p class="mt-4 max-w-xl leading-relaxed text-navy-900/75">
+        When we ran our 30-roofs-in-30-days push, the Shore noticed — thousands of homeowners watched our drone reel of
+        tear-offs and same-day installs. Follow along for real projects, real crews, and real before-and-afters from
+        your neighborhood.
+      </p>
+      <a
+        href={business.social.instagram}
+        target="_blank"
+        rel="noopener"
+        class="btn-navy mt-6"
+        data-cta="instagram-follow"
+      >
+        Follow @paragonexteriorsnj
+      </a>
+    </div>
+    <div class="mx-auto w-full max-w-md">
+      <blockquote
+        class="instagram-media w-full rounded-2xl bg-white shadow-lift"
+        data-instgrm-permalink="https://www.instagram.com/p/DYDPAwvvVZx/"
+        data-instgrm-version="14"
+      >
+        <a href="https://www.instagram.com/p/DYDPAwvvVZx/" target="_blank" rel="noopener">
+          Watch the 30 roofs in 30 days reel on Instagram
+        </a>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<script is:inline async defer src="https://www.instagram.com/embed.js"></script>

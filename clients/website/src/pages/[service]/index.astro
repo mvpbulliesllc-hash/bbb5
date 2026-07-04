@@ -1,0 +1,84 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import TrustBar from '@/components/TrustBar.astro';
+import ProcessSteps from '@/components/ProcessSteps.astro';
+import Testimonials from '@/components/Testimonials.astro';
+import FinancingBand from '@/components/FinancingBand.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import LeadForm from '@/components/LeadForm.astro';
+import TownGrid from '@/components/TownGrid.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { serviceSchema, faqSchema, breadcrumbSchema } from '@/lib/schema';
+import { business } from '@/config/business';
+
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+  return services.map((entry) => ({ params: { service: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Services', url: '/services/' },
+  { name: entry.data.title, url: `/${entry.id}/` },
+];
+const leadServiceMap: Record<string, string> = {
+  'roof-replacement': 'RoofReplacement',
+  'roof-repair': 'RoofRepair',
+  roofing: 'Roofing',
+  siding: 'Siding',
+  windows: 'Windows',
+  doors: 'Doors',
+  decks: 'Decks',
+  gutters: 'Gutters',
+  'commercial-roofing': 'Commercial',
+  'storm-damage': 'RoofRepair',
+};
+---
+
+<Base
+  title={entry.data.metaTitle}
+  description={entry.data.metaDescription}
+  ogImage={entry.data.image}
+  schemas={[
+    serviceSchema({ name: entry.data.serviceName, description: entry.data.metaDescription, url: `${business.url}/${entry.id}/` }),
+    faqSchema(entry.data.faqs),
+    breadcrumbSchema(crumbs),
+  ]}
+>
+  <section class="relative isolate overflow-hidden bg-navy-950 text-white">
+    <img src={entry.data.image} alt="" class="absolute inset-0 -z-10 h-full w-full object-cover opacity-25" loading="eager" />
+    <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24">
+      <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-300">{business.areaServed}</p>
+      <h1 class="h-display mt-4 max-w-3xl text-4xl sm:text-5xl">{entry.data.title}</h1>
+      <p class="mt-5 max-w-2xl text-lg text-white/85">{entry.data.heroTagline}</p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a href="#estimate" class="btn-gold">Get a Free Estimate</a>
+        <a href={business.phoneHref} class="btn-outline">Call {business.phone}</a>
+      </div>
+      {entry.data.priceRange && <p class="mt-6 text-sm text-white/70">Typical investment: <strong class="text-gold-300">{entry.data.priceRange}</strong> — financing available.</p>}
+    </div>
+  </section>
+  <TrustBar />
+  <Breadcrumbs items={crumbs} />
+
+  <article class="prose-paragon mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <Content />
+  </article>
+
+  <ProcessSteps />
+  <Testimonials />
+  <FinancingBand />
+  {entry.data.comboEligible && <TownGrid service={entry.id} heading={`${entry.data.serviceName} across the Jersey Shore`} />}
+  <FaqAccordion faqs={entry.data.faqs} heading={`${entry.data.serviceName} questions, answered`} />
+
+  <section class="bg-navy-950 py-16" id="estimate">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6">
+      <LeadForm service={leadServiceMap[entry.id] ?? 'Other'} heading={`Free ${entry.data.serviceName.toLowerCase()} estimate`} />
+    </div>
+  </section>
+  <CtaBand />
+</Base>

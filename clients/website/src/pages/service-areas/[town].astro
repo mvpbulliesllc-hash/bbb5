@@ -1,0 +1,105 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import TrustBar from '@/components/TrustBar.astro';
+import ServicesGrid from '@/components/ServicesGrid.astro';
+import Testimonials from '@/components/Testimonials.astro';
+import FinancingBand from '@/components/FinancingBand.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import LeadForm from '@/components/LeadForm.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { serviceSchema, faqSchema, breadcrumbSchema } from '@/lib/schema';
+import { business } from '@/config/business';
+
+export async function getStaticPaths() {
+  const towns = await getCollection('towns');
+  return towns.map((entry) => ({ params: { town: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const url = `/service-areas/${entry.id}/`;
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Service Areas', url: '/service-areas/' },
+  { name: entry.data.town, url },
+];
+const combos = await getCollection('combos', (c) => c.data.town === entry.id);
+const services = await getCollection('services');
+const serviceTitles = new Map(services.map((s) => [s.id, s.data.serviceName]));
+---
+
+<Base
+  title={entry.data.metaTitle}
+  description={entry.data.metaDescription}
+  ogImage={entry.data.image}
+  schemas={[
+    serviceSchema({
+      name: `Roofing & Exterior Services in ${entry.data.town}, NJ`,
+      description: entry.data.metaDescription,
+      url: `${business.url}${url}`,
+      areaName: `${entry.data.town}, NJ`,
+    }),
+    faqSchema(entry.data.faqs),
+    breadcrumbSchema(crumbs),
+  ]}
+>
+  <section class="relative isolate overflow-hidden bg-navy-950 text-white">
+    <img src={entry.data.image} alt="" class="absolute inset-0 -z-10 h-full w-full object-cover opacity-25" loading="eager" />
+    <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+      <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-300">
+        {entry.data.county} County, New Jersey
+      </p>
+      <h1 class="h-display mt-4 max-w-3xl text-4xl sm:text-5xl">
+        Roofing &amp; Exterior Contractor in {entry.data.town}, NJ
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg text-white/85">
+        Roof replacement, roof repair, siding, windows, doors &amp; decks for {entry.data.town} homeowners —
+        {business.license}, free estimates.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a href="#estimate" class="btn-gold">Get a Free Estimate</a>
+        <a href={business.phoneHref} class="btn-outline">Call {business.phone}</a>
+      </div>
+    </div>
+  </section>
+  <TrustBar />
+  <Breadcrumbs items={crumbs} />
+
+  <article class="prose-paragon mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <Content />
+  </article>
+
+  {
+    combos.length > 0 && (
+      <nav class="mx-auto max-w-4xl px-4 pb-4 sm:px-6" aria-label={`Services in ${entry.data.town}`}>
+        <h2 class="h-display text-2xl text-navy-950">Popular services in {entry.data.town}</h2>
+        <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+          {combos.map((c) => (
+            <li>
+              <a
+                href={`/${c.data.service}/${c.data.town}/`}
+                class="block rounded-xl bg-sand-50 px-5 py-4 font-display font-bold text-navy-900 ring-1 ring-sand-200 transition hover:bg-gold-50 hover:ring-gold-300"
+              >
+                {serviceTitles.get(c.data.service) ?? c.data.service} in {entry.data.town} →
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
+
+  <ServicesGrid heading={`Everything we do in ${entry.data.town}`} />
+  <Testimonials />
+  <FinancingBand />
+  <FaqAccordion faqs={entry.data.faqs} heading={`${entry.data.town} homeowner FAQs`} />
+
+  <section class="bg-navy-950 py-16" id="estimate">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6">
+      <LeadForm heading={`Free estimate in ${entry.data.town}`} />
+    </div>
+  </section>
+  <CtaBand />
+</Base>

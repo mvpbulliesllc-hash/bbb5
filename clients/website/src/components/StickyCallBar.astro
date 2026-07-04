@@ -1,0 +1,18 @@
+---
+import { business } from '@/config/business';
+---
+
+<!-- Mobile-only bottom action bar: call + estimate always one thumb away. -->
+<div class="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-px border-t border-navy-900 bg-navy-900 md:hidden" role="navigation" aria-label="Quick actions">
+  <a href={business.phoneHref} class="flex items-center justify-center gap-2 bg-navy-950 py-3.5 font-display font-bold text-gold-300" data-cta="sticky-call">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24 11.36 11.36 0 0 0 3.57.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.36 11.36 0 0 0 .57 3.57 1 1 0 0 1-.25 1.02l-2.2 2.2Z" />
+    </svg>
+    Call Now
+  </a>
+  <a href="/contact/" class="flex items-center justify-center gap-2 bg-gold-500 py-3.5 font-display font-bold text-navy-950" data-cta="sticky-estimate">
+    Free Estimate
+  </a>
+</div>
+<!-- Spacer so content never hides behind the fixed bar -->
+<div class="h-14 md:hidden" aria-hidden="true"></div>

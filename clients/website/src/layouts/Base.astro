@@ -1,0 +1,83 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/archivo';
+import '@/styles/global.css';
+import { business, integrations } from '@/config/business';
+import { orgSchema } from '@/lib/schema';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import StickyCallBar from '@/components/StickyCallBar.astro';
+import VoiceWidget from '@/components/VoiceWidget.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  ogType?: string;
+  /** Additional JSON-LD objects for this page. */
+  schemas?: ReadonlyArray<Record<string, unknown> | null>;
+  noindex?: boolean;
+}
+
+const { title, description, ogImage = '/media/og-default.jpg', ogType = 'website', schemas = [], noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImageAbs = ogImage.startsWith('http') ? ogImage : new URL(ogImage, Astro.site).href;
+const allSchemas = [orgSchema(), ...schemas.filter(Boolean)];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageAbs} />
+    <meta property="og:site_name" content={business.name} />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageAbs} />
+    <meta name="theme-color" content="#0b1a2b" />
+    {allSchemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+    {
+      integrations.ga4Id && (
+        <>
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${integrations.ga4Id}`} />
+          <script
+            set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${integrations.ga4Id}');`}
+          />
+        </>
+      )
+    }
+    {
+      integrations.plausibleDomain && (
+        <script defer data-domain={integrations.plausibleDomain} src="https://plausible.io/js/script.tagged-events.js" />
+      )
+    }
+  </head>
+  <body>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded focus:bg-white focus:px-4 focus:py-2 focus:font-semibold"
+    >
+      Skip to main content
+    </a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <StickyCallBar />
+    <VoiceWidget />
+  </body>
+</html>

@@ -1,0 +1,55 @@
+---
+import Base from '@/layouts/Base.astro';
+import LeadForm from '@/components/LeadForm.astro';
+import TrustBar from '@/components/TrustBar.astro';
+import { business, integrations } from '@/config/business';
+import { breadcrumbSchema } from '@/lib/schema';
+---
+
+<Base
+  title={`Contact Paragon Exteriors | Free Roofing Estimates NJ | ${business.phone}`}
+  description={`Get a free roofing, siding, window or deck estimate anywhere in Ocean & Monmouth County NJ. Call ${business.phone} or send the form — same-day response. ${business.license}.`}
+  schemas={[breadcrumbSchema([{ name: 'Home', url: '/' }, { name: 'Contact', url: '/contact/' }])]}
+>
+  <section class="bg-navy-950 py-16 text-white">
+    <div class="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-2">
+      <div>
+        <h1 class="h-display text-4xl sm:text-5xl">Let's talk about your project</h1>
+        <p class="mt-4 max-w-lg text-lg text-white/80">
+          Free estimates, honest answers, same-day response. Reach us however you like:
+        </p>
+        <dl class="mt-8 space-y-5">
+          <div>
+            <dt class="text-sm uppercase tracking-wider text-white/60">Call or text</dt>
+            <dd><a href={business.phoneHref} class="font-display text-3xl font-extrabold text-gold-300">{business.phone}</a></dd>
+          </div>
+          <div>
+            <dt class="text-sm uppercase tracking-wider text-white/60">Email</dt>
+            <dd><a href={business.emailHref} class="text-lg font-semibold text-white hover:text-gold-300">{business.email}</a></dd>
+          </div>
+          <div>
+            <dt class="text-sm uppercase tracking-wider text-white/60">Hours</dt>
+            <dd class="text-white/85">{business.hours}</dd>
+          </div>
+          <div>
+            <dt class="text-sm uppercase tracking-wider text-white/60">Service area</dt>
+            <dd class="text-white/85">{business.areaServed}</dd>
+          </div>
+          <div>
+            <dt class="text-sm uppercase tracking-wider text-white/60">License</dt>
+            <dd class="text-white/85">{business.license} · Fully insured</dd>
+          </div>
+        </dl>
+        {
+          integrations.calendlyUrl && (
+            <a href={integrations.calendlyUrl} target="_blank" rel="noopener" class="btn-gold mt-8">
+              Book an estimate slot online
+            </a>
+          )
+        }
+      </div>
+      <LeadForm heading="Request your free estimate" />
+    </div>
+  </section>
+  <TrustBar />
+</Base>

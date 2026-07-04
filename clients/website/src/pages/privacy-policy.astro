@@ -1,0 +1,43 @@
+---
+import Base from '@/layouts/Base.astro';
+import { business } from '@/config/business';
+---
+
+<Base
+  title="Privacy Policy | Paragon Exteriors LLC"
+  description="How Paragon Exteriors LLC collects, uses, and protects your information when you use our website or request an estimate."
+>
+  <section class="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+    <h1 class="h-display text-4xl text-navy-950">Privacy Policy</h1>
+    <div class="prose-paragon mt-8">
+      <p><em>Last updated: July 2026</em></p>
+      <p>
+        {business.legalName} ("Paragon Exteriors," "we," "us") respects your privacy. This policy explains what we
+        collect through {business.url} and how we use it.
+      </p>
+      <h2>Information we collect</h2>
+      <ul>
+        <li><strong>Estimate requests:</strong> name, phone, email, project address, and project details you submit through our forms or voice assistant.</li>
+        <li><strong>Usage data:</strong> standard analytics such as pages visited, device type, and referral source (including UTM parameters), collected via cookies or similar technologies.</li>
+      </ul>
+      <h2>How we use it</h2>
+      <ul>
+        <li>To respond to your estimate request and manage your project.</li>
+        <li>To understand which marketing brings homeowners to us so we can improve our services.</li>
+        <li>We do <strong>not</strong> sell your personal information. We share it only with service providers who help us operate (e.g., scheduling, CRM, financing partners you ask about) or when required by law.</li>
+      </ul>
+      <h2>Text messaging</h2>
+      <p>
+        If you provide a phone number and choose text as a contact preference, we may text you about your estimate or
+        project. Reply STOP at any time to opt out. Message and data rates may apply.
+      </p>
+      <h2>Your choices</h2>
+      <p>
+        You may request access to, correction of, or deletion of your personal information by emailing
+        <a href={business.emailHref}>{business.email}</a> or calling {business.phone}.
+      </p>
+      <h2>Contact</h2>
+      <p>{business.legalName} · {business.email} · {business.phone} · {business.license}</p>
+    </div>
+  </section>
+</Base>

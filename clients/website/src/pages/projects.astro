@@ -1,0 +1,35 @@
+---
+import Base from '@/layouts/Base.astro';
+import ProjectGallery from '@/components/ProjectGallery.astro';
+import InstagramBand from '@/components/InstagramBand.astro';
+import Testimonials from '@/components/Testimonials.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { breadcrumbSchema } from '@/lib/schema';
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Projects', url: '/projects/' },
+];
+---
+
+<Base
+  title="Roofing Projects & Before/After Gallery | Paragon Exteriors NJ"
+  description="Drone photos of real roof replacements, siding and exterior projects across Ocean & Monmouth County NJ by Paragon Exteriors. See the workmanship before you call."
+  schemas={[breadcrumbSchema(crumbs)]}
+>
+  <section class="bg-navy-950 py-16 text-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <h1 class="h-display max-w-3xl text-4xl sm:text-5xl">Our work, from above</h1>
+      <p class="mt-4 max-w-2xl text-lg text-white/80">
+        Every project gets the drone treatment — because when your ridge lines are this clean, you want the aerial
+        shot. Residential facades to durable commercial structures, each one showcases our attention to detail.
+      </p>
+    </div>
+  </section>
+  <Breadcrumbs items={crumbs} />
+  <ProjectGallery limit={8} heading="Recent installs" />
+  <InstagramBand />
+  <Testimonials />
+  <CtaBand heading="Want your home in this gallery?" />
+</Base>

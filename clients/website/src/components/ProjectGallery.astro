@@ -1,0 +1,42 @@
+---
+/**
+ * Real project drone photography. Files land in /public/media/projects/ via
+ * the fetch-assets workflow (originals from the previous site's gallery).
+ */
+interface Props {
+  limit?: number;
+  heading?: string;
+}
+const { limit = 8, heading = 'Recent work, straight from the drone' } = Astro.props;
+
+const projects = [
+  { src: '/media/projects/project-01.jpg', alt: 'Aerial view of completed architectural shingle roof replacement in Ocean County NJ' },
+  { src: '/media/projects/project-02.jpg', alt: 'Drone photo of new roof installation on a two-story New Jersey colonial home' },
+  { src: '/media/projects/project-03.jpg', alt: 'Completed roof replacement with crisp ridge lines on a Jersey Shore home' },
+  { src: '/media/projects/project-04.jpg', alt: 'Aerial drone shot of finished residential roofing project in New Jersey' },
+  { src: '/media/projects/project-05.jpg', alt: 'New charcoal asphalt shingle roof installed by Paragon Exteriors' },
+  { src: '/media/projects/project-06.jpg', alt: 'Overhead view of completed roof replacement near the Jersey Shore' },
+  { src: '/media/projects/project-07.jpg', alt: 'Finished roofing project on a large New Jersey suburban home' },
+  { src: '/media/projects/project-08.jpg', alt: 'Drone photograph of a new roof and exterior renovation in NJ' },
+].slice(0, limit);
+---
+
+<section class="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+  <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-600">Project gallery</p>
+  <h2 class="h-display mt-3 text-3xl text-navy-950 sm:text-4xl">{heading}</h2>
+  <p class="mt-2 max-w-2xl text-navy-900/70">
+    Every photo below is our crew's real work — no stock photos on this wall.
+  </p>
+  <div class="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
+    {
+      projects.map((p) => (
+        <figure class="aspect-square overflow-hidden rounded-xl bg-navy-100">
+          <img src={p.src} alt={p.alt} width="600" height="600" loading="lazy" class="h-full w-full object-cover transition duration-500 hover:scale-105" />
+        </figure>
+      ))
+    }
+  </div>
+  <div class="mt-8 text-center">
+    <a href="/projects/" class="btn-navy">See all projects</a>
+  </div>
+</section>

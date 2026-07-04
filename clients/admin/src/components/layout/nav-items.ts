@@ -1,6 +1,7 @@
 import {
   Activity,
   Building2,
+  Filter,
   LayoutDashboard,
   Receipt,
   ScrollText,
@@ -14,6 +15,7 @@ import {
 import {
   AuditingPermissions,
   BillingPermissions,
+  CrmPermissions,
   IdentityPermissions,
   MultitenancyPermissions,
   WebhooksPermissions,
@@ -84,6 +86,19 @@ export const sections: NavSection[] = [
         label: "Impersonation",
         icon: UserCog,
         perms: [IdentityPermissions.Impersonation.View],
+      },
+    ],
+  },
+  {
+    id: "crm",
+    caption: "CRM",
+    icon: Filter,
+    items: [
+      {
+        to: "/leads",
+        label: "Leads",
+        icon: Filter,
+        perms: [CrmPermissions.Leads.View],
       },
     ],
   },

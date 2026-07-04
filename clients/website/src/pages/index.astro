@@ -1,0 +1,80 @@
+---
+import Base from '@/layouts/Base.astro';
+import MuxHero from '@/components/MuxHero.astro';
+import TrustBar from '@/components/TrustBar.astro';
+import ServicesGrid from '@/components/ServicesGrid.astro';
+import InstagramBand from '@/components/InstagramBand.astro';
+import ProcessSteps from '@/components/ProcessSteps.astro';
+import Testimonials from '@/components/Testimonials.astro';
+import ProjectGallery from '@/components/ProjectGallery.astro';
+import TownGrid from '@/components/TownGrid.astro';
+import FinancingBand from '@/components/FinancingBand.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import LeadForm from '@/components/LeadForm.astro';
+import { faqSchema } from '@/lib/schema';
+import { business } from '@/config/business';
+
+const faqs = [
+  {
+    q: 'What areas does Paragon Exteriors serve?',
+    a: 'We serve Ocean County, Monmouth County, and the greater Jersey Shore — including Toms River, Brick, Jackson, Lakewood, Howell, Freehold, Point Pleasant, Manahawkin, and dozens of surrounding towns. If you are anywhere near the Shore, call us at 848-633-6440.',
+  },
+  {
+    q: 'Is Paragon Exteriors licensed and insured?',
+    a: 'Yes. Paragon Exteriors LLC is a fully licensed New Jersey home improvement contractor (NJ HIC #13VH13814500) and carries full liability and workers compensation insurance on every job.',
+  },
+  {
+    q: 'How much does a new roof cost in New Jersey?',
+    a: 'Most asphalt shingle roof replacements at the Jersey Shore fall between $8,000 and $18,000 depending on roof size, pitch, layers to remove, and material choice. We provide free itemized estimates, and financing is available so you can spread the cost into monthly payments.',
+  },
+  {
+    q: 'How fast can you replace a roof?',
+    a: 'Most residential roofs are torn off and fully re-shingled in a single day. During our recent 30-roofs-in-30-days run, homeowners went from old roof to new roof between breakfast and dinner — cleanup included.',
+  },
+  {
+    q: 'Do you help with insurance claims for storm damage?',
+    a: 'Yes. We document wind, hail, and storm damage with drone photos, meet your adjuster on site, and make sure the scope of work covers everything your policy allows. Emergency tarping is available to stop active leaks.',
+  },
+];
+---
+
+<Base
+  title="Roofing Contractor NJ | Roof Replacement & Repair — Paragon Exteriors LLC"
+  description="Paragon Exteriors is the Jersey Shore's trusted roofing contractor: roof replacement, roof repair, siding, windows, doors & decks across Ocean & Monmouth County NJ. NJ HIC #13VH13814500. Free estimates: 848-633-6440."
+  schemas={[faqSchema(faqs)]}
+>
+  <MuxHero />
+  <TrustBar />
+  <ServicesGrid heading="Roofing & exteriors, done to a higher standard" />
+  <InstagramBand />
+  <ProcessSteps />
+  <Testimonials />
+  <ProjectGallery />
+  <FinancingBand />
+  <TownGrid />
+  <FaqAccordion faqs={faqs} />
+
+  <section class="bg-navy-950 py-16" id="estimate">
+    <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2">
+      <div class="text-white">
+        <h2 class="h-display text-3xl sm:text-4xl">Get in touch</h2>
+        <p class="mt-4 max-w-lg text-white/80">
+          Fill out the form and we'll reach out — usually the same day — to schedule your free estimate. Prefer to
+          talk? <a href={business.phoneHref} class="font-bold text-gold-300">Call {business.phone}</a>.
+        </p>
+        <ul class="mt-8 space-y-3 text-white/80">
+          <li class="flex items-center gap-3">
+            <span class="text-gold-400">✓</span> Free, itemized estimates — no surprises
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="text-gold-400">✓</span> Same-day response, most roofs done in a day
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="text-gold-400">✓</span> {business.license} · Fully insured · Financing
+          </li>
+        </ul>
+      </div>
+      <LeadForm />
+    </div>
+  </section>
+</Base>

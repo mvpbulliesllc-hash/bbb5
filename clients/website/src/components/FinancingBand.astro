@@ -1,0 +1,21 @@
+---
+import { business } from '@/config/business';
+---
+
+<section class="bg-gold-500">
+  <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 py-10 sm:px-6 lg:flex-row">
+    <div>
+      <h2 class="h-display text-2xl text-navy-950 sm:text-3xl">A new roof, on a monthly payment that fits.</h2>
+      <p class="mt-2 max-w-xl text-navy-950/80">
+        We offer flexible financing so storm damage or an aging roof never has to wait on a lump sum. Ask about current
+        plans when you book your free estimate.
+      </p>
+    </div>
+    <div class="flex shrink-0 gap-4">
+      <a href="/financing/" class="btn-navy">Explore Financing</a>
+      <a href={business.phoneHref} class="inline-flex items-center justify-center rounded-lg border-2 border-navy-950 px-6 py-3 font-display font-bold text-navy-950 transition hover:bg-navy-950 hover:text-white">
+        {business.phone}
+      </a>
+    </div>
+  </div>
+</section>

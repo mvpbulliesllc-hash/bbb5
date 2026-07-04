@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import CtaBand from '@/components/CtaBand.astro';
+
+const posts = (await getCollection('posts')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<Base
+  title="Roofing & Exterior Guides for NJ Homeowners | Paragon Exteriors"
+  description="Straight answers on roof replacement costs, storm damage claims, siding, windows and more — written for Ocean & Monmouth County NJ homeowners by Paragon Exteriors."
+>
+  <section class="bg-navy-950 py-16 text-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <h1 class="h-display text-4xl sm:text-5xl">Guides for Jersey Shore homeowners</h1>
+      <p class="mt-4 max-w-2xl text-lg text-white/80">
+        Costs, materials, storm claims, and how to not get burned by a contractor — everything we wish every homeowner
+        knew, in plain English.
+      </p>
+    </div>
+  </section>
+  <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6">
+    <ul class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {
+        posts.map((p) => (
+          <li>
+            <a href={`/blog/${p.id}/`} class="group block h-full overflow-hidden rounded-2xl ring-1 ring-sand-200 transition hover:-translate-y-1 hover:shadow-lift">
+              <img src={p.data.image} alt="" width="640" height="360" loading="lazy" class="aspect-video w-full object-cover" />
+              <div class="p-6">
+                <p class="font-display text-xs font-bold uppercase tracking-[0.2em] text-gold-600">{p.data.category}</p>
+                <h2 class="h-display mt-2 text-xl text-navy-950 group-hover:underline">{p.data.title}</h2>
+                <p class="mt-2 text-sm leading-relaxed text-navy-900/70">{p.data.description}</p>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+  <CtaBand />
+</Base>

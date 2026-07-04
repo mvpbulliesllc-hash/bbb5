@@ -1,0 +1,85 @@
+---
+import Base from '@/layouts/Base.astro';
+import TrustBar from '@/components/TrustBar.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import LeadForm from '@/components/LeadForm.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { faqSchema, breadcrumbSchema } from '@/lib/schema';
+import { business } from '@/config/business';
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Financing', url: '/financing/' },
+];
+const faqs = [
+  {
+    q: 'Can I finance a roof replacement in NJ?',
+    a: 'Yes. Paragon Exteriors offers financing on roof replacements, siding, windows, doors and decks, turning a five-figure project into a predictable monthly payment. Ask for current plans and terms when you book your free estimate.',
+  },
+  {
+    q: 'Does applying for roofing financing hurt my credit?',
+    a: 'Pre-qualification typically uses a soft credit pull that does not affect your credit score. A hard inquiry only happens if you accept an offer and proceed with funding.',
+  },
+  {
+    q: 'What credit score do I need to finance a new roof?',
+    a: 'Approval odds are strongest above the mid-600s, but multiple plan options exist across the credit spectrum. The only way to know is a quick, no-obligation pre-qualification — we will walk you through it at your estimate.',
+  },
+  {
+    q: 'Is financing better than waiting to save up?',
+    a: 'A leaking or aging roof usually costs more the longer it waits — water damage, mold, and interior repairs add up fast. If your roof is actively deteriorating, financing the fix now typically beats paying for the extra damage later.',
+  },
+];
+---
+
+<Base
+  title="Roof Financing NJ | Monthly Payment Plans — Paragon Exteriors"
+  description="Finance your roof replacement, siding or windows in NJ with flexible monthly payments through Paragon Exteriors. Fast pre-qualification, free estimates: 848-633-6440."
+  schemas={[faqSchema(faqs), breadcrumbSchema(crumbs)]}
+>
+  <section class="bg-navy-950 py-16 text-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-300">We offer financing</p>
+      <h1 class="h-display mt-4 max-w-3xl text-4xl sm:text-5xl">A new roof shouldn't wait on a lump sum</h1>
+      <p class="mt-5 max-w-2xl text-lg text-white/85">
+        Storm damage and worn-out shingles don't care about timing. Flexible financing turns your project into a
+        manageable monthly payment — so you can fix it right, right now.
+      </p>
+    </div>
+  </section>
+  <TrustBar />
+  <Breadcrumbs items={crumbs} />
+
+  <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+    <div class="prose-paragon">
+      <h2>How financing works with Paragon</h2>
+      <ol>
+        <li><strong>Free estimate first.</strong> We inspect, measure, and give you an exact itemized price — so you finance the real number, not a guess.</li>
+        <li><strong>Quick pre-qualification.</strong> A short application with a soft credit pull shows your available plans in minutes.</li>
+        <li><strong>Pick your payment.</strong> Choose the term and monthly amount that fits your budget.</li>
+        <li><strong>We build.</strong> Most roofs are installed in a single day; your first payment typically isn't due until after the work is complete.</li>
+      </ol>
+      <h2>What you can finance</h2>
+      <ul>
+        <li>Roof replacement &amp; major roof repairs</li>
+        <li>Vinyl &amp; premium siding</li>
+        <li>Replacement windows and entry doors</li>
+        <li>Decks, gutters, and full exterior remodels</li>
+        <li>Commercial roofing systems</li>
+      </ul>
+      <p>
+        Have insurance covering part of a storm claim? We regularly combine insurance proceeds with financing to cover
+        deductibles and upgrades — <a href="/storm-damage/">see our storm damage services</a>.
+      </p>
+    </div>
+  </section>
+
+  <FaqAccordion faqs={faqs} heading="Financing FAQs" />
+
+  <section class="bg-navy-950 py-16" id="estimate">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6">
+      <LeadForm heading="Get your free estimate & financing options" />
+    </div>
+  </section>
+  <CtaBand heading={`Questions? Call ${business.phone}`} sub="We'll give you straight answers on pricing and payments." />
+</Base>

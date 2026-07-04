@@ -1,0 +1,33 @@
+---
+import Base from '@/layouts/Base.astro';
+import { business } from '@/config/business';
+---
+
+<Base
+  title="Accessibility Statement | Paragon Exteriors LLC"
+  description="Paragon Exteriors is committed to a website accessible to all visitors, conforming to WCAG 2.1 AA."
+>
+  <section class="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+    <h1 class="h-display text-4xl text-navy-950">Accessibility Statement</h1>
+    <div class="prose-paragon mt-8">
+      <p>
+        {business.legalName} is committed to ensuring digital accessibility for people with disabilities. We are
+        continually improving the user experience for everyone and applying the relevant accessibility standards.
+      </p>
+      <h2>Conformance status</h2>
+      <p>
+        This website aims to conform to the <strong>Web Content Accessibility Guidelines (WCAG) 2.1 Level AA</strong>.
+        Measures include semantic HTML landmarks, sufficient color contrast, keyboard-navigable menus and forms,
+        alternative text on meaningful images, visible focus indicators, and respect for reduced-motion preferences.
+      </p>
+      <h2>Feedback</h2>
+      <p>
+        If you encounter any accessibility barrier on this site, please tell us — we will make it right promptly:
+      </p>
+      <ul>
+        <li>Phone: <a href={business.phoneHref}>{business.phone}</a></li>
+        <li>Email: <a href={business.emailHref}>{business.email}</a></li>
+      </ul>
+    </div>
+  </section>
+</Base>
