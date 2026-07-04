@@ -46,27 +46,59 @@ const crumbs = [
 
   <section class="bg-sand-50 py-14">
     <div class="mx-auto max-w-7xl px-4 sm:px-6">
-      <h2 class="h-display text-3xl text-navy-950">Meet the partners</h2>
-      <div class="mt-8 grid gap-8 md:grid-cols-2">
-        {
-          business.founders.map((f, i) => (
-            <div class="overflow-hidden rounded-2xl bg-white ring-1 ring-sand-200">
-              <img
-                src={i === 0 ? '/media/team-joe.jpg' : '/media/team-franchi.jpg'}
-                alt={`${f.name}, ${f.role} of Paragon Exteriors`}
-                width="800"
-                height="690"
-                loading="lazy"
-                class="aspect-[7/6] w-full object-cover object-top"
-              />
-              <div class="p-8">
-                <h3 class="h-display text-2xl text-navy-950">{f.name}</h3>
-                <p class="mt-1 font-display text-sm font-bold uppercase tracking-wider text-gold-600">{f.role}</p>
-                <p class="mt-4 leading-relaxed text-navy-900/80">{f.bio}</p>
-              </div>
-            </div>
-          ))
-        }
+      <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-600">The family behind Paragon</p>
+      <h2 class="h-display mt-2 text-3xl text-navy-950 sm:text-4xl">Meet Joe &amp; Franchi</h2>
+
+      <!-- Joe — the face of the company, featured -->
+      <div class="mt-8 grid overflow-hidden rounded-3xl bg-white shadow-lift ring-1 ring-sand-200 lg:grid-cols-[minmax(0,44%)_1fr]">
+        <div class="relative min-h-[380px] bg-navy-950">
+          <img
+            src="/media/team-joe.jpg"
+            alt="Giuseppe (Joe) Ballaccomo, Managing Partner of Paragon Exteriors"
+            width="900"
+            height="1100"
+            loading="lazy"
+            class="h-full w-full object-cover object-top"
+          />
+          <span class="absolute left-5 top-5 rounded-full bg-gold-500 px-3.5 py-1.5 font-display text-xs font-bold uppercase tracking-wide text-navy-950 shadow-lift">
+            The guy you'll deal with
+          </span>
+        </div>
+        <div class="flex flex-col justify-center p-8 sm:p-10">
+          <h3 class="h-display text-3xl text-navy-950 sm:text-4xl">Giuseppe “Joe” Ballaccomo</h3>
+          <p class="mt-1 font-display text-sm font-bold uppercase tracking-wider text-gold-600">Founder &amp; Managing Partner</p>
+          <p class="mt-5 text-lg leading-relaxed text-navy-900/85">{business.founders[0].bio}</p>
+          <p class="mt-4 leading-relaxed text-navy-900/70">
+            When you call Paragon, you get Joe — from the first walkthrough to the final nail. No call centers, no
+            handoffs, no salesman you never see again.
+          </p>
+          <div class="mt-7 flex flex-wrap gap-3">
+            <a href={business.phoneHref} class="btn-gold" data-cta="about-call-joe">Call Joe · {business.phone}</a>
+            <a href="/contact/" class="btn-navy">Get a free estimate</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Franchi — master builder, supporting -->
+      <div class="mt-6 grid items-center gap-6 rounded-3xl bg-white p-5 ring-1 ring-sand-200 sm:grid-cols-[220px_1fr] sm:p-6">
+        <div class="overflow-hidden rounded-2xl bg-navy-950">
+          <img
+            src="/media/team-franchi.jpg"
+            alt="Franchi Vacchiano, Managing Partner of Paragon Exteriors"
+            width="440"
+            height="520"
+            loading="lazy"
+            class="aspect-[5/6] w-full object-cover object-top"
+          />
+        </div>
+        <div class="px-1 sm:px-2">
+          <h3 class="h-display text-2xl text-navy-950">Franchi Vacchiano</h3>
+          <p class="mt-1 font-display text-sm font-bold uppercase tracking-wider text-gold-600">
+            Managing Partner · Master Builder
+          </p>
+          <p class="mt-3 leading-relaxed text-navy-900/80">{business.founders[1].bio}</p>
+          <p class="mt-2 text-sm text-navy-900/60">Joe’s right hand — the four decades of build experience behind every Paragon job.</p>
+        </div>
       </div>
       <div class="mt-10 grid gap-6 rounded-2xl bg-navy-950 p-8 text-white md:grid-cols-3">
         <div>
