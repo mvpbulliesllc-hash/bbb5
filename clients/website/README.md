@@ -46,8 +46,12 @@ project photos, team photos, and the hero reel), optimizes it, and commits to
    Until then the hero uses the local video fallback automatically.
 2. **CRM**: deploy the FSH.Starter API, set `PUBLIC_LEADS_API=https://<api-host>/api/v1/crm/leads`
    and `PUBLIC_TENANT` (default `root`). Leads then appear in the admin app's Leads section.
-3. **DNS/hosting**: deploy `clients/website` to Vercel (framework preset: Astro; `vercel.json`
-   carries 301s from old Wix URLs + cache headers). Point paragonexteriorsnj.com at it.
+3. **DNS/hosting**: deploy to Vercel. **This is a monorepo — set the Vercel project's
+   Root Directory to `clients/website`** (Settings → Build and Deployment → Root Directory), then
+   Vercel auto-detects Astro and uses `clients/website/vercel.json` (301s from old Wix URLs + cache
+   headers). Without that setting Vercel builds from the repo root and returns `404: NOT_FOUND` on
+   every route; the root-level `vercel.json` is a fallback that builds the site from root, but
+   setting Root Directory is preferred. Point paragonexteriorsnj.com at the deployment.
 4. **Google Search Console**: verify the domain, submit `/sitemap-index.xml`, request indexing for
    the homepage + service pillars. **The old Wix site shipped `noindex` on every page** — after
    launch, confirm no route carries `noindex` (only `/thank-you/` does, intentionally).
