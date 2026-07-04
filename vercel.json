@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "//": "Root-level Vercel config so a repo-ROOT deployment builds the Astro marketing site in clients/website. Preferred setup is still to set the Vercel project's Root Directory to 'clients/website' (which uses clients/website/vercel.json instead); this file is the belt-and-suspenders fallback so a default repo-root deploy also works. Keep the redirects/headers here in sync with clients/website/vercel.json.",
+  "framework": null,
+  "installCommand": "npm --prefix clients/website install",
+  "buildCommand": "npm --prefix clients/website run build",
+  "outputDirectory": "clients/website/dist",
+  "cleanUrls": true,
+  "trailingSlash": true,
+  "redirects": [
+    { "source": "/projects-7", "destination": "/projects/", "permanent": true },
+    { "source": "/get-solar", "destination": "/solar/", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/media/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}
