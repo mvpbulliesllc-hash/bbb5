@@ -47,13 +47,15 @@ jobs:
           done
           rm -rf tmp-assets
 
-      - name: Download and compress hero reel
+      - name: Download and compress hero reel (keep audio)
         working-directory: clients/website
         run: |
           set -euo pipefail
           url=$(jq -r '.videos[0].url' scripts/asset-manifest.json)
           curl -fsSL --retry 3 -o hero-src.mp4 "$url"
-          ffmpeg -y -i hero-src.mp4 -vf "scale='min(1280,iw)':-2" -c:v libx264 -crf 27 -preset slow -movflags +faststart -an public/media/hero-reel.mp4
+          # Keep the audio track (the feature-video band plays it with sound).
+          # AAC 128k; if the source has no audio, ffmpeg simply produces a video-only file.
+          ffmpeg -y -i hero-src.mp4 -vf "scale='min(1280,iw)':-2" -c:v libx264 -crf 26 -preset slow -movflags +faststart -c:a aac -b:a 128k public/media/hero-reel.mp4
           rm hero-src.mp4
           ls -la public/media/hero-reel.mp4
 

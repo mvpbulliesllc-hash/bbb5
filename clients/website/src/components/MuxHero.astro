@@ -1,54 +1,24 @@
 ---
-import { business, integrations } from '@/config/business';
+import { business } from '@/config/business';
 
 /**
- * Homepage hero built around the "30 roofs in 30 days" drone reel
- * (instagram.com/p/DYDPAwvvVZx).
- *
- * Rendering strategy, best-available first:
- *  1. PUBLIC_MUX_PLAYBACK_ID set → <mux-player> streaming from Mux.
- *  2. Local fallback video (public/media/hero-reel.mp4, fetched from the
- *     original reel) → plain <video> loop.
- *  3. Neither → static hero image.
- * The video is decorative background: muted, looped, no controls in
- * fallback mode, with a poster + reduced-motion respect.
+ * Homepage hero — a static, high-impact background image (the reel now lives
+ * in its own full-width Mux band directly below, see MuxFeatureVideo.astro).
+ * Uses hero-static.jpg (a purpose-built cinematic shot) with hero-poster.jpg
+ * as a graceful fallback if the static asset isn't present yet.
  */
-const muxId = integrations.muxPlaybackId;
 const heroHeadline = 'The Jersey Shore’s New Standard in Roofing & Exteriors';
 ---
 
 <section class="relative isolate overflow-hidden bg-navy-950 text-white">
   <div class="absolute inset-0 -z-10" aria-hidden="true">
-    {
-      muxId ? (
-        <mux-player
-          playback-id={muxId}
-          autoplay="muted"
-          loop
-          muted
-          preload="auto"
-          disable-tracking
-          poster="/media/hero-poster.jpg"
-          style="--controls: none; width: 100%; height: 100%; object-fit: cover; pointer-events: none;"
-        />
-      ) : (
-        <video
-          class="h-full w-full object-cover motion-reduce:hidden"
-          autoplay
-          muted
-          loop
-          playsinline
-          poster="/media/hero-poster.jpg"
-        >
-          <source src="/media/hero-reel.mp4" type="video/mp4" />
-        </video>
-      )
-    }
     <img
-      src="/media/hero-poster.jpg"
+      src="/media/hero-static.jpg"
       alt=""
-      class="hidden h-full w-full object-cover motion-reduce:block"
+      class="h-full w-full object-cover"
       loading="eager"
+      fetchpriority="high"
+      onerror="this.onerror=null;this.src='/media/hero-poster.jpg';"
     />
     <div class="absolute inset-0 bg-gradient-to-b from-navy-950/80 via-navy-950/60 to-navy-950/90"></div>
   </div>
@@ -86,5 +56,3 @@ const heroHeadline = 'The Jersey Shore’s New Standard in Roofing & Exteriors';
     </dl>
   </div>
 </section>
-
-{muxId && <script>import '@mux/mux-player';</script>}
