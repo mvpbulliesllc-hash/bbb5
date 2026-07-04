@@ -1,0 +1,166 @@
+---
+import Base from '@/layouts/Base.astro';
+import TrustBar from '@/components/TrustBar.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import { business } from '@/config/business';
+import { breadcrumbSchema, faqSchema } from '@/lib/schema';
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'How We Get Found', url: '/how-we-get-found/' },
+];
+
+const faqs = [
+  {
+    q: 'How did I find Paragon when I searched?',
+    a: 'A mix of three things: a website Google can actually read, a dedicated page built for your specific town, and structured "schema" data that tells search engines and AI assistants exactly who we are and what we do. Most contractors do none of the three — so the search engines never confidently recommend them.',
+  },
+  {
+    q: 'Does Paragon really have a page for my town?',
+    a: 'If you are anywhere in our Ocean County, Monmouth County, or Jersey Shore footprint, almost certainly — we built a dedicated roof-repair and roof-replacement page for every town we serve, over 150 in all, each one written for that town specifically.',
+  },
+  {
+    q: 'What is schema markup, in one sentence?',
+    a: 'A hidden, machine-readable label on our website that tells Google and AI search tools exactly who we are — our services, service area, phone number, reviews, and license — so they can recommend us by name instead of guessing.',
+  },
+  {
+    q: 'Does all this online reach mean Paragon is a big corporate company?',
+    a: 'Just the opposite. We are a family-run Jersey Shore contractor — we simply did our homework so the right neighbors can find us. Our name still goes on every roof we install.',
+  },
+];
+---
+
+<Base
+  title="How You Found Us — SEO, GEO & Schema in Plain English | Paragon Exteriors"
+  description="Why your neighbors keep finding Paragon first: the plain-English version of how a roofer shows up on Google, in every town we serve, and inside AI search — no jargon."
+  schemas={[breadcrumbSchema(crumbs), faqSchema(faqs)]}
+>
+  <section class="bg-navy-950 py-16 text-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-300">How you found us</p>
+      <h1 class="h-display mt-4 max-w-3xl text-4xl sm:text-5xl">Why your neighbors keep finding Paragon first</h1>
+      <p class="mt-5 max-w-2xl text-lg text-white/85">
+        Most roofers are invisible online. Landing here wasn't luck — it's three things almost no contractor
+        bothers to do. Here's the plain-English version, no jargon.
+      </p>
+    </div>
+  </section>
+  <TrustBar />
+  <Breadcrumbs items={crumbs} />
+
+  <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+    <div class="prose-paragon">
+      <p>
+        When you searched for a roofer and ended up here, a lot of quiet work made that happen. None of it is
+        complicated once someone explains it without the acronyms — so here it is, three ideas that decide who
+        gets found and who stays invisible.
+      </p>
+    </div>
+  </section>
+
+  <!-- 01 — SEO -->
+  <section class="bg-sand-50 py-14">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6">
+      <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-600">01 — Getting found on Google</p>
+      <h2 class="h-display mt-2 text-3xl text-navy-950 sm:text-4xl">SEO, explained like you're five</h2>
+      <div class="prose-paragon mt-5">
+        <p>
+          Think of Google as a librarian. When someone asks the librarian for help, it recommends the books it
+          knows about and trusts. <strong>SEO is just making sure the librarian knows your book exists, knows
+          exactly what it's about, and trusts it enough to hand it over first.</strong>
+        </p>
+        <p>
+          Most contractor websites are a book with no title on the spine. The librarian can't tell what it is, so
+          it never gets recommended. Some even have a sticker that says "don't shelve this" — and the owner has no
+          idea it's there. (Paragon's old site did exactly that: it quietly told Google not to list a single page.)
+        </p>
+      </div>
+      <div class="mt-6 rounded-2xl border-l-4 border-gold-500 bg-white p-6 shadow-lift ring-1 ring-sand-200">
+        <p class="font-display text-sm font-bold uppercase tracking-wider text-gold-600">What that means for you</p>
+        <p class="mt-2 leading-relaxed text-navy-900/85">
+          Paragon's site is the easiest book in the building to recommend — clear title, clean labels, every page
+          in order. So when someone at the Shore searches for what we do, the librarian points at us first.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 — GEO -->
+  <section class="py-14">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6">
+      <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-600">02 — Showing up in every town we work</p>
+      <h2 class="h-display mt-2 text-3xl text-navy-950 sm:text-4xl">Why one website isn't enough for a whole region</h2>
+      <div class="prose-paragon mt-5">
+        <p>
+          Say you run a pizza shop and put one sign up in your own town. People one town over never see it — and
+          that's fine, because they'll drive to you for pizza.
+        </p>
+        <p>
+          A roofer doesn't wait for people to drive over. We work dozens of towns across Ocean and Monmouth County.
+          Put up one sign in one town, and every other town full of homeowners never knows you exist. When someone
+          the next town over searches "roofer near me," Google looks for a business that speaks to <em>that</em>
+          town — and if you don't have one, you're not "near" them as far as Google is concerned.
+        </p>
+        <p>
+          So instead of one sign in one town, <strong>Paragon has a real page for every single town we serve</strong> —
+          "Roof repair in Rumson," "Roof replacement in Holmdel," and over 150 more. Whoever searches, wherever they
+          are in our footprint, there's a page built just for them.
+        </p>
+      </div>
+      <div class="mt-6 rounded-2xl border-l-4 border-gold-500 bg-sand-50 p-6 ring-1 ring-sand-200">
+        <p class="font-display text-sm font-bold uppercase tracking-wider text-gold-600">What that means for you</p>
+        <p class="mt-2 leading-relaxed text-navy-900/85">
+          You get a local roofer who actually knows your town — the housing stock, the permit office, the way the
+          coast beats up a roof — not a faceless company three counties away.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 — Schema (the big one) -->
+  <section class="bg-navy-950 py-16 text-white">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6">
+      <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-300">03 — Getting picked by AI search</p>
+      <h2 class="h-display mt-2 text-3xl sm:text-4xl">The rules of search just changed. Almost nobody knows yet.</h2>
+      <div class="mt-5 space-y-4 text-lg leading-relaxed text-white/85">
+        <p>Here's the one most people have never heard of — and it might be the most important.</p>
+        <p>
+          <strong class="text-white">Schema</strong> is a hidden label on a website, written in a language robots
+          read perfectly. You see a normal page; underneath, the label tells the machines exactly what they're
+          looking at: this is a roofing company, here's the phone number, here's the service area, here are the
+          reviews, here's the star rating, this is a real, trusted business. No guessing — you hand the robots the
+          answer.
+        </p>
+        <p>
+          Why does that suddenly matter? Because how people search is changing fast. It used to be: type into
+          Google, scroll the blue links, click one. Now people ask ChatGPT, or Google's AI, or Perplexity,
+          <em>"who's the best roofer near me?"</em> — and the AI just answers. It picks one and names it. The way
+          it decides who to name is by reading the sites that labeled themselves clearly, the ones with clean
+          schema.
+        </p>
+        <p>
+          Almost nobody has done this yet — especially small contractors. The slate is nearly blank. It's like the
+          early days of Google back in 1999: the businesses that showed up early became the ones everybody found
+          for the next twenty years. <strong class="text-white">Paragon planted that flag early.</strong>
+        </p>
+      </div>
+      <div class="mt-6 rounded-2xl border-l-4 border-gold-400 bg-white/5 p-6 ring-1 ring-white/10">
+        <p class="font-display text-sm font-bold uppercase tracking-wider text-gold-300">What that means for you</p>
+        <p class="mt-2 leading-relaxed text-white/85">
+          When you ask an AI assistant for a roofer at the Jersey Shore, Paragon is built to be the name it can
+          actually read, trust, and recommend. <span class="text-white/70">(This very page is marked up that way —
+          the machines are reading it as you scroll.)</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <FaqAccordion faqs={faqs} heading="How Paragon gets found — questions we get" />
+
+  <CtaBand
+    heading="The search engines pick Paragon. Homeowners do too."
+    sub="Family-run, fully licensed, and easy to find for a reason. Get your free estimate."
+  />
+</Base>
