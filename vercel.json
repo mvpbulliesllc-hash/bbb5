@@ -1,6 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "//": "Root-level Vercel config so a repo-ROOT deployment builds the Astro marketing site in clients/website. Preferred setup is still to set the Vercel project's Root Directory to 'clients/website' (which uses clients/website/vercel.json instead); this file is the belt-and-suspenders fallback so a default repo-root deploy also works. Keep the redirects/headers here in sync with clients/website/vercel.json.",
   "framework": null,
   "installCommand": "npm --prefix clients/website install",
   "buildCommand": "npm --prefix clients/website run build",
