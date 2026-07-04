@@ -4,24 +4,25 @@ import { business, integrations } from '@/config/business';
 /**
  * Full-width hook-video block below the hero — a purpose-built 10s cinematic
  * hook ("30 ROOFS. / 30 DAYS. / ZERO SHORTCUTS. / YOUR ROOF. DONE IN A DAY.")
- * with text beats + logo end card baked in and a cinematic audio bed.
+ * with text beats + logo end card baked in and a loud, clearly-audible music
+ * bed.
  *
- * Source: /media/hero-hook.mp4 (16:9, has audio) — generated via Higgsfield
- * (Kling 3.0) and finished in the asset pipeline. Poster is hero-static.jpg so
- * there's no blank flash before load. The real Instagram reel stays lower on
- * the page in the InstagramBand (its native vertical format).
+ * Source: /media/hero-hook.mp4 (16:9, has a real music bed + narration-free
+ * cinematic audio, loudness-normalized). Poster is hero-static.jpg so there's
+ * no blank flash. The real Instagram reel stays lower on the page.
  *
- * Rendering: <mux-player> when PUBLIC_MUX_PLAYBACK_ID is set (upload the same
- * mp4 to Mux for adaptive streaming); otherwise the local file. Autoplays
- * muted + looping per browser policy, with a prominent unmute button and
- * native controls so viewers can hear it.
+ * SOUND: browsers forbid autoplay WITH sound, so the clip autostarts muted and
+ * loops, and we unmute on the viewer's very first interaction anywhere on the
+ * page (click / tap / scroll / key) AND via an unmissable center button. Once
+ * unmuted it stays unmuted. Uses <mux-player> when PUBLIC_MUX_PLAYBACK_ID is
+ * set, else the local file.
  */
 const muxId = integrations.muxPlaybackId;
 ---
 
 <section class="bg-navy-950">
   <div class="relative w-full">
-    <div class="relative aspect-video w-full overflow-hidden bg-black">
+    <div class="group relative aspect-video w-full overflow-hidden bg-black">
       {
         muxId ? (
           <mux-player
@@ -51,18 +52,27 @@ const muxId = integrations.muxPlaybackId;
         )
       }
 
-      <!-- Unmute affordance — this hook video has a cinematic audio bed. -->
+      <!-- Unmissable sound toggle overlay -->
       <button
-        id="feature-unmute"
+        id="feature-sound"
         type="button"
-        class="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-gold-500/95 px-4 py-2 font-display text-sm font-bold text-navy-950 shadow-lift transition hover:bg-gold-400"
-        aria-label="Unmute video"
+        class="absolute inset-0 z-10 flex items-end justify-center pb-6 sm:pb-10"
+        aria-label="Turn sound on"
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M3 10v4h4l5 5V5L7 10H3Zm13.5 2a4.5 4.5 0 0 0-2.5-4.03v8.06A4.5 4.5 0 0 0 16.5 12Z" />
-          <path d="m19 4-1.4 1.4a9 9 0 0 1 0 13.2L19 20a11 11 0 0 0 0-16Z" />
-        </svg>
-        Tap for sound
+        <span
+          id="feature-sound-pill"
+          class="pointer-events-none inline-flex items-center gap-2 rounded-full bg-gold-500/95 px-5 py-2.5 font-display text-sm font-bold text-navy-950 shadow-lift ring-2 ring-white/30 transition group-hover:scale-105"
+        >
+          <svg id="feature-sound-off" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M3 10v4h4l5 5V5L7 10H3Z" />
+            <path d="m16.5 8.5 5 5m0-5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" />
+          </svg>
+          <svg id="feature-sound-on" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M3 10v4h4l5 5V5L7 10H3Zm13.5 2a4.5 4.5 0 0 0-2.5-4.03v8.06A4.5 4.5 0 0 0 16.5 12Z" />
+            <path d="m19 4-1.4 1.4a9 9 0 0 1 0 13.2L19 20a11 11 0 0 0 0-16Z" />
+          </svg>
+          <span id="feature-sound-label">Tap for sound</span>
+        </span>
       </button>
     </div>
   </div>
@@ -79,26 +89,57 @@ const muxId = integrations.muxPlaybackId;
 <script>
   const vid = document.querySelector<HTMLVideoElement>('#feature-video');
   const muxEl = document.querySelector('mux-player[data-feature-video]') as
-    | (HTMLElement & { muted?: boolean; play?: () => void })
+    | (HTMLElement & { muted?: boolean; play?: () => void; volume?: number })
     | null;
-  const btn = document.getElementById('feature-unmute');
+  const btn = document.getElementById('feature-sound');
+  const pill = document.getElementById('feature-sound-pill');
+  const iconOff = document.getElementById('feature-sound-off');
+  const iconOn = document.getElementById('feature-sound-on');
+  const label = document.getElementById('feature-sound-label');
 
-  const enableSound = () => {
+  let soundOn = false;
+
+  const setMuted = (muted: boolean) => {
     if (vid) {
-      vid.muted = false;
+      vid.muted = muted;
       vid.volume = 1;
-      void vid.play().catch(() => {});
+      if (!muted) void vid.play().catch(() => {});
     }
     if (muxEl) {
-      muxEl.muted = false;
-      muxEl.play?.();
+      muxEl.muted = muted;
+      if (!muted) muxEl.play?.();
     }
-    btn?.classList.add('hidden');
-    window.gtag?.('event', 'feature_video_unmute');
+    soundOn = !muted;
+    iconOff?.classList.toggle('hidden', soundOn);
+    iconOn?.classList.toggle('hidden', !soundOn);
+    if (label) label.textContent = soundOn ? 'Sound on' : 'Tap for sound';
+    pill?.classList.toggle('bg-gold-500/95', !soundOn);
+    pill?.classList.toggle('bg-navy-900/80', soundOn);
+    pill?.classList.toggle('text-white', soundOn);
   };
 
-  btn?.addEventListener('click', enableSound);
-  vid?.addEventListener('volumechange', () => {
-    if (vid && !vid.muted) btn?.classList.add('hidden');
+  // Explicit button = toggle.
+  btn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    setMuted(soundOn);
+    window.gtag?.('event', soundOn ? 'feature_video_unmute' : 'feature_video_mute');
   });
+
+  // First interaction anywhere on the page turns sound on once (autoplay-policy
+  // safe: this runs inside a real user gesture). Removed after it fires.
+  const unmuteOnce = () => {
+    if (!soundOn) {
+      setMuted(false);
+      window.gtag?.('event', 'feature_video_unmute', { trigger: 'first_interaction' });
+    }
+    remove();
+  };
+  const remove = () => {
+    ['pointerdown', 'touchstart', 'keydown', 'wheel'].forEach((ev) =>
+      window.removeEventListener(ev, unmuteOnce)
+    );
+  };
+  ['pointerdown', 'touchstart', 'keydown', 'wheel'].forEach((ev) =>
+    window.addEventListener(ev, unmuteOnce, { once: false, passive: true })
+  );
 </script>
