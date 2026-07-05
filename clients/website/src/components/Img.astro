@@ -1,0 +1,64 @@
+---
+import { Picture } from 'astro:assets';
+import { resolveMedia } from '@/lib/images';
+
+/**
+ * Drop-in replacement for `<img src="/media/...">` that emits an optimized,
+ * responsive `<picture>` (AVIF + WebP + fallback) with intrinsic width/height
+ * to eliminate layout shift. Falls back to a plain `<img>` for any path not
+ * managed by the image pipeline (e.g. assets still in public/media).
+ *
+ * `priority` marks the LCP image: eager loading + fetchpriority=high.
+ */
+interface Props {
+  src: string;
+  alt: string;
+  widths?: number[];
+  sizes?: string;
+  loading?: 'lazy' | 'eager';
+  priority?: boolean;
+  class?: string;
+  width?: number;
+  height?: number;
+  [key: string]: unknown;
+}
+
+const {
+  src,
+  alt,
+  widths = [400, 800, 1200, 1600],
+  sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw',
+  loading,
+  priority = false,
+  class: className,
+  width,
+  height,
+  ...rest
+} = Astro.props;
+
+const img = resolveMedia(src);
+const load = priority ? 'eager' : (loading ?? 'lazy');
+// Never request a width larger than the source (astro:assets warns + won't upscale).
+const capped = img
+  ? Array.from(new Set(widths.filter((w) => w <= img.width).concat(img.width))).sort((a, b) => a - b)
+  : widths;
+---
+
+{
+  img ? (
+    <Picture
+      src={img}
+      formats={['avif', 'webp']}
+      widths={capped}
+      sizes={sizes}
+      alt={alt}
+      loading={load}
+      fetchpriority={priority ? 'high' : undefined}
+      decoding={priority ? 'auto' : 'async'}
+      class={className}
+      {...rest}
+    />
+  ) : (
+    <img src={src} alt={alt} loading={load} width={width} height={height} class={className} {...rest} />
+  )
+}

@@ -1,24 +1,26 @@
 ---
 import { business } from '@/config/business';
+import Img from '@/components/Img.astro';
 
 /**
  * Homepage hero — a static, high-impact background image (the reel now lives
- * in its own full-width Mux band directly below, see MuxFeatureVideo.astro).
- * Uses hero-static.jpg (a purpose-built cinematic shot) with hero-poster.jpg
- * as a graceful fallback if the static asset isn't present yet.
+ * in its own full-width band directly below, see MuxFeatureVideo.astro).
+ * Uses hero-home.jpg — a bright daytime shot, deliberately distinct from the
+ * sunset clip below — rendered as the LCP image (eager + fetchpriority=high,
+ * responsive AVIF/WebP).
  */
 const heroHeadline = 'The Jersey Shore’s New Standard in Roofing & Exteriors';
 ---
 
 <section class="relative isolate overflow-hidden bg-navy-950 text-white">
   <div class="absolute inset-0 -z-10" aria-hidden="true">
-    <img
-      src="/media/hero-static.jpg"
+    <Img
+      src="/media/hero-home.jpg"
       alt=""
+      priority
+      widths={[768, 1280, 1920, 2560]}
+      sizes="100vw"
       class="h-full w-full object-cover"
-      loading="eager"
-      fetchpriority="high"
-      onerror="this.onerror=null;this.src='/media/hero-poster.jpg';"
     />
     <div class="absolute inset-0 bg-gradient-to-b from-navy-950/80 via-navy-950/60 to-navy-950/90"></div>
   </div>

@@ -7,6 +7,7 @@ interface Props {
   limit?: number;
   heading?: string;
 }
+import Img from '@/components/Img.astro';
 const { limit = 8, heading = 'Recent work, straight from the drone' } = Astro.props;
 
 const projects = [
@@ -31,7 +32,7 @@ const projects = [
     {
       projects.map((p) => (
         <figure class="aspect-square overflow-hidden rounded-xl bg-navy-100">
-          <img src={p.src} alt={p.alt} width="600" height="600" loading="lazy" class="h-full w-full object-cover transition duration-500 hover:scale-105" />
+          <Img src={p.src} alt={p.alt} widths={[300, 600, 900]} sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" class="h-full w-full object-cover transition duration-500 hover:scale-105" />
         </figure>
       ))
     }

@@ -10,6 +10,8 @@ import LeadForm from '@/components/LeadForm.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import { serviceSchema, faqSchema, breadcrumbSchema } from '@/lib/schema';
 import { business } from '@/config/business';
+import Img from '@/components/Img.astro';
+import { ogImageUrl } from '@/lib/images';
 
 export async function getStaticPaths() {
   const combos = await getCollection('combos');
@@ -38,7 +40,7 @@ const townNames = new Map((await getCollection('towns')).map((t) => [t.id, t.dat
 <Base
   title={entry.data.metaTitle}
   description={entry.data.metaDescription}
-  ogImage={town.data.image}
+  ogImage={await ogImageUrl(town.data.image, Astro.site)}
   schemas={[
     serviceSchema({
       name: `${service.data.serviceName} in ${town.data.town}, NJ`,
@@ -51,7 +53,7 @@ const townNames = new Map((await getCollection('towns')).map((t) => [t.id, t.dat
   ]}
 >
   <section class="relative isolate overflow-hidden bg-navy-950 text-white">
-    <img src={town.data.image} alt="" class="absolute inset-0 -z-10 h-full w-full object-cover opacity-25" loading="eager" />
+    <Img src={town.data.image} alt="" priority widths={[768, 1280, 1920]} sizes="100vw" class="absolute inset-0 -z-10 h-full w-full object-cover opacity-25" />
     <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6">
       <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-300">
         {town.data.town} · {town.data.county} County, NJ
