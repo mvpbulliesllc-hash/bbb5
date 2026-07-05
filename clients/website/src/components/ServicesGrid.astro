@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import Img from '@/components/Img.astro';
 
 interface Props {
   heading?: string;
@@ -20,12 +21,11 @@ const services = (await getCollection('services')).sort((a, b) => a.data.order -
           class="group overflow-hidden rounded-2xl bg-white ring-1 ring-sand-200 transition hover:-translate-y-1 hover:shadow-lift"
         >
           <div class="aspect-[4/3] overflow-hidden bg-navy-100">
-            <img
+            <Img
               src={s.data.image}
               alt={s.data.title}
-              width="640"
-              height="480"
-              loading="lazy"
+              widths={[400, 640, 800]}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
             />
           </div>

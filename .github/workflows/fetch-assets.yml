@@ -31,18 +31,21 @@ jobs:
         working-directory: clients/website
         run: |
           set -euo pipefail
-          mkdir -p public/media/projects tmp-assets
+          mkdir -p tmp-assets
+          # `dest` is a path relative to clients/website (e.g. src/assets/media/x.jpg
+          # for build-optimized content imagery, or public/media/x.png for stable-URL assets).
           jq -c '.images[]' scripts/asset-manifest.json | while read -r item; do
             url=$(echo "$item" | jq -r .url)
             dest=$(echo "$item" | jq -r .dest)
             width=$(echo "$item" | jq -r '.width // 1600')
             keep=$(echo "$item" | jq -r '.keepFormat // false')
             echo "→ $dest"
+            mkdir -p "$(dirname "$dest")"
             curl -fsSL --retry 3 -A "Mozilla/5.0 (compatible; ParagonAssetFetcher/1.0)" -o "tmp-assets/src" "$url"
             if [ "$keep" = "true" ]; then
-              convert "tmp-assets/src" -resize "${width}>" "public/media/$dest"
+              convert "tmp-assets/src" -resize "${width}>" "$dest"
             else
-              convert "tmp-assets/src" -resize "${width}>" -quality 82 -strip "public/media/$dest"
+              convert "tmp-assets/src" -resize "${width}>" -quality 82 -strip "$dest"
             fi
           done
           rm -rf tmp-assets
@@ -104,6 +107,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add clients/website/public/media
+          git add clients/website/public/media clients/website/src/assets/media
           git diff --cached --quiet && echo "No changes" || git commit -m "chore(website): fetch and optimize media assets"
           git push

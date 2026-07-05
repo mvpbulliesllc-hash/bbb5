@@ -4,6 +4,7 @@ import TrustBar from '@/components/TrustBar.astro';
 import Testimonials from '@/components/Testimonials.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Img from '@/components/Img.astro';
 import { business } from '@/config/business';
 import { breadcrumbSchema } from '@/lib/schema';
 
@@ -52,12 +53,11 @@ const crumbs = [
       <!-- Joe — the face of the company, featured -->
       <div class="mt-8 grid overflow-hidden rounded-3xl bg-white shadow-lift ring-1 ring-sand-200 lg:grid-cols-[minmax(0,44%)_1fr]">
         <div class="relative min-h-[380px] bg-navy-950">
-          <img
+          <Img
             src="/media/team-joe.jpg"
             alt="Giuseppe (Joe) Ballaccomo, Managing Partner of Paragon Exteriors"
-            width="900"
-            height="1100"
-            loading="lazy"
+            widths={[440, 700, 900]}
+            sizes="(max-width: 1024px) 100vw, 44vw"
             class="h-full w-full object-cover object-top"
           />
           <span class="absolute left-5 top-5 rounded-full bg-gold-500 px-3.5 py-1.5 font-display text-xs font-bold uppercase tracking-wide text-navy-950 shadow-lift">
@@ -82,12 +82,11 @@ const crumbs = [
       <!-- Franchi — master builder, supporting -->
       <div class="mt-6 grid items-center gap-6 rounded-3xl bg-white p-5 ring-1 ring-sand-200 sm:grid-cols-[220px_1fr] sm:p-6">
         <div class="overflow-hidden rounded-2xl bg-navy-950">
-          <img
+          <Img
             src="/media/team-franchi.jpg"
             alt="Franchi Vacchiano, Managing Partner of Paragon Exteriors"
-            width="440"
-            height="520"
-            loading="lazy"
+            widths={[220, 340, 440]}
+            sizes="(max-width: 640px) 100vw, 220px"
             class="aspect-[5/6] w-full object-cover object-top"
           />
         </div>

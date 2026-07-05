@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '@/layouts/Base.astro';
 import CtaBand from '@/components/CtaBand.astro';
+import Img from '@/components/Img.astro';
 
 const posts = (await getCollection('posts')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
@@ -25,7 +26,7 @@ const posts = (await getCollection('posts')).sort((a, b) => b.data.pubDate.value
         posts.map((p) => (
           <li>
             <a href={`/blog/${p.id}/`} class="group block h-full overflow-hidden rounded-2xl ring-1 ring-sand-200 transition hover:-translate-y-1 hover:shadow-lift">
-              <img src={p.data.image} alt="" width="640" height="360" loading="lazy" class="aspect-video w-full object-cover" />
+              <Img src={p.data.image} alt="" widths={[320, 480, 640]} sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" class="aspect-video w-full object-cover" />
               <div class="p-6">
                 <p class="font-display text-xs font-bold uppercase tracking-[0.2em] text-gold-600">{p.data.category}</p>
                 <h2 class="h-display mt-2 text-xl text-navy-950 group-hover:underline">{p.data.title}</h2>
