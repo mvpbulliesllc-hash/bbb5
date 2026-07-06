@@ -114,15 +114,20 @@ const { id = 'quote' } = Astro.props;
     var root = document.querySelector('[data-quote]');
     if (!root) return;
 
+    // ---- clean line-icon helper (no emoji — this is a premium build) -----
+    function ic(inner) {
+      return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5" aria-hidden="true">' + inner + '</svg>';
+    }
+
     // ---- pricing model (tunable) ----------------------------------------
     var MODEL = {
       services: [
-        { id: 'roof-replacement', label: 'Roof Replacement', emoji: '🏠', flow: 'roof' },
-        { id: 'roof-repair', label: 'Roof Repair', emoji: '🔧', flow: 'repair' },
-        { id: 'siding', label: 'Siding', emoji: '🧱', flow: 'range', range: [9000, 26000], sizes: true },
-        { id: 'windows', label: 'Windows', emoji: '🪟', flow: 'range', range: [7000, 22000], sizes: true },
-        { id: 'gutters', label: 'Gutters', emoji: '🌧️', flow: 'range', range: [1400, 4800], sizes: false },
-        { id: 'decks', label: 'Decks', emoji: '🪵', flow: 'range', range: [12000, 45000], sizes: false },
+        { id: 'roof-replacement', label: 'Roof Replacement', icon: ic('<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>'), flow: 'roof' },
+        { id: 'roof-repair', label: 'Roof Repair', icon: ic('<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.1-3.1a6 6 0 0 1-7.7 7.7l-5.9 5.9a2.1 2.1 0 0 1-3-3l5.9-5.9a6 6 0 0 1 7.7-7.7z"/>'), flow: 'repair' },
+        { id: 'siding', label: 'Siding', icon: ic('<rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 9h18M3 14h18"/>'), flow: 'range', range: [9000, 26000], sizes: true },
+        { id: 'windows', label: 'Windows', icon: ic('<rect x="4" y="3" width="16" height="18" rx="1"/><path d="M4 12h16M12 3v18"/>'), flow: 'range', range: [7000, 22000], sizes: true },
+        { id: 'gutters', label: 'Gutters', icon: ic('<path d="M2 8h14a4 4 0 0 1 4 4v6"/><path d="M2 8v3a2 2 0 0 0 2 2h12"/>'), flow: 'range', range: [1400, 4800], sizes: false },
+        { id: 'decks', label: 'Decks', icon: ic('<rect x="3" y="9" width="18" height="4" rx="1"/><path d="M6 13v6M12 13v6M18 13v6M8 9V6M16 9V6"/>'), flow: 'range', range: [12000, 45000], sizes: false },
       ],
       // roof squares (100 sqft) by home size
       sizes: [
@@ -144,9 +149,9 @@ const { id = 'quote' } = Astro.props;
         { id: 'storm', label: 'Storm / large damage', sub: 'Often insurance-eligible — we handle the claim', lo: 4500, hi: 12000 },
       ],
       timeline: [
-        { id: 'asap', label: 'ASAP / storm damage', emoji: '⚡' },
-        { id: 'soon', label: 'Next 1–3 months', emoji: '📅' },
-        { id: 'explore', label: 'Just exploring', emoji: '👀' },
+        { id: 'asap', label: 'ASAP / storm damage', icon: ic('<path d="M13 2 4 14h7l-2 8 9-12h-7z"/>') },
+        { id: 'soon', label: 'Next 1–3 months', icon: ic('<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>') },
+        { id: 'explore', label: 'Just exploring', icon: ic('<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>') },
       ],
     };
 
@@ -177,7 +182,7 @@ const { id = 'quote' } = Astro.props;
       b.type = 'button';
       b.className = 'group flex w-full items-center gap-3 rounded-xl border-2 border-sand-200 bg-white p-4 text-left transition hover:border-gold-500 hover:bg-gold-50';
       b.innerHTML =
-        (opts.emoji ? '<span class="text-2xl">' + opts.emoji + '</span>' : '') +
+        (opts.icon ? '<span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-navy-50 text-navy-700 transition group-hover:bg-gold-100 group-hover:text-gold-700">' + opts.icon + '</span>' : '') +
         '<span><span class="block font-display font-bold text-navy-950">' + opts.label + '</span>' +
         (opts.sub ? '<span class="block text-xs text-navy-900/60">' + opts.sub + '</span>' : '') + '</span>';
       b.addEventListener('click', opts.onClick);
@@ -187,7 +192,7 @@ const { id = 'quote' } = Astro.props;
     function render(sel, items, onPick) {
       var box = root.querySelector('[data-choices="' + sel + '"]');
       box.innerHTML = '';
-      items.forEach(function (it) { box.appendChild(card({ emoji: it.emoji, label: it.label, sub: it.sub, onClick: function () { onPick(it); } })); });
+      items.forEach(function (it) { box.appendChild(card({ icon: it.icon, label: it.label, sub: it.sub, onClick: function () { onPick(it); } })); });
     }
 
     // step 1
@@ -253,7 +258,7 @@ const { id = 'quote' } = Astro.props;
       includes.filter(Boolean).forEach(function (i) {
         var li = document.createElement('li');
         li.className = 'flex items-start gap-1.5';
-        li.innerHTML = '<span class="text-gold-600">✓</span> ' + i;
+        li.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-4 w-4 shrink-0 text-gold-600" aria-hidden="true"><path d="m20 6-11 11-5-5"/></svg><span>' + i + '</span>';
         ul.appendChild(li);
       });
     }
