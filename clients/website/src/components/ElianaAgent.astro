@@ -2,8 +2,10 @@
 import { business, integrations } from '@/config/business';
 
 /**
- * "Eliana" — Paragon's on-screen AI presenter. A floating video-style agent
+ * "Eli" — Paragon's on-screen AI presenter. A floating video-style agent
  * that answers roofing questions and runs lead intake, then books.
+ * The presenter is a real, looping talking-head video (eli.mp4) so she
+ * visibly "talks" while she answers — a live video-call feel.
  *
  * Reliability-first design for live demos:
  *  - Works with ZERO keys: a grounded Paragon knowledge base answers common
@@ -28,15 +30,15 @@ const tenant = integrations.tenant;
   data-phone-href={business.phoneHref}
 >
   <!-- Launcher -->
-  <button id="eliana-launch" type="button" aria-label="Chat with Eliana, Paragon's assistant"
+  <button id="eliana-launch" type="button" aria-label="Chat with Eli, Paragon's assistant"
     class="group fixed bottom-5 right-5 z-[60] flex items-center gap-3 rounded-full bg-navy-950 py-2 pl-2 pr-5 text-white shadow-lift ring-1 ring-white/15 transition hover:scale-105">
     <span class="relative block h-12 w-12 overflow-hidden rounded-full ring-2 ring-gold-400">
-      <img src="/media/eliana.jpg" alt="Eliana" class="h-full w-full object-cover" onerror="this.style.display='none'" />
+      <img src="/media/eli.jpg" alt="Eli" class="h-full w-full object-cover object-top" onerror="this.style.display='none'" />
       <span class="absolute inset-0 -z-10 bg-gradient-to-br from-gold-400 to-navy-800"></span>
       <span class="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-navy-950 bg-green-400"></span>
     </span>
     <span class="text-left leading-tight">
-      <span class="block font-display text-sm font-bold">Ask Eliana</span>
+      <span class="block font-display text-sm font-bold">Ask Eli</span>
       <span class="block text-[0.7rem] text-white/60">Roofing help · 24/7</span>
     </span>
   </button>
@@ -46,15 +48,22 @@ const tenant = integrations.tenant;
     class="fixed bottom-5 right-5 z-[61] flex h-[min(80vh,640px)] w-[min(94vw,400px)] flex-col overflow-hidden rounded-3xl bg-white shadow-lift ring-1 ring-navy-200">
     <!-- Presenter header -->
     <div class="relative shrink-0 bg-navy-950">
-      <div id="eliana-stage" class="relative aspect-[16/10] w-full overflow-hidden">
-        <img src="/media/eliana.jpg" alt="Eliana, Paragon's virtual assistant"
-          class="h-full w-full object-cover object-top" onerror="this.style.display='none'" />
+      <div id="eliana-stage" class="relative aspect-[16/10] w-full overflow-hidden bg-navy-900">
+        <video id="eliana-video" class="h-full w-full object-cover object-center" autoplay muted loop playsinline
+          poster="/media/eli.jpg" preload="auto">
+          <source src="/media/eli.mp4" type="video/mp4" />
+        </video>
         <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/10 to-transparent"></div>
         <!-- speaking ring -->
         <span id="eliana-ring" class="pointer-events-none absolute inset-0 opacity-0 ring-4 ring-inset ring-gold-400 transition-opacity"></span>
+        <!-- live badge -->
+        <span class="absolute left-4 top-3 flex items-center gap-1.5 rounded-full bg-black/40 px-2.5 py-1 backdrop-blur">
+          <span class="h-1.5 w-1.5 rounded-full bg-green-400"></span>
+          <span class="text-[0.6rem] font-bold uppercase tracking-wider text-white">Live</span>
+        </span>
         <div class="absolute bottom-3 left-4 right-4 flex items-end justify-between">
           <div>
-            <p class="font-display text-lg font-extrabold leading-none text-white">Eliana</p>
+            <p class="font-display text-lg font-extrabold leading-none text-white">Eli</p>
             <p class="text-[0.72rem] text-gold-300" id="eliana-status">Paragon's roofing assistant</p>
           </div>
           <button id="eliana-close" type="button" aria-label="Close" class="rounded-full bg-white/15 p-2 text-white hover:bg-white/25">
@@ -81,7 +90,7 @@ const tenant = integrations.tenant;
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l18-8-8 18-2.5-7.5L3 11Z"/></svg>
         </button>
       </div>
-      <p class="mt-1.5 text-center text-[0.68rem] text-navy-900/45">Eliana is Paragon's assistant · she can book your free estimate</p>
+      <p class="mt-1.5 text-center text-[0.68rem] text-navy-900/45">Eli is Paragon's assistant · she can book your free estimate</p>
     </form>
   </div>
 </div>
@@ -101,7 +110,9 @@ const tenant = integrations.tenant;
     var mic = document.getElementById('eliana-mic');
     var ring = document.getElementById('eliana-ring');
     var statusEl = document.getElementById('eliana-status');
+    var video = document.getElementById('eliana-video');
     var started = false;
+    function playVideo() { try { if (video) { video.muted = true; var p = video.play(); if (p && p.catch) p.catch(function () {}); } } catch (e) {} }
 
     // ---------- speech (ElevenLabs if API set, else browser TTS) ----------
     var voice = null;
@@ -113,7 +124,11 @@ const tenant = integrations.tenant;
       } catch (e) {}
     }
     if ('speechSynthesis' in window) { pickVoice(); window.speechSynthesis.onvoiceschanged = pickVoice; }
-    function speaking(on) { ring.style.opacity = on ? '1' : '0'; statusEl.textContent = on ? 'Speaking…' : "Paragon's roofing assistant"; }
+    function speaking(on) {
+      ring.style.opacity = on ? '1' : '0';
+      statusEl.textContent = on ? 'Speaking…' : "Paragon's roofing assistant";
+      if (video) { video.style.transition = 'transform .4s ease'; video.style.transform = on ? 'scale(1.04)' : 'scale(1)'; }
+    }
     async function say(text) {
       var clean = text.replace(/\s+/g, ' ').trim();
       if (API) {
@@ -168,7 +183,7 @@ const tenant = integrations.tenant;
 
     // ---------- grounded Paragon knowledge base (offline brain) ----------
     var KB = [
-      { k: ['hello','hi','hey','yo','sup'], a: "Hi! I'm Eliana, Paragon Exteriors' assistant. I can answer anything about your roof or exterior — or get you a free estimate. What's going on with your home?" },
+      { k: ['hello','hi','hey','yo','sup'], a: "Hi! I'm Eli, Paragon Exteriors' assistant. I can answer anything about your roof or exterior — or get you a free estimate. What's going on with your home?" },
       { k: ['service','offer','do you','what do you do','siding','window','door','deck','gutter','commercial'], a: "Paragon does it all: roof replacement & repair, siding, windows, doors, decks, gutters, and commercial roofing. Roofing's our specialty. What are you thinking about?" },
       { k: ['area','where','town','serve','location','near me','county'], a: "We cover " + AREA + " — Toms River, Brick, Jackson, Howell, Point Pleasant, Rumson, Holmdel and dozens more. Where's your home?" },
       { k: ['cost','price','how much','estimate','quote','expensive','afford'], a: "Most Jersey Shore roof replacements run about $8,000–$18,000 depending on size and shingle. Want a real number in 30 seconds? I can run our instant estimator — or just have someone come look, free.", chips: ['Run my instant quote','Book a free estimate'] },
@@ -244,16 +259,16 @@ const tenant = integrations.tenant;
     }
     async function submitLead() {
       var d = intake.data;
-      var msg = "Ask-Eliana lead — Issue: " + (d.issue || '') ;
+      var msg = "Ask-Eli lead — Issue: " + (d.issue || '') ;
       var parts = (d.name || '').trim().split(' ');
       var payload = {
-        firstName: parts[0] || d.name || 'Website', lastName: parts.slice(1).join(' ') || '(via Eliana)',
+        firstName: parts[0] || d.name || 'Website', lastName: parts.slice(1).join(' ') || '(via Eli)',
         phone: d.phone || '', address: d.address || '', serviceType: 'Roofing',
         message: msg, source: 'Website', preferredContactMethod: 'Phone', landingPage: location.pathname,
       };
       var wait = typing();
       var ok = false;
-      // Prefer the live Eliana API (writes to Attio + notifies Joe); else the site CRM; else mailto.
+      // Prefer the live Eli API (writes to Attio + notifies Joe); else the site CRM; else mailto.
       try {
         if (API) {
           var r = await fetch(API.replace(/\/$/, '') + '/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
@@ -265,7 +280,7 @@ const tenant = integrations.tenant;
         }
       } catch (e) { ok = false; }
       wait.remove();
-      if (window.gtag) window.gtag('event', 'generate_lead', { method: 'eliana' });
+      if (window.gtag) window.gtag('event', 'generate_lead', { method: 'eli' });
       intake = null;
       if (ok) {
         var done = "You're all set, " + ((d.name || '').split(' ')[0] || 'friend') + "! I've sent your details to Joe's team — they'll reach out fast, usually the same day. Anything else I can help with?";
@@ -273,7 +288,7 @@ const tenant = integrations.tenant;
       } else {
         var body = encodeURIComponent('Name: ' + (d.name||'') + '\nPhone: ' + (d.phone||'') + '\nAddress: ' + (d.address||'') + '\nIssue: ' + (d.issue||''));
         var fb = "Got it! The fastest way to lock this in: tap to send it to us, or call " + PHONE + ".";
-        var b = bubble('eliana', esc(fb) + ' <a class="font-bold text-gold-700 underline" href="mailto:Paragonexteriors.co@gmail.com?subject=Eliana%20lead&body=' + body + '">Send my request</a>');
+        var b = bubble('eliana', esc(fb) + ' <a class="font-bold text-gold-700 underline" href="mailto:Paragonexteriors.co@gmail.com?subject=Eli%20lead&body=' + body + '">Send my request</a>');
         say(fb);
       }
     }
@@ -304,15 +319,16 @@ const tenant = integrations.tenant;
     // ---------- open / close ----------
     function open() {
       panel.hidden = false; launch.style.display = 'none';
+      playVideo();
       if (!started) {
         started = true;
-        var hi = "Hey! I'm Eliana 👋 Paragon's roofing assistant. Ask me anything about your roof — or I can get you a free estimate in seconds.";
+        var hi = "Hey! I'm Eli 👋 Paragon's roofing assistant. Ask me anything about your roof — or I can get you a free estimate in seconds.";
         bubble('eliana', esc(hi)); say(hi);
         chips(['How much is a new roof?','Do you handle storm damage?','Book a free estimate']);
       }
       setTimeout(function () { input.focus(); }, 100);
     }
-    function close() { panel.hidden = true; launch.style.display = 'flex'; try { window.speechSynthesis.cancel(); } catch(e){} speaking(false); }
+    function close() { panel.hidden = true; launch.style.display = 'flex'; try { if (video) video.pause(); } catch(e){} try { window.speechSynthesis.cancel(); } catch(e){} speaking(false); }
     launch.addEventListener('click', open);
     document.getElementById('eliana-close').addEventListener('click', close);
   })();
