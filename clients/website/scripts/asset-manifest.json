@@ -31,7 +31,8 @@
     { "url": "https://static.wixstatic.com/media/e699bb_4f429f8707ce4a24a348bcdf1eba7cfc~mv2.png", "dest": "public/media/logo.png", "width": 400, "keepFormat": true },
     { "url": "https://static.wixstatic.com/media/88aac0_ce326710d21542229e624c3b6ed5dcd1~mv2.png", "dest": "public/media/logo-mark.png", "width": 350, "keepFormat": true },
     { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_202008_4718a3a9-aef5-4439-b3de-9e1b756c2fbd.png", "dest": "src/assets/media/team-joe.jpg", "width": 900 },
-    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_200415_a526e1bf-cd4a-45bf-bd60-1675395df7e5.png", "dest": "src/assets/media/team-franchi.jpg", "width": 900 }
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260704_200415_a526e1bf-cd4a-45bf-bd60-1675395df7e5.png", "dest": "src/assets/media/team-franchi.jpg", "width": 900 },
+    { "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/hf_20260706_040346_320a346b-ed5b-4215-bd56-9fe0728cf2e0.png", "dest": "public/media/eliana.jpg", "width": 800 }
   ],
   "videos": [
     {

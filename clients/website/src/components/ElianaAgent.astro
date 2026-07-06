@@ -1,0 +1,319 @@
+---
+import { business, integrations } from '@/config/business';
+
+/**
+ * "Eliana" — Paragon's on-screen AI presenter. A floating video-style agent
+ * that answers roofing questions and runs lead intake, then books.
+ *
+ * Reliability-first design for live demos:
+ *  - Works with ZERO keys: a grounded Paragon knowledge base answers common
+ *    questions, the browser speaks the replies (SpeechSynthesis), push-to-talk
+ *    uses the Web Speech API, and lead intake posts to the existing CRM.
+ *  - Upgrades automatically when configured:
+ *      · PUBLIC_ELIANA_API  → live Claude brain (serverless endpoint) + ElevenLabs voice
+ *      · PUBLIC_LEADS_API    → CRM lead write (already used by LeadForm)
+ *  So the demo can't fail cold, and goes fully live once the env vars are set.
+ */
+const elianaApi = import.meta.env.PUBLIC_ELIANA_API ?? '';
+const leadsApi = integrations.leadsApi;
+const tenant = integrations.tenant;
+---
+
+<div
+  id="eliana"
+  data-api={elianaApi}
+  data-leads={leadsApi}
+  data-tenant={tenant}
+  data-phone={business.phone}
+  data-phone-href={business.phoneHref}
+>
+  <!-- Launcher -->
+  <button id="eliana-launch" type="button" aria-label="Chat with Eliana, Paragon's assistant"
+    class="group fixed bottom-5 right-5 z-[60] flex items-center gap-3 rounded-full bg-navy-950 py-2 pl-2 pr-5 text-white shadow-lift ring-1 ring-white/15 transition hover:scale-105">
+    <span class="relative block h-12 w-12 overflow-hidden rounded-full ring-2 ring-gold-400">
+      <img src="/media/eliana.jpg" alt="Eliana" class="h-full w-full object-cover" onerror="this.style.display='none'" />
+      <span class="absolute inset-0 -z-10 bg-gradient-to-br from-gold-400 to-navy-800"></span>
+      <span class="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-navy-950 bg-green-400"></span>
+    </span>
+    <span class="text-left leading-tight">
+      <span class="block font-display text-sm font-bold">Ask Eliana</span>
+      <span class="block text-[0.7rem] text-white/60">Roofing help · 24/7</span>
+    </span>
+  </button>
+
+  <!-- Panel -->
+  <div id="eliana-panel" hidden
+    class="fixed bottom-5 right-5 z-[61] flex h-[min(80vh,640px)] w-[min(94vw,400px)] flex-col overflow-hidden rounded-3xl bg-white shadow-lift ring-1 ring-navy-200">
+    <!-- Presenter header -->
+    <div class="relative shrink-0 bg-navy-950">
+      <div id="eliana-stage" class="relative aspect-[16/10] w-full overflow-hidden">
+        <img src="/media/eliana.jpg" alt="Eliana, Paragon's virtual assistant"
+          class="h-full w-full object-cover object-top" onerror="this.style.display='none'" />
+        <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/10 to-transparent"></div>
+        <!-- speaking ring -->
+        <span id="eliana-ring" class="pointer-events-none absolute inset-0 opacity-0 ring-4 ring-inset ring-gold-400 transition-opacity"></span>
+        <div class="absolute bottom-3 left-4 right-4 flex items-end justify-between">
+          <div>
+            <p class="font-display text-lg font-extrabold leading-none text-white">Eliana</p>
+            <p class="text-[0.72rem] text-gold-300" id="eliana-status">Paragon's roofing assistant</p>
+          </div>
+          <button id="eliana-close" type="button" aria-label="Close" class="rounded-full bg-white/15 p-2 text-white hover:bg-white/25">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transcript -->
+    <div id="eliana-log" class="flex-1 space-y-3 overflow-y-auto bg-sand-50 px-4 py-4 text-sm"></div>
+
+    <!-- Composer -->
+    <form id="eliana-form" class="shrink-0 border-t border-navy-100 bg-white p-3">
+      <div class="flex items-center gap-2">
+        <button id="eliana-mic" type="button" aria-label="Push to talk"
+          class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-sand-100 text-navy-800 transition hover:bg-sand-200">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M19 11a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V21a1 1 0 1 0 2 0v-3.08A7 7 0 0 0 19 11Z"/></svg>
+        </button>
+        <input id="eliana-input" autocomplete="off" placeholder="Ask about your roof…"
+          class="h-11 w-full rounded-full border border-navy-200 px-4 text-sm focus:border-gold-500 focus:outline-none" />
+        <button type="submit" aria-label="Send"
+          class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-gold-500 text-navy-950 transition hover:bg-gold-400">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l18-8-8 18-2.5-7.5L3 11Z"/></svg>
+        </button>
+      </div>
+      <p class="mt-1.5 text-center text-[0.68rem] text-navy-900/45">Eliana is Paragon's assistant · she can book your free estimate</p>
+    </form>
+  </div>
+</div>
+
+<script is:inline define:vars={{ PHONE: business.phone, LICENSE: business.license, AREA: business.areaServed, HOURS: business.hours }}>
+  (function () {
+    var root = document.getElementById('eliana');
+    if (!root) return;
+    var API = root.dataset.api || '';
+    var LEADS = root.dataset.leads || '';
+    var TENANT = root.dataset.tenant || 'root';
+    var launch = document.getElementById('eliana-launch');
+    var panel = document.getElementById('eliana-panel');
+    var log = document.getElementById('eliana-log');
+    var form = document.getElementById('eliana-form');
+    var input = document.getElementById('eliana-input');
+    var mic = document.getElementById('eliana-mic');
+    var ring = document.getElementById('eliana-ring');
+    var statusEl = document.getElementById('eliana-status');
+    var started = false;
+
+    // ---------- speech (ElevenLabs if API set, else browser TTS) ----------
+    var voice = null;
+    function pickVoice() {
+      try {
+        var vs = window.speechSynthesis.getVoices();
+        voice = vs.find(function (v) { return /female|samantha|jenny|aria|zira|google us english/i.test(v.name); })
+          || vs.find(function (v) { return /en-US/i.test(v.lang); }) || vs[0] || null;
+      } catch (e) {}
+    }
+    if ('speechSynthesis' in window) { pickVoice(); window.speechSynthesis.onvoiceschanged = pickVoice; }
+    function speaking(on) { ring.style.opacity = on ? '1' : '0'; statusEl.textContent = on ? 'Speaking…' : "Paragon's roofing assistant"; }
+    async function say(text) {
+      var clean = text.replace(/\s+/g, ' ').trim();
+      if (API) {
+        try {
+          var r = await fetch(API.replace(/\/$/, '') + '/voice', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: clean }) });
+          if (r.ok) {
+            var buf = await r.arrayBuffer();
+            var audio = new Audio(URL.createObjectURL(new Blob([buf], { type: 'audio/mpeg' })));
+            speaking(true); audio.onended = function () { speaking(false); }; await audio.play(); return;
+          }
+        } catch (e) { /* fall through to browser TTS */ }
+      }
+      if ('speechSynthesis' in window) {
+        try {
+          window.speechSynthesis.cancel();
+          var u = new SpeechSynthesisUtterance(clean);
+          if (voice) u.voice = voice; u.rate = 1.02; u.pitch = 1.05;
+          u.onstart = function () { speaking(true); }; u.onend = function () { speaking(false); };
+          window.speechSynthesis.speak(u);
+        } catch (e) {}
+      }
+    }
+
+    // ---------- transcript ----------
+    function bubble(role, html) {
+      var wrap = document.createElement('div');
+      wrap.className = role === 'user' ? 'flex justify-end' : 'flex justify-start';
+      var b = document.createElement('div');
+      b.className = role === 'user'
+        ? 'max-w-[80%] rounded-2xl rounded-br-sm bg-navy-900 px-3.5 py-2.5 text-white'
+        : 'max-w-[85%] rounded-2xl rounded-bl-sm bg-white px-3.5 py-2.5 text-navy-900 ring-1 ring-navy-100';
+      b.innerHTML = html;
+      wrap.appendChild(b); log.appendChild(wrap); log.scrollTop = log.scrollHeight;
+      return b;
+    }
+    function typing() {
+      var b = bubble('eliana', '<span class="inline-flex gap-1"><span class="h-1.5 w-1.5 animate-bounce rounded-full bg-navy-300"></span><span class="h-1.5 w-1.5 animate-bounce rounded-full bg-navy-300" style="animation-delay:.15s"></span><span class="h-1.5 w-1.5 animate-bounce rounded-full bg-navy-300" style="animation-delay:.3s"></span></span>');
+      return b.parentElement;
+    }
+    function chips(items) {
+      var row = document.createElement('div');
+      row.className = 'flex flex-wrap justify-start gap-2 pt-1';
+      items.forEach(function (t) {
+        var c = document.createElement('button');
+        c.type = 'button';
+        c.className = 'rounded-full border border-gold-500 bg-white px-3 py-1 text-xs font-semibold text-navy-900 hover:bg-gold-50';
+        c.textContent = t; c.addEventListener('click', function () { handle(t); });
+        row.appendChild(c);
+      });
+      log.appendChild(row); log.scrollTop = log.scrollHeight;
+    }
+
+    // ---------- grounded Paragon knowledge base (offline brain) ----------
+    var KB = [
+      { k: ['hello','hi','hey','yo','sup'], a: "Hi! I'm Eliana, Paragon Exteriors' assistant. I can answer anything about your roof or exterior — or get you a free estimate. What's going on with your home?" },
+      { k: ['service','offer','do you','what do you do','siding','window','door','deck','gutter','commercial'], a: "Paragon does it all: roof replacement & repair, siding, windows, doors, decks, gutters, and commercial roofing. Roofing's our specialty. What are you thinking about?" },
+      { k: ['area','where','town','serve','location','near me','county'], a: "We cover " + AREA + " — Toms River, Brick, Jackson, Howell, Point Pleasant, Rumson, Holmdel and dozens more. Where's your home?" },
+      { k: ['cost','price','how much','estimate','quote','expensive','afford'], a: "Most Jersey Shore roof replacements run about $8,000–$18,000 depending on size and shingle. Want a real number in 30 seconds? I can run our instant estimator — or just have someone come look, free.", chips: ['Run my instant quote','Book a free estimate'] },
+      { k: ['how fast','how long','time','quick','day','when can'], a: "Most roofs are torn off and fully re-shingled in a single day — cleanup included. During our 30-roofs-in-30-days run, folks went from old roof to new roof between breakfast and dinner." },
+      { k: ['financ','payment','monthly','loan'], a: "Yes — financing's available with low monthly payments, so you don't pay it all up front. I can show an estimated monthly in our instant quote.", chips: ['Run my instant quote'] },
+      { k: ['warrant','guarantee','last','lifespan'], a: "You get both a manufacturer warranty on the materials and our workmanship warranty on the install. Architectural shingles typically last 25–30 years; standing-seam metal 50+." },
+      { k: ['storm','insurance','claim','hail','wind','leak','damage','emergency'], a: "We handle storm and insurance work start to finish — drone-document the damage, meet your adjuster on site, and make sure the claim covers everything it should. Active leak? We can tarp it fast. Want someone out today?", chips: ['Book a free estimate'] },
+      { k: ['licens','insured','legit','trust','review'], a: "Paragon is fully licensed and insured — " + LICENSE + " — and family-run. Our name goes on every roof we install." },
+      { k: ['hour','open','when are you','time you'], a: "We're reachable " + HOURS + ". You can also call " + PHONE + " anytime, or I can take your info right now." },
+      { k: ['who','about','owner','joe','franchi','family'], a: "Paragon is family-run by Joe Ballaccomo and Franchi Vacchiano — 55+ combined years in roofing and construction. When you call, you actually get Joe." },
+      { k: ['phone','call','number','contact','talk to','human'], a: "You can reach the team at " + PHONE + ". Want me to have Joe's crew call you instead? Takes 20 seconds." , chips: ['Book a free estimate'] },
+      { k: ['metal','shingle','material','asphalt','architectural','gaf','certainteed'], a: "We install architectural asphalt (the Shore workhorse), designer and luxury shingles, and coastal-grade standing-seam metal. I can price any of them in the instant quote.", chips: ['Run my instant quote'] },
+    ];
+    function answer(q) {
+      var s = q.toLowerCase();
+      var best = null, bestScore = 0;
+      KB.forEach(function (item) {
+        var score = item.k.reduce(function (n, kw) { return n + (s.indexOf(kw) >= 0 ? kw.length : 0); }, 0);
+        if (score > bestScore) { bestScore = score; best = item; }
+      });
+      if (/(book|schedule|estimate|come out|come look|appointment|yes|sign me|get started|let'?s do)/.test(s) && bestScore < 6) return { intake: true };
+      if (best) return best;
+      return { a: "Great question — I want to get you the right answer. The fastest way is a quick free estimate with our crew. Want me to set that up? Meanwhile, you can always call " + PHONE + ".", chips: ['Book a free estimate','Run my instant quote'] };
+    }
+
+    // ---------- live brain (Claude via serverless) with KB fallback ----------
+    var history = [];
+    async function respond(q) {
+      var t = typing();
+      var reply = null, chipList = null, doIntake = false;
+      if (API) {
+        try {
+          var r = await fetch(API.replace(/\/$/, '') + '/chat', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: q, history: history.slice(-8) }),
+          });
+          if (r.ok) { var d = await r.json(); reply = d.reply; chipList = d.chips || null; doIntake = !!d.intake; }
+        } catch (e) { /* fall back to KB */ }
+      }
+      if (reply == null) {
+        var kb = answer(q);
+        if (kb.intake) { doIntake = true; } else { reply = kb.a; chipList = kb.chips || null; }
+      }
+      t.remove();
+      if (doIntake && !reply) { startIntake(); return; }
+      history.push({ role: 'user', content: q }); history.push({ role: 'assistant', content: reply });
+      bubble('eliana', esc(reply));
+      say(reply);
+      if (chipList) chips(chipList);
+    }
+    function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
+
+    // ---------- lead intake ----------
+    var intake = null;
+    var steps = [
+      { key: 'name', q: "Love it — let's get you booked. First, what's your name?" },
+      { key: 'phone', q: "Thanks {name}! Best phone number for the crew to reach you?" },
+      { key: 'address', q: "Got it. What's the property address (town/zip is fine)?" },
+      { key: 'issue', q: "And what's going on — roof replacement, a leak, storm damage, siding…?" },
+    ];
+    function startIntake() {
+      intake = { i: 0, data: {} };
+      bubble('eliana', esc(steps[0].q)); say(steps[0].q);
+    }
+    function intakeStep(val) {
+      var step = steps[intake.i];
+      intake.data[step.key] = val;
+      intake.i++;
+      if (intake.i < steps.length) {
+        var q = steps[intake.i].q.replace('{name}', (intake.data.name || '').split(' ')[0]);
+        bubble('eliana', esc(q)); say(q);
+      } else { submitLead(); }
+    }
+    async function submitLead() {
+      var d = intake.data;
+      var msg = "Ask-Eliana lead — Issue: " + (d.issue || '') ;
+      var parts = (d.name || '').trim().split(' ');
+      var payload = {
+        firstName: parts[0] || d.name || 'Website', lastName: parts.slice(1).join(' ') || '(via Eliana)',
+        phone: d.phone || '', address: d.address || '', serviceType: 'Roofing',
+        message: msg, source: 'Website', preferredContactMethod: 'Phone', landingPage: location.pathname,
+      };
+      var wait = typing();
+      var ok = false;
+      // Prefer the live Eliana API (writes to Attio + notifies Joe); else the site CRM; else mailto.
+      try {
+        if (API) {
+          var r = await fetch(API.replace(/\/$/, '') + '/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+          ok = r.ok;
+        }
+        if (!ok && LEADS) {
+          var r2 = await fetch(LEADS, { method: 'POST', headers: { 'Content-Type': 'application/json', tenant: TENANT }, body: JSON.stringify(payload) });
+          ok = r2.ok;
+        }
+      } catch (e) { ok = false; }
+      wait.remove();
+      if (window.gtag) window.gtag('event', 'generate_lead', { method: 'eliana' });
+      intake = null;
+      if (ok) {
+        var done = "You're all set, " + ((d.name || '').split(' ')[0] || 'friend') + "! I've sent your details to Joe's team — they'll reach out fast, usually the same day. Anything else I can help with?";
+        bubble('eliana', esc(done)); say(done);
+      } else {
+        var body = encodeURIComponent('Name: ' + (d.name||'') + '\nPhone: ' + (d.phone||'') + '\nAddress: ' + (d.address||'') + '\nIssue: ' + (d.issue||''));
+        var fb = "Got it! The fastest way to lock this in: tap to send it to us, or call " + PHONE + ".";
+        var b = bubble('eliana', esc(fb) + ' <a class="font-bold text-gold-700 underline" href="mailto:Paragonexteriors.co@gmail.com?subject=Eliana%20lead&body=' + body + '">Send my request</a>');
+        say(fb);
+      }
+    }
+
+    // ---------- input routing ----------
+    function handle(text) {
+      var q = (text || '').trim(); if (!q) return;
+      bubble('user', esc(q));
+      if (intake) { intakeStep(q); return; }
+      if (/run my instant quote|instant quote/i.test(q)) { var m = "You got it — opening the instant estimator."; bubble('eliana', esc(m)); say(m); setTimeout(function(){ location.href = '/instant-quote/'; }, 900); return; }
+      if (/book|free estimate/i.test(q)) { startIntake(); return; }
+      respond(q);
+    }
+    form.addEventListener('submit', function (e) { e.preventDefault(); var v = input.value; input.value = ''; handle(v); });
+
+    // ---------- mic (Web Speech API push-to-talk) ----------
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SR) {
+      var rec = new SR(); rec.lang = 'en-US'; rec.interimResults = false;
+      var listening = false;
+      mic.addEventListener('click', function () {
+        try { if (listening) { rec.stop(); return; } rec.start(); listening = true; mic.classList.add('bg-red-500','text-white'); statusEl.textContent = 'Listening…'; } catch (e) {}
+      });
+      rec.onresult = function (ev) { var t = ev.results[0][0].transcript; input.value = ''; handle(t); };
+      rec.onend = function () { listening = false; mic.classList.remove('bg-red-500','text-white'); statusEl.textContent = "Paragon's roofing assistant"; };
+    } else { mic.style.display = 'none'; }
+
+    // ---------- open / close ----------
+    function open() {
+      panel.hidden = false; launch.style.display = 'none';
+      if (!started) {
+        started = true;
+        var hi = "Hey! I'm Eliana 👋 Paragon's roofing assistant. Ask me anything about your roof — or I can get you a free estimate in seconds.";
+        bubble('eliana', esc(hi)); say(hi);
+        chips(['How much is a new roof?','Do you handle storm damage?','Book a free estimate']);
+      }
+      setTimeout(function () { input.focus(); }, 100);
+    }
+    function close() { panel.hidden = true; launch.style.display = 'flex'; try { window.speechSynthesis.cancel(); } catch(e){} speaking(false); }
+    launch.addEventListener('click', open);
+    document.getElementById('eliana-close').addEventListener('click', close);
+  })();
+</script>
