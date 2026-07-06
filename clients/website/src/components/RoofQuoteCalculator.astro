@@ -1,0 +1,330 @@
+---
+import { business, integrations } from '@/config/business';
+
+/**
+ * Instant Roof Quote Calculator — an interactive multi-step estimator.
+ * Visitor picks service → project size → material tier → timeline and gets a
+ * transparent price RANGE in seconds, with a financing estimate, then "locks
+ * it in" via a lead form that posts to the CRM (same pattern as LeadForm).
+ *
+ * The pricing model lives in `MODEL` below (config-driven, easy to tune). All
+ * numbers are clearly framed as ballpark ranges confirmed on-site — never a
+ * hard quote.
+ *
+ * is:inline script is deliberate: this is a demo centerpiece and must run
+ * verbatim, independent of bundling.
+ */
+interface Props {
+  id?: string;
+}
+const { id = 'quote' } = Astro.props;
+---
+
+<section class="bg-navy-950 py-16 text-white sm:py-20" id={id}>
+  <div class="mx-auto max-w-4xl px-4 sm:px-6">
+    <div class="text-center">
+      <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-300">Instant estimate</p>
+      <h2 class="h-display mt-3 text-3xl sm:text-4xl">Get your roof price in 30 seconds</h2>
+      <p class="mt-3 text-white/70">No phone tag, no waiting. Real Jersey Shore pricing, ranged honestly — then we confirm it free, on-site.</p>
+    </div>
+
+    <div
+      class="mt-8 overflow-hidden rounded-3xl bg-white text-navy-900 shadow-lift ring-1 ring-white/10"
+      data-quote
+      data-endpoint={integrations.leadsApi}
+      data-tenant={integrations.tenant}
+      data-phone={business.phone}
+      data-phone-href={business.phoneHref}
+    >
+      <!-- Progress -->
+      <div class="flex items-center gap-2 border-b border-sand-200 px-6 py-4">
+        <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-sand-200">
+          <div class="h-full w-0 rounded-full bg-gold-500 transition-all duration-500" data-progress></div>
+        </div>
+        <span class="font-display text-xs font-bold uppercase tracking-wider text-navy-900/50" data-stepcount>Step 1 of 4</span>
+      </div>
+
+      <div class="p-6 sm:p-9">
+        <!-- STEP 1 — service -->
+        <div data-panel="1">
+          <h3 class="h-display text-2xl text-navy-950">What can we price for you?</h3>
+          <div class="mt-6 grid gap-3 sm:grid-cols-3" data-choices="service"></div>
+        </div>
+
+        <!-- STEP 2 — size -->
+        <div data-panel="2" hidden>
+          <h3 class="h-display text-2xl text-navy-950" data-q2>How big is your home?</h3>
+          <p class="mt-1 text-sm text-navy-900/60" data-q2sub>A rough footprint is fine — we confirm exact measurements on-site.</p>
+          <div class="mt-6 grid gap-3 sm:grid-cols-2" data-choices="size"></div>
+        </div>
+
+        <!-- STEP 3 — tier / detail -->
+        <div data-panel="3" hidden>
+          <h3 class="h-display text-2xl text-navy-950" data-q3>Which roof are we building?</h3>
+          <div class="mt-6 grid gap-3 sm:grid-cols-2" data-choices="tier"></div>
+        </div>
+
+        <!-- STEP 4 — timeline -->
+        <div data-panel="4" hidden>
+          <h3 class="h-display text-2xl text-navy-950">When are you looking to start?</h3>
+          <div class="mt-6 grid gap-3 sm:grid-cols-3" data-choices="timeline"></div>
+        </div>
+
+        <!-- RESULT -->
+        <div data-panel="result" hidden>
+          <p class="font-display text-sm font-bold uppercase tracking-[0.2em] text-gold-600" data-result-kicker>Your estimated range</p>
+          <div class="mt-2 flex items-end gap-2">
+            <span class="h-display text-4xl text-navy-950 sm:text-5xl" data-lo>$0</span>
+            <span class="pb-1 text-2xl text-navy-900/40">–</span>
+            <span class="h-display text-4xl text-navy-950 sm:text-5xl" data-hi>$0</span>
+          </div>
+          <p class="mt-2 text-sm text-navy-900/60" data-fin></p>
+          <div class="mt-5 rounded-2xl bg-sand-50 p-5 ring-1 ring-sand-200">
+            <p class="font-display text-sm font-bold text-navy-950">What that includes</p>
+            <ul class="mt-2 grid gap-1.5 text-sm text-navy-900/75 sm:grid-cols-2" data-includes></ul>
+          </div>
+
+          <!-- Lead capture -->
+          <form class="mt-6 grid gap-3 sm:grid-cols-2" data-quote-form novalidate>
+            <p class="sm:col-span-2 font-display text-lg font-bold text-navy-950">Lock in this estimate — free on-site confirmation</p>
+            <input name="firstName" required placeholder="First name *" autocomplete="given-name" class="rounded-lg border border-navy-200 px-3.5 py-2.5 focus:border-gold-500 focus:outline-none" />
+            <input name="lastName" required placeholder="Last name *" autocomplete="family-name" class="rounded-lg border border-navy-200 px-3.5 py-2.5 focus:border-gold-500 focus:outline-none" />
+            <input name="phone" type="tel" required placeholder="Phone *" autocomplete="tel" class="rounded-lg border border-navy-200 px-3.5 py-2.5 focus:border-gold-500 focus:outline-none" />
+            <input name="email" type="email" placeholder="Email" autocomplete="email" class="rounded-lg border border-navy-200 px-3.5 py-2.5 focus:border-gold-500 focus:outline-none" />
+            <input name="address" placeholder="Project address (town / zip)" autocomplete="street-address" class="sm:col-span-2 rounded-lg border border-navy-200 px-3.5 py-2.5 focus:border-gold-500 focus:outline-none" />
+            <input type="text" name="company" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+            <button type="submit" class="btn-gold sm:col-span-2 text-lg" data-cta="quote-submit">Lock in my estimate</button>
+            <p class="sm:col-span-2 text-center text-xs text-navy-900/55" data-quote-note>Free &amp; no obligation. Prefer to talk? Call {business.phone}.</p>
+            <p class="sm:col-span-2 hidden rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800" data-quote-error>Couldn't send that — please call {business.phone} and we'll take care of you.</p>
+          </form>
+        </div>
+
+        <!-- Nav -->
+        <div class="mt-8 flex items-center justify-between">
+          <button type="button" class="font-display text-sm font-bold text-navy-900/50 hover:text-navy-900 disabled:invisible" data-back>← Back</button>
+          <span class="text-xs text-navy-900/40">Ballpark range · confirmed free on-site</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    var root = document.querySelector('[data-quote]');
+    if (!root) return;
+
+    // ---- pricing model (tunable) ----------------------------------------
+    var MODEL = {
+      services: [
+        { id: 'roof-replacement', label: 'Roof Replacement', emoji: '🏠', flow: 'roof' },
+        { id: 'roof-repair', label: 'Roof Repair', emoji: '🔧', flow: 'repair' },
+        { id: 'siding', label: 'Siding', emoji: '🧱', flow: 'range', range: [9000, 26000], sizes: true },
+        { id: 'windows', label: 'Windows', emoji: '🪟', flow: 'range', range: [7000, 22000], sizes: true },
+        { id: 'gutters', label: 'Gutters', emoji: '🌧️', flow: 'range', range: [1400, 4800], sizes: false },
+        { id: 'decks', label: 'Decks', emoji: '🪵', flow: 'range', range: [12000, 45000], sizes: false },
+      ],
+      // roof squares (100 sqft) by home size
+      sizes: [
+        { id: 'ranch', label: 'Ranch / single story', sub: '≈ 1,200–1,700 sq ft', squares: 18, mult: 0.95 },
+        { id: 'avg', label: 'Average 2-story', sub: '≈ 1,700–2,600 sq ft', squares: 24, mult: 1.0 },
+        { id: 'large', label: 'Large home', sub: '≈ 2,600–3,600 sq ft', squares: 33, mult: 1.05 },
+        { id: 'estate', label: 'Estate / complex', sub: '3,600+ sq ft', squares: 44, mult: 1.12 },
+      ],
+      // per-square installed $ range by shingle/roof tier
+      tiers: [
+        { id: 'architectural', label: 'Architectural asphalt', sub: 'GAF/CertainTeed dimensional — the Jersey Shore workhorse', lo: 475, hi: 675 },
+        { id: 'designer', label: 'Designer shingle', sub: 'Bolder profile, longer warranty', lo: 675, hi: 950 },
+        { id: 'luxury', label: 'Luxury / slate-look', sub: 'Premium curb appeal', lo: 950, hi: 1350 },
+        { id: 'metal', label: 'Standing-seam metal', sub: 'Coastal-grade, 50-yr lifespan', lo: 1250, hi: 1900 },
+      ],
+      repair: [
+        { id: 'minor', label: 'Small leak / a few shingles', sub: 'Isolated fix', lo: 450, hi: 1500 },
+        { id: 'moderate', label: 'Section repair / flashing', sub: 'Around a valley, chimney or skylight', lo: 1500, hi: 4500 },
+        { id: 'storm', label: 'Storm / large damage', sub: 'Often insurance-eligible — we handle the claim', lo: 4500, hi: 12000 },
+      ],
+      timeline: [
+        { id: 'asap', label: 'ASAP / storm damage', emoji: '⚡' },
+        { id: 'soon', label: 'Next 1–3 months', emoji: '📅' },
+        { id: 'explore', label: 'Just exploring', emoji: '👀' },
+      ],
+    };
+
+    var state = { service: null, size: null, tier: null, timeline: null };
+    var money = function (n) { return '$' + Math.round(n / 100) * 100 + ''; };
+    var fmt = function (n) { return '$' + Number(Math.round(n / 100) * 100).toLocaleString('en-US'); };
+
+    var panels = {};
+    ['1', '2', '3', '4', 'result'].forEach(function (k) { panels[k] = root.querySelector('[data-panel="' + k + '"]'); });
+    var order = ['1', '2', '3', '4', 'result'];
+    var current = '1';
+    var progress = root.querySelector('[data-progress]');
+    var stepcount = root.querySelector('[data-stepcount]');
+    var backBtn = root.querySelector('[data-back]');
+
+    function show(step) {
+      current = step;
+      order.forEach(function (k) { panels[k].hidden = k !== step; });
+      var idx = order.indexOf(step);
+      progress.style.width = ((idx) / (order.length - 1)) * 100 + '%';
+      stepcount.textContent = step === 'result' ? 'Your estimate' : 'Step ' + (idx + 1) + ' of 4';
+      backBtn.disabled = step === '1';
+      root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function card(opts) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'group flex w-full items-center gap-3 rounded-xl border-2 border-sand-200 bg-white p-4 text-left transition hover:border-gold-500 hover:bg-gold-50';
+      b.innerHTML =
+        (opts.emoji ? '<span class="text-2xl">' + opts.emoji + '</span>' : '') +
+        '<span><span class="block font-display font-bold text-navy-950">' + opts.label + '</span>' +
+        (opts.sub ? '<span class="block text-xs text-navy-900/60">' + opts.sub + '</span>' : '') + '</span>';
+      b.addEventListener('click', opts.onClick);
+      return b;
+    }
+
+    function render(sel, items, onPick) {
+      var box = root.querySelector('[data-choices="' + sel + '"]');
+      box.innerHTML = '';
+      items.forEach(function (it) { box.appendChild(card({ emoji: it.emoji, label: it.label, sub: it.sub, onClick: function () { onPick(it); } })); });
+    }
+
+    // step 1
+    render('service', MODEL.services, function (svc) {
+      state.service = svc; state.size = null; state.tier = null;
+      if (svc.flow === 'roof') {
+        root.querySelector('[data-q2]').textContent = 'How big is your home?';
+        render('size', MODEL.sizes, function (s) { state.size = s; buildTier(); show('3'); });
+        show('2');
+      } else if (svc.flow === 'repair') {
+        // skip size; step2 becomes severity
+        root.querySelector('[data-q2]').textContent = 'What kind of repair?';
+        render('size', MODEL.repair, function (s) { state.tier = s; show('4'); });
+        show('2');
+      } else {
+        // range service
+        if (svc.sizes) {
+          root.querySelector('[data-q2]').textContent = 'How big is your home?';
+          render('size', MODEL.sizes, function (s) { state.size = s; show('4'); });
+          show('2');
+        } else { show('4'); }
+      }
+    });
+
+    function buildTier() {
+      root.querySelector('[data-q3]').textContent = 'Which roof are we building?';
+      render('tier', MODEL.tiers, function (t) { state.tier = t; show('4'); });
+    }
+
+    // step 4 timeline
+    render('timeline', MODEL.timeline, function (t) { state.timeline = t; computeAndShow(); });
+
+    function computeAndShow() {
+      var lo = 0, hi = 0, includes = [];
+      var svc = state.service;
+      if (svc.flow === 'roof') {
+        var sq = state.size.squares, m = state.size.mult, tier = state.tier;
+        lo = sq * tier.lo * m; hi = sq * tier.hi * m;
+        includes = ['Full tear-off & disposal', 'Synthetic underlayment + ice/water shield', tier.label + ' + ridge vent', 'Manufacturer + workmanship warranty', 'Permits & inspection', 'Yard cleanup (magnet swept)'];
+      } else if (svc.flow === 'repair') {
+        lo = state.tier.lo; hi = state.tier.hi;
+        includes = ['Full roof inspection', 'Matched materials', 'Leak-stop guarantee', state.tier.id === 'storm' ? 'Insurance claim assistance' : 'Same-week scheduling'];
+      } else {
+        var base = svc.range, f = state.size ? state.size.mult : 1;
+        lo = base[0] * (svc.sizes ? (state.size ? state.size.squares / 24 : 1) : 1);
+        hi = base[1] * (svc.sizes ? (state.size ? state.size.squares / 24 : 1) : 1);
+        includes = ['Free on-site measure', 'Premium materials', 'Licensed install crew', business.license ? '' : ''];
+      }
+      var urgent = state.timeline && state.timeline.id === 'asap';
+      // reveal
+      show('result');
+      root.querySelector('[data-result-kicker]').textContent = 'Your estimated ' + svc.label.toLowerCase() + ' range';
+      countTo(root.querySelector('[data-lo]'), lo);
+      countTo(root.querySelector('[data-hi]'), hi);
+      // financing: 120 mo @ 9.99%
+      var r = 0.0999 / 12, n = 120, p = lo;
+      var moPay = (p * r) / (1 - Math.pow(1 + r, -n));
+      root.querySelector('[data-fin]').innerHTML =
+        'Financing available — as low as <strong>' + fmt(moPay) + '/mo</strong>. ' +
+        (urgent ? '<span class="text-gold-700 font-semibold">Storm work? We prioritize emergency jobs.</span>' : '');
+      var ul = root.querySelector('[data-includes]');
+      ul.innerHTML = '';
+      includes.filter(Boolean).forEach(function (i) {
+        var li = document.createElement('li');
+        li.className = 'flex items-start gap-1.5';
+        li.innerHTML = '<span class="text-gold-600">✓</span> ' + i;
+        ul.appendChild(li);
+      });
+    }
+
+    function countTo(el, target) {
+      var start = 0, t0 = null, dur = 700;
+      function step(ts) {
+        if (!t0) t0 = ts;
+        var p = Math.min((ts - t0) / dur, 1);
+        el.textContent = fmt(Math.round(target * (0.2 + 0.8 * p)));
+        if (p < 1) requestAnimationFrame(step); else el.textContent = fmt(target);
+      }
+      requestAnimationFrame(step);
+    }
+
+    backBtn.addEventListener('click', function () {
+      var idx = order.indexOf(current);
+      if (idx > 0) {
+        // walk back to the appropriate prior step for the chosen flow
+        if (current === 'result') { show(state.service && state.service.flow === 'roof' ? '4' : '4'); }
+        else show(order[idx - 1]);
+      }
+    });
+
+    // lead submit — mirrors LeadForm (endpoint + tenant + attribution -> thank-you)
+    var form = root.querySelector('[data-quote-form]');
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var data = Object.fromEntries(new FormData(form).entries());
+      if (data.company) return; delete data.company;
+      var quoteText = [
+        'INSTANT QUOTE:',
+        'Service: ' + (state.service ? state.service.label : ''),
+        state.size ? 'Size: ' + state.size.label : '',
+        state.tier ? 'Tier: ' + state.tier.label : '',
+        state.timeline ? 'Timeline: ' + state.timeline.label : '',
+        'Estimated range: ' + root.querySelector('[data-lo]').textContent + '–' + root.querySelector('[data-hi]').textContent,
+      ].filter(Boolean).join(' | ');
+      var svcMap = { 'roof-replacement': 'RoofReplacement', 'roof-repair': 'RoofRepair', siding: 'Siding', windows: 'Windows', gutters: 'Gutters', decks: 'Decks' };
+      var attribution = {};
+      try { attribution = JSON.parse(localStorage.getItem('paragon-attribution') || '{}'); } catch (_) {}
+      var payload = Object.assign({
+        serviceType: svcMap[state.service && state.service.id] || 'Roofing',
+        message: quoteText,
+        source: 'Website',
+        preferredContactMethod: 'Phone',
+        landingPage: attribution.landingPage || location.pathname,
+        referrer: attribution.referrer || document.referrer || null,
+        utmSource: attribution.utmSource || null, utmMedium: attribution.utmMedium || null,
+        utmCampaign: attribution.utmCampaign || null, utmTerm: attribution.utmTerm || null, utmContent: attribution.utmContent || null,
+      }, data);
+      var endpoint = root.dataset.endpoint;
+      var btn = form.querySelector('button[type=submit]');
+      btn.disabled = true; btn.textContent = 'Sending…';
+      try {
+        if (endpoint) {
+          var res = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', tenant: root.dataset.tenant || 'root' }, body: JSON.stringify(payload) });
+          if (!res.ok) throw new Error('CRM ' + res.status);
+        } else {
+          var body = encodeURIComponent(Object.entries(payload).filter(function (kv) { return kv[1]; }).map(function (kv) { return kv[0] + ': ' + kv[1]; }).join('\n'));
+          location.href = 'mailto:Paragonexteriors.co@gmail.com?subject=' + encodeURIComponent('Instant quote request') + '&body=' + body;
+        }
+        if (window.gtag) window.gtag('event', 'generate_lead', { method: 'quote_calculator' });
+        location.href = '/thank-you/';
+      } catch (err) {
+        console.error(err);
+        form.querySelector('[data-quote-error]').classList.remove('hidden');
+        btn.disabled = false; btn.textContent = 'Lock in my estimate';
+      }
+    });
+
+    show('1');
+  })();
+</script>
