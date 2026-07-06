@@ -1,0 +1,44 @@
+---
+import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import TrustBar from '@/components/TrustBar.astro';
+import RoofQuoteCalculator from '@/components/RoofQuoteCalculator.astro';
+import Testimonials from '@/components/Testimonials.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { business } from '@/config/business';
+import { breadcrumbSchema, faqSchema } from '@/lib/schema';
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Instant Quote', url: '/instant-quote/' },
+];
+const faqs = [
+  { q: 'How accurate is the instant estimate?', a: 'It is a real, honest ballpark based on Jersey Shore pricing, your home size, and the material tier you pick. We confirm the exact number free, on-site — the range you see is what most homeowners actually pay for that scope.' },
+  { q: 'Is the instant quote binding?', a: 'No — it is a no-obligation estimate. Your final price is set after a free on-site measurement, and it never goes up without your written approval.' },
+  { q: 'Do you offer financing?', a: 'Yes. Most roofs can be financed with low monthly payments — the calculator shows an estimated monthly, and we walk you through options during your free estimate.' },
+];
+---
+
+<Base
+  title="Instant Roof Quote Calculator | Free NJ Roofing Estimate | Paragon Exteriors"
+  description="Get a real roof replacement or repair price range in 30 seconds — no phone tag. Honest Jersey Shore pricing, financing estimate, and a free on-site confirmation."
+  schemas={[breadcrumbSchema(crumbs), faqSchema(faqs)]}
+>
+  <section class="bg-navy-950 pt-14 text-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-300">Free · 30 seconds · no phone tag</p>
+      <h1 class="h-display mt-4 max-w-3xl text-4xl sm:text-5xl">Your instant roof estimate</h1>
+      <p class="mt-4 max-w-2xl text-lg text-white/85">
+        Answer four quick questions and get an honest price range on the spot — then we confirm it free, on-site.
+        {business.license}, licensed &amp; insured.
+      </p>
+    </div>
+  </section>
+  <TrustBar />
+  <Breadcrumbs items={crumbs} />
+
+  <RoofQuoteCalculator />
+
+  <Testimonials />
+  <CtaBand heading="Prefer a human? We answer fast." sub="Call, text, or book a free on-site estimate." />
+</Base>
