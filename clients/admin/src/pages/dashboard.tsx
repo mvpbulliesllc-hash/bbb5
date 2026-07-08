@@ -1,27 +1,33 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowRight,
   Building2,
   FileText,
-  LayoutDashboard,
   Receipt,
   UsersRound,
+  Layers,
+  AlertTriangle,
 } from "lucide-react";
 import { listTenants } from "@/api/tenants";
 import { listInvoices, getPlans } from "@/api/billing";
 import { Skeleton } from "@/components/ui/skeleton";
-import { EntityPageHeader, Stat, StatStrip, ToneIconTile, type ToneIconTileTone } from "@/components/list";
+import { ToneIconTile, type ToneIconTileTone } from "@/components/list";
+import { TiltCard } from "@/components/ui/tilt-card";
+import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
 import { useAuth } from "@/auth/use-auth";
 import { cn } from "@/lib/cn";
 
 /**
- * DashboardPage — the operator overview. EntityPageHeader greeting,
- * four KPI stat tiles drawing from real data, then pivot cards into
- * the rest of the app. No fake "Coming soon" filler.
+ * DashboardPage — the operator overview, rebuilt as the liquid-glass
+ * showcase. A live WebGL particle field (see GLBackdrop) refracts through
+ * every glass surface here: the header card, the tilting KPI tiles, and the
+ * entry-point pivots. All numbers are real, drawn from the tenants, plans,
+ * and invoices APIs — no placeholder content.
  */
 export function DashboardPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const tenantsQuery = useQuery({
     queryKey: ["tenants", { pageNumber: 1, pageSize: 1 }],
@@ -45,83 +51,79 @@ export function DashboardPage() {
 
   const firstName = user?.name?.split(" ")[0];
 
+  const stats: StatTileData[] = [
+    {
+      icon: Building2,
+      label: "Tenants",
+      value: tenantsQuery.isLoading ? null : tenantsTotal?.toLocaleString() ?? "—",
+      hint: "on this instance",
+      accent: "emerald",
+    },
+    {
+      icon: Layers,
+      label: "Plans",
+      value: plansQuery.isLoading ? null : plans.length.toLocaleString(),
+      hint: `${activePlans} active`,
+      accent: "sky",
+    },
+    {
+      icon: Receipt,
+      label: "Invoices",
+      value: invoicesQuery.isLoading
+        ? null
+        : invoicesPage?.items.length.toLocaleString() ?? "—",
+      hint: invoicesPage
+        ? `${invoicesPage.totalCount.toLocaleString()} total ledger`
+        : "loading…",
+      accent: "emerald",
+    },
+    {
+      icon: AlertTriangle,
+      label: "Outstanding",
+      value: invoicesQuery.isLoading ? null : outstandingCount.toLocaleString(),
+      hint: "issued, awaiting payment",
+      accent: outstandingCount > 0 ? "amber" : "emerald",
+    },
+  ];
+
   return (
     <div className="space-y-6">
-      {/* ── Page header ──────────────────────────────────────────────── */}
-      <div className="fsh-enter">
-        <EntityPageHeader
-          icon={LayoutDashboard}
-          title={
-            <>
-              Overview{firstName ? (
+      {/* ── Header card ──────────────────────────────────────────────── */}
+      <div className="fsh-enter liquid-glass rounded-3xl p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <h1 className="text-balance font-display text-2xl font-bold tracking-tight text-[var(--color-foreground)] sm:text-3xl">
+              Overview
+              {firstName ? (
                 <span className="text-[var(--color-muted-foreground)]">, {firstName}</span>
               ) : null}
-            </>
-          }
-          tone="primary"
-          description="Operate every tenant on this instance — identity, multitenancy, billing, and the rest of the system surface."
-        />
+            </h1>
+            <p className="mt-1 max-w-xl text-pretty text-sm leading-relaxed text-[var(--color-muted-foreground)]">
+              Operate every tenant on this instance — identity, multitenancy,
+              billing, and the rest of the system surface.
+            </p>
+          </div>
+          <div className="shrink-0">
+            <LiquidMetalButton
+              label="+ New Tenant"
+              width={148}
+              onClick={() => navigate("/tenants/new")}
+            />
+          </div>
+        </div>
       </div>
 
-      {/* ── KPI stat strip ───────────────────────────────────────────── */}
-      <StatStrip cols={4} className="fsh-enter fsh-enter-2">
-        <Stat
-          label="Tenants"
-          value={
-            tenantsQuery.isLoading ? (
-              <Skeleton className="h-7 w-16" />
-            ) : (
-              tenantsTotal?.toLocaleString() ?? "—"
-            )
-          }
-          hint="registered on this instance"
-        />
-        <Stat
-          label="Plans"
-          value={
-            plansQuery.isLoading ? (
-              <Skeleton className="h-7 w-16" />
-            ) : (
-              plans.length.toLocaleString()
-            )
-          }
-          hint={`${activePlans} active`}
-        />
-        <Stat
-          label="Invoices"
-          value={
-            invoicesQuery.isLoading ? (
-              <Skeleton className="h-7 w-16" />
-            ) : (
-              invoicesPage?.items.length.toLocaleString() ?? "—"
-            )
-          }
-          hint={
-            invoicesPage
-              ? `${invoicesPage.totalCount.toLocaleString()} total ledger`
-              : "loading…"
-          }
-        />
-        <Stat
-          label="Outstanding"
-          value={
-            invoicesQuery.isLoading ? (
-              <Skeleton className="h-7 w-16" />
-            ) : (
-              outstandingCount.toLocaleString()
-            )
-          }
-          hint="issued, awaiting payment"
-          tone={outstandingCount > 0 ? "warning" : "default"}
-        />
-      </StatStrip>
+      {/* ── KPI stat tiles ───────────────────────────────────────────── */}
+      <div className="fsh-enter fsh-enter-2 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {stats.map((stat) => (
+          <StatTile key={stat.label} {...stat} />
+        ))}
+      </div>
 
       {/* ── Quick pivots ─────────────────────────────────────────────── */}
       <section className="fsh-enter fsh-enter-3 space-y-3">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--color-muted-foreground)]">
-          Entry points
-        </p>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <p className="meta text-[var(--color-muted-foreground)]">Entry points</p>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <PivotCard
             to="/tenants"
             icon={Building2}
@@ -158,6 +160,46 @@ export function DashboardPage() {
 
 // ─── subcomponents ───────────────────────────────────────────────────
 
+type StatAccent = "emerald" | "amber" | "sky";
+
+type StatTileData = {
+  icon: typeof Building2;
+  label: string;
+  /** null while the underlying query is loading. */
+  value: string | null;
+  hint: string;
+  accent: StatAccent;
+};
+
+const ACCENT_TEXT: Record<StatAccent, string> = {
+  emerald: "text-emerald-300",
+  amber: "text-amber-300",
+  sky: "text-sky-300",
+};
+
+function StatTile({ icon: Icon, label, value, hint, accent }: StatTileData) {
+  return (
+    <TiltCard max={6} className="rounded-3xl">
+      <div className="liquid-glass rounded-3xl p-5 transition-all duration-500 ease-out hover:brightness-125">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-[13px] text-[var(--color-muted-foreground)]">{label}</p>
+            <div className="mt-1.5 text-display text-[28px] font-semibold leading-none tracking-[-0.02em] text-[var(--color-foreground)]">
+              {value === null ? <Skeleton className="h-7 w-16" /> : value}
+            </div>
+            <p className={cn("mt-1.5 text-[12px] font-medium", ACCENT_TEXT[accent])}>
+              {hint}
+            </p>
+          </div>
+          <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-[oklch(1_0_0_/_0.12)] bg-[oklch(1_0_0_/_0.06)]">
+            <Icon className={cn("size-5", ACCENT_TEXT[accent])} aria-hidden />
+          </div>
+        </div>
+      </div>
+    </TiltCard>
+  );
+}
+
 function PivotCard({
   to,
   icon: Icon,
@@ -172,11 +214,11 @@ function PivotCard({
   description: string;
 }) {
   return (
-    <Link to={to} className="group block focus:outline-none">
+    <Link to={to} className="group block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)]">
       <div
         className={cn(
-          "flex h-full flex-col gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-4 shadow-xs",
-          "transition-colors duration-200 hover:border-[var(--color-border-strong)] hover:bg-[var(--color-accent)]",
+          "liquid-glass flex h-full flex-col gap-3 rounded-2xl p-4",
+          "transition-all duration-300 hover:brightness-125",
         )}
       >
         <div className="flex items-start justify-between">
