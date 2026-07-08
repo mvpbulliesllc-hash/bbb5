@@ -8,8 +8,8 @@ const STAGE_LABEL: Record<string, string> = { new: 'New', contacted: 'Contacted'
 function Tile({ label, value, accent }: { label: string; value: string | number; accent?: boolean }) {
   return (
     <div className={`liquid-glass rounded-3xl p-5 ${accent ? 'text-white' : ''}`}>
-      <p className={`text-xs font-semibold uppercase tracking-wider ${accent ? 'text-emerald-300' : 'text-white/50'}`}>{label}</p>
-      <p className={`font-display mt-1.5 text-3xl font-extrabold ${accent ? 'text-emerald-200' : 'text-white'}`}>{value}</p>
+      <p className={`text-xs font-semibold uppercase tracking-wider ${accent ? 'text-matrix-300' : 'text-white/50'}`}>{label}</p>
+      <p className={`font-display mt-1.5 text-3xl font-extrabold ${accent ? 'text-matrix-200' : 'text-white'}`}>{value}</p>
     </div>
   );
 }

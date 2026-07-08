@@ -5,13 +5,14 @@ const INTEGRATIONS: Array<{ name: string; status: 'live' | 'ready' | 'waiting'; 
   { name: 'AgentMail (lead emails)', status: 'live', detail: 'Leads email from eli-paragon@agentmail.to.' },
   { name: 'Hume (Ellianna voice)', status: 'live', detail: 'Expressive TTS on the marketing site, Ava Song voice.' },
   { name: 'Mux (hero video)', status: 'live', detail: 'Homepage hook video streams via Mux.' },
-  { name: 'QuickBooks sync', status: 'waiting', detail: 'Expense categories mirror the QuickBooks chart — direct sync available when you want it.' },
-  { name: 'List builder (zip research)', status: 'waiting', detail: 'Parked during the Auth0 → password migration; say the word to bring it into /admin.' },
+  { name: 'Expenses ledger', status: 'live', detail: 'Replaces QuickBooks day-to-day: categories, totals, ad-channel breakout, add-your-own categories.' },
+  { name: 'List Builder (Parallel web research)', status: 'live', detail: 'Zip → homeowner list, CSV import/export, one-tap push to Pipeline.' },
+  { name: 'Clay / Apollo / Nimble / Bright Data / Firecrawl / Browserbase enrichment', status: 'ready', detail: 'Keys on file — next step is enriching contacts (phones, emails, socials) through these providers.' },
 ];
 
 const BADGE: Record<string, string> = {
   live: 'bg-green-400/20 text-green-200 ring-1 ring-green-300/30',
-  ready: 'bg-emerald-400/15 text-emerald-200 ring-1 ring-emerald-300/25',
+  ready: 'bg-matrix-400/15 text-matrix-200 ring-1 ring-matrix-300/25',
   waiting: 'bg-white/10 text-white/60 ring-1 ring-white/15',
 };
 

@@ -16,6 +16,12 @@
   --color-sand-100: #f1ede4;
   --color-sand-50: #f8f6f1;
   --font-display: 'Archivo', 'Inter', system-ui, sans-serif;
+  /* Matrix terminal green — the accent Joe asked for (#00ff41 family) */
+  --color-matrix-200: #b3ffc9;
+  --color-matrix-300: #4dff77;
+  --color-matrix-400: #00ff41;
+  --color-matrix-500: #00e63a;
+  --color-matrix-600: #00b32d;
 }
 
 body {

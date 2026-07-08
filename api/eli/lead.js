@@ -66,9 +66,12 @@ module.exports = async (req, res) => {
       email: lead.email || '',
       address: lead.address || '',
       town: lead.town || '',
+      zip: lead.zip || '',
       service: what,
       message: lead.message || '',
       source: lead.source || 'website',
+      referredFrom: lead.utmSource || lead.referrer || '',
+      enteredBy: 'website',
       stage: 'new',
       notes: [],
     };

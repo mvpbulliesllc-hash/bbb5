@@ -54,9 +54,9 @@ function SupplierCard({ s, save, remove }: { s: Rec<Supplier>; save: Save; remov
         <div className="min-w-0">
           <p className="truncate font-display text-sm font-bold text-white">{s.company}</p>
           <p className="truncate text-xs text-white/60">
-            {s.phone && <a className="hover:text-emerald-300" href={`tel:${s.phone}`}>{s.phone}</a>}
+            {s.phone && <a className="hover:text-matrix-300" href={`tel:${s.phone}`}>{s.phone}</a>}
             {s.phone && s.email && ' · '}
-            {s.email && <a className="hover:text-emerald-300" href={`mailto:${s.email}`}>{s.email}</a>}
+            {s.email && <a className="hover:text-matrix-300" href={`mailto:${s.email}`}>{s.email}</a>}
           </p>
           {s.notes && <p className="mt-0.5 text-xs text-white/70">{s.notes}</p>}
         </div>
@@ -95,10 +95,10 @@ function SupplierCard({ s, save, remove }: { s: Rec<Supplier>; save: Save; remov
           setM({ name: '', cost: '', unit: '' });
         }}
       >
-        <input value={m.name} onChange={(e) => setM({ ...m, name: e.target.value })} placeholder="Material" className="w-full rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-white placeholder-white/35 focus:border-emerald-300/60 focus:outline-none" />
-        <input value={m.cost} onChange={(e) => setM({ ...m, cost: e.target.value })} placeholder="Cost $" inputMode="decimal" className="w-24 rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-white placeholder-white/35 focus:border-emerald-300/60 focus:outline-none" />
-        <input value={m.unit} onChange={(e) => setM({ ...m, unit: e.target.value })} placeholder="Unit" className="w-20 rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-white placeholder-white/35 focus:border-emerald-300/60 focus:outline-none" />
-        <button className="rounded-md bg-emerald-400/20 px-2.5 py-1 text-xs font-bold text-emerald-200 ring-1 ring-emerald-300/30 hover:bg-emerald-400/30">Add</button>
+        <input value={m.name} onChange={(e) => setM({ ...m, name: e.target.value })} placeholder="Material" className="w-full rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-white placeholder-white/35 focus:border-matrix-300/60 focus:outline-none" />
+        <input value={m.cost} onChange={(e) => setM({ ...m, cost: e.target.value })} placeholder="Cost $" inputMode="decimal" className="w-24 rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-white placeholder-white/35 focus:border-matrix-300/60 focus:outline-none" />
+        <input value={m.unit} onChange={(e) => setM({ ...m, unit: e.target.value })} placeholder="Unit" className="w-20 rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-white placeholder-white/35 focus:border-matrix-300/60 focus:outline-none" />
+        <button className="rounded-md bg-matrix-400/20 px-2.5 py-1 text-xs font-bold text-matrix-200 ring-1 ring-matrix-300/30 hover:bg-matrix-400/30">Add</button>
       </form>
 
       <ExtraFields extra={s.extra} onSave={(extra) => save({ ...bare(s), extra }, s.id)} />

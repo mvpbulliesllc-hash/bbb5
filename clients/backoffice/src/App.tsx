@@ -3,6 +3,7 @@ import {
   BarChart3,
   LogOut,
   Package,
+  Radar,
   Receipt,
   Settings as SettingsIcon,
   Trash2,
@@ -12,6 +13,7 @@ import {
 import Background from './components/Background';
 import Overview from './tabs/Overview';
 import Pipeline from './tabs/Pipeline';
+import ListBuilder from './tabs/ListBuilder';
 import Contractors from './tabs/Contractors';
 import Dumpsters from './tabs/Dumpsters';
 import Suppliers from './tabs/Suppliers';
@@ -25,6 +27,7 @@ const GROUPS = [
     tabs: [
       { id: 'overview', label: 'Dashboard', Icon: BarChart3 },
       { id: 'pipeline', label: 'Pipeline', Icon: TrendingUp },
+      { id: 'listbuilder', label: 'List Builder', Icon: Radar },
       { id: 'contractors', label: 'Contractors', Icon: Users },
       { id: 'dumpsters', label: 'Dumpsters', Icon: Trash2 },
       { id: 'suppliers', label: 'Suppliers', Icon: Package },
@@ -47,8 +50,8 @@ const ALL_TABS = GROUPS.flatMap((g) => g.tabs as ReadonlyArray<TabDef>);
 function Logo() {
   return (
     <div className="flex items-center gap-3">
-      <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-400/30 bg-emerald-400/15">
-        <span className="text-lg font-bold text-emerald-300">P</span>
+      <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-matrix-400/30 bg-matrix-400/15">
+        <span className="text-lg font-bold text-matrix-300">P</span>
       </div>
       <div>
         <h1 className="font-display text-xl font-bold leading-tight text-white">Paragon</h1>
@@ -76,8 +79,8 @@ function Login({ onOk }: { onOk: () => void }) {
           else onOk();
         }}
       >
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-400/30 bg-emerald-400/15">
-          <span className="text-2xl font-bold text-emerald-300">P</span>
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-matrix-400/30 bg-matrix-400/15">
+          <span className="text-2xl font-bold text-matrix-300">P</span>
         </div>
         <h1 className="font-display mt-4 text-xl font-extrabold text-white">Paragon Back Office</h1>
         <p className="mt-1 text-sm text-white/55">Enter the admin password to continue.</p>
@@ -87,12 +90,12 @@ function Login({ onOk }: { onOk: () => void }) {
           onChange={(e) => { setPw(e.target.value); setErr(null); }}
           placeholder="Password"
           autoFocus
-          className="mt-5 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm text-white placeholder-white/35 focus:border-emerald-300/60 focus:outline-none"
+          className="mt-5 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm text-white placeholder-white/35 focus:border-matrix-300/60 focus:outline-none"
         />
         {err && <p className="mt-2 rounded-lg border border-red-400/25 bg-red-400/10 px-3 py-2 text-xs text-red-200">{err}</p>}
         <button
           disabled={busy || !pw}
-          className="mt-4 w-full rounded-full bg-emerald-400/90 px-4 py-2.5 font-display font-bold text-black transition hover:bg-emerald-300 disabled:opacity-50"
+          className="mt-4 w-full rounded-full bg-matrix-400/90 px-4 py-2.5 font-display font-bold text-black transition hover:bg-matrix-300 disabled:opacity-50"
         >
           {busy ? 'Checking…' : 'Sign in'}
         </button>
@@ -112,7 +115,7 @@ export default function App() {
     return (
       <div className="grid min-h-screen place-items-center">
         <Background />
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-emerald-300 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-matrix-300 border-t-transparent" />
       </div>
     );
   }
@@ -139,7 +142,7 @@ export default function App() {
                         : 'text-white/60 hover:bg-white/5 hover:text-white'
                     }`}
                   >
-                    <Icon size={16} className={tab === id ? 'text-emerald-300' : ''} />
+                    <Icon size={16} className={tab === id ? 'text-matrix-300' : ''} />
                     {label}
                   </button>
                 ))}
@@ -163,7 +166,7 @@ export default function App() {
             key={id}
             onClick={() => setTab(id)}
             aria-label={id}
-            className={`rounded-full p-2.5 ${tab === id ? 'liquid-glass-inset text-emerald-300' : 'text-white/60'}`}
+            className={`rounded-full p-2.5 ${tab === id ? 'liquid-glass-inset text-matrix-300' : 'text-white/60'}`}
           >
             <Icon size={18} />
           </button>
@@ -176,6 +179,7 @@ export default function App() {
       <main className="min-w-0 flex-1 pb-20 md:pb-0">
         {tab === 'overview' && <Overview />}
         {tab === 'pipeline' && <Pipeline />}
+        {tab === 'listbuilder' && <ListBuilder />}
         {tab === 'contractors' && <Contractors />}
         {tab === 'dumpsters' && <Dumpsters />}
         {tab === 'suppliers' && <Suppliers />}

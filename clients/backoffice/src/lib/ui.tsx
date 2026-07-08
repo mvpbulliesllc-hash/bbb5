@@ -2,16 +2,16 @@ import { useState } from 'react';
 
 /** Shared dark liquid-glass styles (ported from the CRM dashboard design). */
 export const inp =
-  'rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/35 focus:border-emerald-300/60 focus:outline-none';
+  'rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/35 focus:border-matrix-300/60 focus:outline-none';
 export const btnPrimary =
-  'rounded-full bg-emerald-400/90 px-4 py-2 font-display text-sm font-bold text-black transition hover:bg-emerald-300';
+  'rounded-full bg-matrix-400/90 px-4 py-2 font-display text-sm font-bold text-black transition hover:bg-matrix-300';
 export const btnDark =
   'rounded-full liquid-glass-inset px-4 py-2 font-display text-sm font-bold text-white/85 transition hover:text-white hover:bg-white/10';
 export const btnGhost = 'rounded-md px-1.5 py-1 text-xs font-semibold text-white/55 hover:bg-white/10 hover:text-white/85';
 export const btnDanger = 'rounded-md px-1.5 py-1 text-xs text-red-300/80 hover:bg-red-400/10 hover:text-red-300';
-export const btnMini = 'rounded-md bg-emerald-400/20 px-2.5 py-1 text-xs font-bold text-emerald-200 ring-1 ring-emerald-300/30 hover:bg-emerald-400/30';
+export const btnMini = 'rounded-md bg-matrix-400/20 px-2.5 py-1 text-xs font-bold text-matrix-200 ring-1 ring-matrix-300/30 hover:bg-matrix-400/30';
 export const inpMini =
-  'rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-white placeholder-white/35 focus:border-emerald-300/60 focus:outline-none';
+  'rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-white placeholder-white/35 focus:border-matrix-300/60 focus:outline-none';
 export const card = 'liquid-glass rounded-3xl';
 
 export const money = (n: number | undefined | null) =>

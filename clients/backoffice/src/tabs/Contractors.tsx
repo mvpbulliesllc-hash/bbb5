@@ -74,9 +74,9 @@ function ContractorCard({ c, save, remove }: { c: Rec<Contractor>; save: Save; r
         <div className="min-w-0">
           <p className="truncate font-display text-sm font-bold text-white">{c.name}</p>
           <p className="truncate text-xs text-white/60">
-            {c.phone && <a className="hover:text-emerald-300" href={`tel:${c.phone}`}>{c.phone}</a>}
+            {c.phone && <a className="hover:text-matrix-300" href={`tel:${c.phone}`}>{c.phone}</a>}
             {c.phone && c.email && ' · '}
-            {c.email && <a className="hover:text-emerald-300" href={`mailto:${c.email}`}>{c.email}</a>}
+            {c.email && <a className="hover:text-matrix-300" href={`mailto:${c.email}`}>{c.email}</a>}
           </p>
         </div>
         <div className="flex shrink-0 gap-1.5">

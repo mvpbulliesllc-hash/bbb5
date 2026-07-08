@@ -120,14 +120,14 @@ export default function Expenses() {
               setNewCat('');
             }}
           >
-            <input value={newCat} onChange={(e) => setNewCat(e.target.value)} placeholder="New category" className="rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-white placeholder-white/35 focus:border-emerald-300/60 focus:outline-none" />
-            <button className="rounded-md bg-emerald-400/20 px-2.5 py-1 text-xs font-bold text-emerald-200 ring-1 ring-emerald-300/30 hover:bg-emerald-400/30">Add category</button>
+            <input value={newCat} onChange={(e) => setNewCat(e.target.value)} placeholder="New category" className="rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-white placeholder-white/35 focus:border-matrix-300/60 focus:outline-none" />
+            <button className="rounded-md bg-matrix-400/20 px-2.5 py-1 text-xs font-bold text-matrix-200 ring-1 ring-matrix-300/30 hover:bg-matrix-400/30">Add category</button>
           </form>
         </div>
         <div className="mt-3 flex flex-wrap gap-1.5">
           <button
             onClick={() => setCatFilter('')}
-            className={`rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${!catFilter ? 'bg-emerald-400/90 text-black ring-emerald-300/60' : 'bg-white/5 text-white/70 ring-white/15 hover:bg-white/10'}`}
+            className={`rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${!catFilter ? 'bg-matrix-400/90 text-black ring-matrix-300/60' : 'bg-white/5 text-white/70 ring-white/15 hover:bg-white/10'}`}
           >
             All {money(sum(all))}
           </button>
@@ -135,7 +135,7 @@ export default function Expenses() {
             <button
               key={c}
               onClick={() => setCatFilter(catFilter === c ? '' : c)}
-              className={`rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${catFilter === c ? 'bg-emerald-400/90 text-black ring-emerald-300/60' : 'bg-white/5 text-white/70 ring-white/15 hover:bg-white/10'}`}
+              className={`rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${catFilter === c ? 'bg-matrix-400/90 text-black ring-matrix-300/60' : 'bg-white/5 text-white/70 ring-white/15 hover:bg-white/10'}`}
             >
               {c}{byCategory.has(c) ? ` · ${money(byCategory.get(c))}` : ''}
             </button>

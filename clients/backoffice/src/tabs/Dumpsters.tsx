@@ -60,9 +60,9 @@ function DumpsterCard({ d, save, remove }: { d: Rec<Dumpster>; save: Save; remov
         <div className="min-w-0">
           <p className="truncate font-display text-sm font-bold text-white">{d.company}</p>
           <p className="truncate text-xs text-white/60">
-            {d.phone && <a className="hover:text-emerald-300" href={`tel:${d.phone}`}>{d.phone}</a>}
+            {d.phone && <a className="hover:text-matrix-300" href={`tel:${d.phone}`}>{d.phone}</a>}
             {d.phone && d.email && ' · '}
-            {d.email && <a className="hover:text-emerald-300" href={`mailto:${d.email}`}>{d.email}</a>}
+            {d.email && <a className="hover:text-matrix-300" href={`mailto:${d.email}`}>{d.email}</a>}
           </p>
           {d.info && <p className="mt-0.5 text-xs text-white/70">{d.info}</p>}
         </div>

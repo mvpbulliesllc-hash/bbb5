@@ -97,6 +97,13 @@ export type Lead = {
   source?: string;
   stage: string; // new | contacted | estimate | won | lost
   notes: Array<{ text: string; at: number }>;
+  // HubSpot-replacement intake fields
+  homeAge?: string;
+  lastRoofRepair?: string;
+  socials?: string;
+  referredFrom?: string;
+  enteredBy?: string;
+  owner?: string;
   // CRM header (Joe's outline)
   scope?: string;
   proposalSentAt?: number;
@@ -156,3 +163,35 @@ export type Expense = {
 };
 
 export type ExpenseCategory = { name: string };
+
+export type Contact = {
+  address: string;
+  ownerName?: string;
+  phone?: string;
+  email?: string;
+  town?: string;
+  zip?: string;
+  list?: string;
+  tags?: string[];
+};
+
+export type ListJob = {
+  zip: string;
+  town?: string;
+  status: string; // running | done | error
+  note?: string;
+  count?: number;
+  runId?: string;
+};
+
+export async function listBuilderOp(body: Record<string, unknown>) {
+  const r = await fetch(`${API}/listbuilder/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
+    body: JSON.stringify(body),
+  });
+  const d = await r.json().catch(() => null);
+  if (!r.ok) throw new Error((d && (d as { error?: string }).error) || `request failed (${r.status})`);
+  return d;
+}

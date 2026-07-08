@@ -6,7 +6,7 @@ import { fromDateInput, money, toDateInput, toNum } from '../lib/ui';
 const STAGES = ['new', 'contacted', 'estimate', 'won', 'lost'] as const;
 const STAGE_LABEL: Record<string, string> = { new: 'New', contacted: 'Contacted', estimate: 'Estimate', won: 'Won', lost: 'Lost' };
 const STAGE_TINT: Record<string, string> = {
-  new: 'bg-emerald-400/15 text-emerald-200 ring-1 ring-emerald-300/25',
+  new: 'bg-matrix-400/15 text-matrix-200 ring-1 ring-matrix-300/25',
   contacted: 'bg-sky-400/15 text-sky-200 ring-1 ring-sky-300/25',
   estimate: 'bg-white/10 text-white/80 ring-1 ring-white/15',
   won: 'bg-green-400/20 text-green-200 ring-1 ring-green-300/30',
@@ -42,7 +42,7 @@ function JobDetails({ lead, save }: { lead: Rec<Lead>; save: Save }) {
   const net = toNum(f.jobCost) != null ? (toNum(f.jobCost) as number) - spend : undefined;
 
   const lbl = 'text-[0.6rem] font-bold uppercase tracking-wider text-white/45';
-  const box = 'w-full rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-white placeholder-white/35 focus:border-emerald-300/60 focus:outline-none';
+  const box = 'w-full rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-white placeholder-white/35 focus:border-matrix-300/60 focus:outline-none';
 
   return (
     <div className="mt-2 border-t border-white/15 pt-2">
@@ -67,7 +67,7 @@ function JobDetails({ lead, save }: { lead: Rec<Lead>; save: Save }) {
         <label><span className={lbl}>Dumpster cost $</span><input value={f.dumpsterCost} onChange={set('dumpsterCost')} inputMode="decimal" className={box} /></label>
       </div>
       <div className="mt-2 flex items-center gap-3 text-xs">
-        <span className="font-semibold text-white/60">Balance owed: <span className={balance != null && balance > 0 ? 'text-red-300' : 'text-emerald-300'}>{money(balance)}</span></span>
+        <span className="font-semibold text-white/60">Balance owed: <span className={balance != null && balance > 0 ? 'text-red-300' : 'text-matrix-300'}>{money(balance)}</span></span>
         <span className="font-semibold text-white/60">Net: <span className="text-white">{money(net)}</span></span>
         <button
           onClick={async () => {
@@ -92,7 +92,7 @@ function JobDetails({ lead, save }: { lead: Rec<Lead>; save: Save }) {
             );
             setSaved(true);
           }}
-          className="ml-auto rounded-md bg-emerald-400/20 px-2.5 py-1 text-xs font-bold text-emerald-200 ring-1 ring-emerald-300/30 hover:bg-emerald-400/30"
+          className="ml-auto rounded-md bg-matrix-400/20 px-2.5 py-1 text-xs font-bold text-matrix-200 ring-1 ring-matrix-300/30 hover:bg-matrix-400/30"
         >
           {saved ? 'Saved ✓' : 'Save job'}
         </button>
@@ -104,7 +104,20 @@ function JobDetails({ lead, save }: { lead: Rec<Lead>; save: Save }) {
 function LeadCard({ lead, save, remove }: { lead: Rec<Lead>; save: Save; remove: (id: number) => Promise<void> }) {
   const [open, setOpen] = useState(false);
   const [showJob, setShowJob] = useState(false);
+  const [editing, setEditing] = useState(false);
   const [note, setNote] = useState('');
+
+  if (editing) return <LeadFormCard doc={lead} save={save} onDone={() => setEditing(false)} />;
+
+  const mapsAddress = [lead.address, lead.town, lead.zip].filter(Boolean).join(', ');
+  const details: Array<[string, string | undefined]> = [
+    ['Home age', lead.homeAge],
+    ['Last roof repair', lead.lastRoofRepair],
+    ['Referred from', lead.referredFrom],
+    ['Source', lead.source],
+    ['Entered by', lead.enteredBy],
+    ['Belongs to', lead.owner],
+  ];
 
   return (
     <div className="liquid-glass rounded-2xl p-3.5">
@@ -119,9 +132,21 @@ function LeadCard({ lead, save, remove }: { lead: Rec<Lead>; save: Save; remove:
       </div>
       {(lead.phone || lead.email) && (
         <p className="mt-1.5 truncate text-xs text-white/75">
-          {lead.phone && <a className="hover:text-emerald-300" href={`tel:${lead.phone}`}>{lead.phone}</a>}
+          {lead.phone && <a className="hover:text-matrix-300" href={`tel:${lead.phone}`}>{lead.phone}</a>}
           {lead.phone && lead.email && ' · '}
-          {lead.email && <a className="hover:text-emerald-300" href={`mailto:${lead.email}`}>{lead.email}</a>}
+          {lead.email && <a className="hover:text-matrix-300" href={`mailto:${lead.email}`}>{lead.email}</a>}
+        </p>
+      )}
+      {mapsAddress && (
+        <p className="mt-1 truncate text-xs">
+          <a
+            className="text-matrix-200/90 underline decoration-matrix-300/30 underline-offset-2 hover:text-matrix-200"
+            href={`https://maps.google.com/?q=${encodeURIComponent(mapsAddress)}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            📍 {mapsAddress}
+          </a>
         </p>
       )}
       <div className="mt-2.5 flex items-center gap-1.5">
@@ -135,10 +160,13 @@ function LeadCard({ lead, save, remove }: { lead: Rec<Lead>; save: Save; remove:
           ))}
         </select>
         <button onClick={() => setOpen(!open)} className="rounded-md px-1.5 py-1 text-xs font-semibold text-white/60 hover:bg-white/10">
-          Notes{lead.notes.length ? ` (${lead.notes.length})` : ''}
+          Info{lead.notes.length ? ` (${lead.notes.length})` : ''}
         </button>
         <button onClick={() => setShowJob(!showJob)} className="rounded-md px-1.5 py-1 text-xs font-semibold text-white/60 hover:bg-white/10">
           Job{lead.jobCost != null ? ' ✓' : ''}
+        </button>
+        <button onClick={() => setEditing(true)} className="rounded-md px-1.5 py-1 text-xs font-semibold text-white/60 hover:bg-white/10">
+          Edit
         </button>
         <button
           onClick={() => { if (confirm(`Delete lead "${lead.name}"?`)) remove(lead.id); }}
@@ -149,6 +177,26 @@ function LeadCard({ lead, save, remove }: { lead: Rec<Lead>; save: Save; remove:
       </div>
       {open && (
         <div className="mt-2 border-t border-white/15 pt-2">
+          {details.some(([, v]) => v) && (
+            <dl className="mb-2 grid grid-cols-1 gap-x-3 gap-y-0.5">
+              {details.filter(([, v]) => v).map(([label, v]) => (
+                <div key={label} className="flex gap-1.5 text-xs">
+                  <dt className="shrink-0 font-semibold text-white/45">{label}:</dt>
+                  <dd className="truncate text-white/80">{v}</dd>
+                </div>
+              ))}
+              {lead.socials && (
+                <div className="flex gap-1.5 text-xs">
+                  <dt className="shrink-0 font-semibold text-white/45">Socials:</dt>
+                  <dd className="truncate">
+                    <a className="text-matrix-200/90 hover:text-matrix-200" href={/^https?:/i.test(lead.socials) ? lead.socials : `https://${lead.socials}`} target="_blank" rel="noreferrer">
+                      {lead.socials}
+                    </a>
+                  </dd>
+                </div>
+              )}
+            </dl>
+          )}
           {lead.message && <p className="mb-2 rounded-lg bg-white/5 p-2 text-xs text-white/75">{lead.message}</p>}
           {lead.notes.map((n, i) => (
             <p key={i} className="mt-1 text-xs text-white/75">
@@ -169,9 +217,9 @@ function LeadCard({ lead, save, remove }: { lead: Rec<Lead>; save: Save; remove:
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="Add a note"
-              className="w-full rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-white placeholder-white/35 focus:border-emerald-300/60 focus:outline-none"
+              className="w-full rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-white placeholder-white/35 focus:border-matrix-300/60 focus:outline-none"
             />
-            <button className="rounded-md bg-emerald-400/20 px-2.5 py-1 text-xs font-bold text-emerald-200 ring-1 ring-emerald-300/30 hover:bg-emerald-400/30">Save</button>
+            <button className="rounded-md bg-matrix-400/20 px-2.5 py-1 text-xs font-bold text-matrix-200 ring-1 ring-matrix-300/30 hover:bg-matrix-400/30">Save</button>
           </form>
         </div>
       )}
@@ -180,40 +228,61 @@ function LeadCard({ lead, save, remove }: { lead: Rec<Lead>; save: Save; remove:
   );
 }
 
-function NewLeadForm({ save, onDone }: { save: Save; onDone: () => void }) {
-  const [f, setF] = useState({ name: '', phone: '', email: '', town: '', service: '', message: '' });
-  const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement>) => setF({ ...f, [k]: e.target.value });
+const LEAD_FIELDS = [
+  { key: 'name', label: 'Name *' },
+  { key: 'phone', label: 'Phone' },
+  { key: 'email', label: 'Email' },
+  { key: 'address', label: 'Address (street)' },
+  { key: 'town', label: 'Town' },
+  { key: 'zip', label: 'Zip' },
+  { key: 'service', label: 'Service needed' },
+  { key: 'homeAge', label: 'Home age (yrs / built)' },
+  { key: 'lastRoofRepair', label: 'Last roof repair (when/what)' },
+  { key: 'socials', label: 'Socials (IG/FB link)' },
+  { key: 'referredFrom', label: 'Referred from / lead source' },
+  { key: 'enteredBy', label: 'Entered by' },
+  { key: 'owner', label: 'Belongs to (owner)' },
+  { key: 'message', label: 'Message / details' },
+] as const;
+
+type LeadFieldKey = (typeof LEAD_FIELDS)[number]['key'];
+type LeadForm = Record<LeadFieldKey, string>;
+
+function LeadFormCard({ doc, save, onDone }: { doc?: Rec<Lead>; save: Save; onDone: () => void }) {
+  const [f, setF] = useState<LeadForm>(
+    () => Object.fromEntries(LEAD_FIELDS.map(({ key }) => [key, (doc?.[key] as string | undefined) ?? ''])) as LeadForm,
+  );
   return (
     <form
       className="grid gap-2 liquid-glass rounded-2xl p-4 sm:grid-cols-3"
       onSubmit={async (e) => {
         e.preventDefault();
         if (!f.name.trim()) return;
-        await save({
-          name: f.name.trim(),
-          phone: f.phone.trim() || undefined,
-          email: f.email.trim() || undefined,
-          town: f.town.trim() || undefined,
-          service: f.service.trim() || undefined,
-          message: f.message.trim() || undefined,
-          source: 'manual',
-          stage: 'new',
-          notes: [],
-        });
+        const values = Object.fromEntries(
+          LEAD_FIELDS.map(({ key }) => [key, f[key].trim() || undefined]),
+        ) as Partial<Record<LeadFieldKey, string>>;
+        await save(
+          {
+            ...(doc ? bare(doc) : { source: 'manual', stage: 'new', notes: [] as Lead['notes'] }),
+            ...values,
+            name: f.name.trim(),
+          },
+          doc?.id,
+        );
         onDone();
       }}
     >
-      {(['name', 'phone', 'email', 'town', 'service', 'message'] as const).map((k) => (
+      {LEAD_FIELDS.map(({ key, label }) => (
         <input
-          key={k}
-          value={f[k]}
-          onChange={set(k)}
-          placeholder={k === 'name' ? 'Name *' : k[0].toUpperCase() + k.slice(1)}
-          className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/35 focus:border-emerald-300/60 focus:outline-none"
+          key={key}
+          value={f[key]}
+          onChange={(e) => setF({ ...f, [key]: e.target.value })}
+          placeholder={label}
+          className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/35 focus:border-matrix-300/60 focus:outline-none"
         />
       ))}
-      <button className="rounded-full bg-emerald-400/90 px-4 py-2 font-display text-sm font-bold text-black transition hover:bg-emerald-300 sm:col-span-3">
-        Add lead
+      <button className="rounded-full bg-matrix-400/90 px-4 py-2 font-display text-sm font-bold text-black transition hover:bg-matrix-300 sm:col-span-3">
+        {doc ? 'Save changes' : 'Add lead'}
       </button>
     </form>
   );
@@ -227,7 +296,9 @@ export default function Pipeline() {
   const filtered = (leads ?? []).filter((l) => {
     if (!filter.trim()) return true;
     const q = filter.toLowerCase();
-    return [l.name, l.phone, l.email, l.town, l.service, l.message].filter(Boolean).some((x) => String(x).toLowerCase().includes(q));
+    return [l.name, l.phone, l.email, l.address, l.town, l.zip, l.service, l.message, l.referredFrom, l.owner, l.enteredBy]
+      .filter(Boolean)
+      .some((x) => String(x).toLowerCase().includes(q));
   });
 
   return (
@@ -242,7 +313,7 @@ export default function Pipeline() {
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             placeholder="Filter leads"
-            className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/35 focus:border-emerald-300/60 focus:outline-none"
+            className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/35 focus:border-matrix-300/60 focus:outline-none"
           />
           <button
             onClick={() => setAdding(!adding)}
@@ -252,7 +323,7 @@ export default function Pipeline() {
           </button>
         </div>
       </div>
-      {adding && <div className="mt-4"><NewLeadForm save={save} onDone={() => setAdding(false)} /></div>}
+      {adding && <div className="mt-4"><LeadFormCard save={save} onDone={() => setAdding(false)} /></div>}
       <div className="mt-6 grid gap-4 lg:grid-cols-5">
         {STAGES.map((stage) => {
           const col = filtered.filter((l) => l.stage === stage);
