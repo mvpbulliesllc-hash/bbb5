@@ -7,7 +7,7 @@ import { orgSchema } from '@/lib/schema';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import StickyCallBar from '@/components/StickyCallBar.astro';
-import VoiceWidget from '@/components/VoiceWidget.astro';
+import EliChat from '@/components/EliChat.astro';
 
 interface Props {
   title: string;
@@ -78,6 +78,6 @@ const allSchemas = [orgSchema(), ...schemas.filter(Boolean)];
     </main>
     <Footer />
     <StickyCallBar />
-    <VoiceWidget />
+    <EliChat />
   </body>
 </html>
