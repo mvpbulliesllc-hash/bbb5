@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { LiquidMetalButton } from './components/LiquidMetalButton';
 import {
+  Activity,
   BarChart3,
   LogOut,
   Package,
@@ -13,6 +14,7 @@ import {
 } from 'lucide-react';
 import Background from './components/Background';
 import Overview from './tabs/Overview';
+import Analytics from './tabs/Analytics';
 import Pipeline from './tabs/Pipeline';
 import ListBuilder from './tabs/ListBuilder';
 import Contractors from './tabs/Contractors';
@@ -27,6 +29,7 @@ const GROUPS = [
     title: 'Operations',
     tabs: [
       { id: 'overview', label: 'Dashboard', Icon: BarChart3 },
+      { id: 'analytics', label: 'Analytics', Icon: Activity },
       { id: 'pipeline', label: 'Pipeline', Icon: TrendingUp },
       { id: 'listbuilder', label: 'List Builder', Icon: Radar },
       { id: 'contractors', label: 'Contractors', Icon: Users },
@@ -176,6 +179,7 @@ export default function App() {
 
       <main className="min-w-0 flex-1 pb-20 md:pb-0">
         {tab === 'overview' && <Overview />}
+        {tab === 'analytics' && <Analytics />}
         {tab === 'pipeline' && <Pipeline />}
         {tab === 'listbuilder' && <ListBuilder />}
         {tab === 'contractors' && <Contractors />}
