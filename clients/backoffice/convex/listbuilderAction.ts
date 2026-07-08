@@ -39,10 +39,10 @@ export const run = internalAction({
     }
     const where = town ? `${town}, NJ ${zip}` : `ZIP code ${zip} in New Jersey`;
     const input =
-      `Compile a list of residential property addresses in ${where} with their property owner names, ` +
-      `using public sources such as county tax assessment records, property record aggregators, and directories. ` +
-      `Include a phone number or email only when it is publicly listed for that owner. ` +
-      `Return as many distinct properties as you can find (aim for 50+). Only include properties actually in zip ${zip}.`;
+      `Extract residential property records for ${where} from public NJ property-record sources ` +
+      `(county tax assessment listings, njpropertyrecords, taxrecords-nj, recent sale listings). ` +
+      `For each property return the street address and the owner name as recorded, plus phone/email only if ` +
+      `publicly listed. Return at least 15 distinct real properties actually in zip ${zip} — more is better.`;
 
     try {
       const createRes = await fetch('https://api.parallel.ai/v1/tasks/runs', {
@@ -50,7 +50,7 @@ export const run = internalAction({
         headers: { 'x-api-key': apiKey, 'Content-Type': 'application/json' },
         body: JSON.stringify({
           input,
-          processor: 'base',
+          processor: 'core',
           task_spec: { output_schema: { type: 'json', json_schema: OUTPUT_SCHEMA } },
         }),
       });
