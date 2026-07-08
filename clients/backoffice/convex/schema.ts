@@ -20,6 +20,17 @@ export default defineSchema({
     .index('by_stage', ['stage'])
     .searchIndex('search_all', { searchField: 'name' }),
 
+  /** List-builder jobs — web research runs that fill the contacts table. */
+  jobs: defineTable({
+    kind: v.string(), // parallel-zip
+    zip: v.string(),
+    town: v.optional(v.string()),
+    status: v.string(), // running | done | error
+    note: v.optional(v.string()),
+    count: v.optional(v.number()),
+    runId: v.optional(v.string()),
+  }),
+
   /** Owned prospect lists — zip → address → owner → contact info. */
   contacts: defineTable({
     address: v.string(),

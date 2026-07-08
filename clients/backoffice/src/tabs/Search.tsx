@@ -40,6 +40,58 @@ function toCsv(rows: Array<Record<string, unknown>>) {
   return [cols.join(','), ...rows.map((r) => cols.map((c) => esc(r[c])).join(','))].join('\n');
 }
 
+function BuildList() {
+  const start = useMutation(api.listbuilder.start);
+  const jobs = useQuery(api.listbuilder.jobs);
+  const [zip, setZip] = useState('');
+  const [town, setTown] = useState('');
+  const [err, setErr] = useState<string | null>(null);
+  const running = (jobs ?? []).some((j) => j.status === 'running');
+
+  return (
+    <div className="mt-4 rounded-2xl bg-navy-950 p-4 text-white">
+      <div className="flex flex-wrap items-center gap-2">
+        <p className="font-display text-sm font-bold text-gold-300">Build a list from the web</p>
+        <input
+          value={zip}
+          onChange={(e) => setZip(e.target.value)}
+          placeholder="Zip (e.g. 08753)"
+          className="w-36 rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-sm placeholder-white/40 focus:border-gold-400 focus:outline-none"
+        />
+        <input
+          value={town}
+          onChange={(e) => setTown(e.target.value)}
+          placeholder="Town (optional)"
+          className="w-44 rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-sm placeholder-white/40 focus:border-gold-400 focus:outline-none"
+        />
+        <button
+          onClick={async () => {
+            setErr(null);
+            try { await start({ zip, town: town || undefined }); setZip(''); setTown(''); }
+            catch (e) { setErr(String((e as Error).message ?? e)); }
+          }}
+          className="rounded-lg bg-gold-500 px-4 py-2 font-display text-sm font-bold text-navy-950 hover:bg-gold-400"
+        >
+          Research zip
+        </button>
+        <p className="text-xs text-white/50">Finds addresses + owners via public records research. Takes a few minutes.</p>
+      </div>
+      {err && <p className="mt-2 rounded-lg bg-red-500/20 px-3 py-1.5 text-xs text-red-200">{err}</p>}
+      {(jobs ?? []).slice(0, 4).map((j) => (
+        <div key={j._id} className="mt-2 flex items-center gap-2 text-xs">
+          {j.status === 'running' && <span className="h-2.5 w-2.5 animate-spin rounded-full border border-gold-400 border-t-transparent" />}
+          <span className={`rounded-full px-2 py-0.5 font-bold uppercase tracking-wider ${
+            j.status === 'done' ? 'bg-green-400/20 text-green-300' : j.status === 'running' ? 'bg-gold-400/20 text-gold-300' : 'bg-red-400/20 text-red-300'
+          }`}>{j.status}</span>
+          <span className="text-white/70">zip {j.zip}{j.town ? ` · ${j.town}` : ''}{typeof j.count === 'number' ? ` · ${j.count} contacts` : ''}</span>
+          {j.note && <span className="truncate text-white/40">{j.note}</span>}
+        </div>
+      ))}
+      {running && <p className="mt-2 text-[0.7rem] text-white/40">Research runs in the background — results appear in the table when done.</p>}
+    </div>
+  );
+}
+
 export default function Search() {
   const [zip, setZip] = useState('');
   const [text, setText] = useState('');
@@ -80,6 +132,8 @@ export default function Search() {
           {importing ? 'Close import' : 'Import CSV'}
         </button>
       </div>
+
+      <BuildList />
 
       {importing && (
         <div className="mt-4 rounded-2xl bg-white p-4 ring-1 ring-sand-200">
