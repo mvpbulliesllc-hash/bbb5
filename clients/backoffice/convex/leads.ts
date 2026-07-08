@@ -76,6 +76,31 @@ export const addNote = mutation({
   },
 });
 
+/** CRM header (Joe's outline) — job tracking fields, all optional patches. */
+export const updateJob = mutation({
+  args: {
+    id: v.id('leads'),
+    scope: v.optional(v.string()),
+    proposalSentAt: v.optional(v.number()),
+    contractSignedAt: v.optional(v.number()),
+    subAssigned: v.optional(v.string()),
+    jobCost: v.optional(v.number()),
+    scheduledAt: v.optional(v.number()),
+    completedAt: v.optional(v.number()),
+    deposit: v.optional(v.number()),
+    additionalPayment: v.optional(v.number()),
+    finalPayment: v.optional(v.number()),
+    materialCost: v.optional(v.number()),
+    laborCost: v.optional(v.number()),
+    dumpsterCost: v.optional(v.number()),
+    measurements: v.optional(v.record(v.string(), v.string())),
+  },
+  handler: async (ctx, { id, ...rest }) => {
+    await requireAuth(ctx);
+    await ctx.db.patch(id, rest);
+  },
+});
+
 export const remove = mutation({
   args: { id: v.id('leads') },
   handler: async (ctx, { id }) => {

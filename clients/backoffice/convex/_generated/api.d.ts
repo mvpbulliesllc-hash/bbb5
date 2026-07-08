@@ -9,10 +9,14 @@
  */
 
 import type * as contacts from "../contacts.js";
+import type * as contractors from "../contractors.js";
+import type * as dumpsters from "../dumpsters.js";
+import type * as expenses from "../expenses.js";
 import type * as http from "../http.js";
 import type * as leads from "../leads.js";
 import type * as listbuilder from "../listbuilder.js";
 import type * as listbuilderAction from "../listbuilderAction.js";
+import type * as suppliers from "../suppliers.js";
 
 import type {
   ApiFromModules,
@@ -22,10 +26,14 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   contacts: typeof contacts;
+  contractors: typeof contractors;
+  dumpsters: typeof dumpsters;
+  expenses: typeof expenses;
   http: typeof http;
   leads: typeof leads;
   listbuilder: typeof listbuilder;
   listbuilderAction: typeof listbuilderAction;
+  suppliers: typeof suppliers;
 }>;
 
 /**

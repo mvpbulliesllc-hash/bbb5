@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import type { Doc, Id } from '../../convex/_generated/dataModel';
+import { fromDateInput, money, toDateInput, toNum } from '../lib/ui';
 
 const STAGES = ['new', 'contacted', 'estimate', 'won', 'lost'] as const;
 const STAGE_LABEL: Record<string, string> = { new: 'New', contacted: 'Contacted', estimate: 'Estimate', won: 'Won', lost: 'Lost' };
@@ -13,11 +14,96 @@ const STAGE_TINT: Record<string, string> = {
   lost: 'bg-red-50 text-red-700',
 };
 
+/** CRM job header (Joe's outline) — scope, dates, sub, and money on the job. */
+function JobDetails({ lead }: { lead: Doc<'leads'> }) {
+  const updateJob = useMutation(api.leads.updateJob);
+  const contractors = useQuery(api.contractors.list);
+  const [f, setF] = useState({
+    scope: lead.scope ?? '',
+    proposalSentAt: toDateInput(lead.proposalSentAt),
+    contractSignedAt: toDateInput(lead.contractSignedAt),
+    subAssigned: lead.subAssigned ?? '',
+    scheduledAt: toDateInput(lead.scheduledAt),
+    completedAt: toDateInput(lead.completedAt),
+    jobCost: lead.jobCost?.toString() ?? '',
+    deposit: lead.deposit?.toString() ?? '',
+    additionalPayment: lead.additionalPayment?.toString() ?? '',
+    finalPayment: lead.finalPayment?.toString() ?? '',
+    materialCost: lead.materialCost?.toString() ?? '',
+    laborCost: lead.laborCost?.toString() ?? '',
+    dumpsterCost: lead.dumpsterCost?.toString() ?? '',
+  });
+  const [saved, setSaved] = useState(false);
+  const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement>) => { setSaved(false); setF({ ...f, [k]: e.target.value }); };
+
+  const paid = (toNum(f.deposit) ?? 0) + (toNum(f.additionalPayment) ?? 0) + (toNum(f.finalPayment) ?? 0);
+  const balance = toNum(f.jobCost) != null ? (toNum(f.jobCost) as number) - paid : undefined;
+  const spend = (toNum(f.materialCost) ?? 0) + (toNum(f.laborCost) ?? 0) + (toNum(f.dumpsterCost) ?? 0);
+  const net = toNum(f.jobCost) != null ? (toNum(f.jobCost) as number) - spend : undefined;
+
+  const lbl = 'text-[0.6rem] font-bold uppercase tracking-wider text-navy-900/45';
+  const box = 'w-full rounded-md border border-sand-200 px-2 py-1 text-xs focus:border-gold-500 focus:outline-none';
+
+  return (
+    <div className="mt-2 border-t border-sand-200 pt-2">
+      <p className="text-[0.65rem] font-bold uppercase tracking-wider text-navy-900/50">Job details</p>
+      <div className="mt-1.5 grid grid-cols-2 gap-1.5">
+        <label className="col-span-2"><span className={lbl}>Scope of work</span><input value={f.scope} onChange={set('scope')} className={box} /></label>
+        <label><span className={lbl}>Proposal sent</span><input type="date" value={f.proposalSentAt} onChange={set('proposalSentAt')} className={box} /></label>
+        <label><span className={lbl}>Contract signed</span><input type="date" value={f.contractSignedAt} onChange={set('contractSignedAt')} className={box} /></label>
+        <label className="col-span-2">
+          <span className={lbl}>Sub assigned</span>
+          <input list="contractor-names" value={f.subAssigned} onChange={set('subAssigned')} className={box} />
+          <datalist id="contractor-names">{(contractors ?? []).map((c) => <option key={c._id} value={c.name} />)}</datalist>
+        </label>
+        <label><span className={lbl}>Schedule date</span><input type="date" value={f.scheduledAt} onChange={set('scheduledAt')} className={box} /></label>
+        <label><span className={lbl}>Completed date</span><input type="date" value={f.completedAt} onChange={set('completedAt')} className={box} /></label>
+        <label><span className={lbl}>Job cost $</span><input value={f.jobCost} onChange={set('jobCost')} inputMode="decimal" className={box} /></label>
+        <label><span className={lbl}>Deposit $</span><input value={f.deposit} onChange={set('deposit')} inputMode="decimal" className={box} /></label>
+        <label><span className={lbl}>Additional pmt $</span><input value={f.additionalPayment} onChange={set('additionalPayment')} inputMode="decimal" className={box} /></label>
+        <label><span className={lbl}>Final pmt $</span><input value={f.finalPayment} onChange={set('finalPayment')} inputMode="decimal" className={box} /></label>
+        <label><span className={lbl}>Material cost $</span><input value={f.materialCost} onChange={set('materialCost')} inputMode="decimal" className={box} /></label>
+        <label><span className={lbl}>Labor cost $</span><input value={f.laborCost} onChange={set('laborCost')} inputMode="decimal" className={box} /></label>
+        <label><span className={lbl}>Dumpster cost $</span><input value={f.dumpsterCost} onChange={set('dumpsterCost')} inputMode="decimal" className={box} /></label>
+      </div>
+      <div className="mt-2 flex items-center gap-3 text-xs">
+        <span className="font-semibold text-navy-900/60">Balance owed: <span className={balance != null && balance > 0 ? 'text-red-700' : 'text-green-800'}>{money(balance)}</span></span>
+        <span className="font-semibold text-navy-900/60">Net: <span className="text-navy-950">{money(net)}</span></span>
+        <button
+          onClick={async () => {
+            await updateJob({
+              id: lead._id,
+              scope: f.scope.trim() || undefined,
+              proposalSentAt: fromDateInput(f.proposalSentAt),
+              contractSignedAt: fromDateInput(f.contractSignedAt),
+              subAssigned: f.subAssigned.trim() || undefined,
+              scheduledAt: fromDateInput(f.scheduledAt),
+              completedAt: fromDateInput(f.completedAt),
+              jobCost: toNum(f.jobCost),
+              deposit: toNum(f.deposit),
+              additionalPayment: toNum(f.additionalPayment),
+              finalPayment: toNum(f.finalPayment),
+              materialCost: toNum(f.materialCost),
+              laborCost: toNum(f.laborCost),
+              dumpsterCost: toNum(f.dumpsterCost),
+            });
+            setSaved(true);
+          }}
+          className="ml-auto rounded-md bg-navy-950 px-2.5 py-1 text-xs font-bold text-white"
+        >
+          {saved ? 'Saved ✓' : 'Save job'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function LeadCard({ lead }: { lead: Doc<'leads'> }) {
   const setStage = useMutation(api.leads.setStage);
   const addNote = useMutation(api.leads.addNote);
   const remove = useMutation(api.leads.remove);
   const [open, setOpen] = useState(false);
+  const [showJob, setShowJob] = useState(false);
   const [note, setNote] = useState('');
 
   return (
@@ -51,6 +137,9 @@ function LeadCard({ lead }: { lead: Doc<'leads'> }) {
         <button onClick={() => setOpen(!open)} className="rounded-md px-1.5 py-1 text-xs font-semibold text-navy-900/60 hover:bg-sand-100">
           Notes{lead.notes.length ? ` (${lead.notes.length})` : ''}
         </button>
+        <button onClick={() => setShowJob(!showJob)} className="rounded-md px-1.5 py-1 text-xs font-semibold text-navy-900/60 hover:bg-sand-100">
+          Job{lead.jobCost != null ? ' ✓' : ''}
+        </button>
         <button
           onClick={() => { if (confirm(`Delete lead "${lead.name}"?`)) remove({ id: lead._id }); }}
           className="ml-auto rounded-md px-1.5 py-1 text-xs text-red-600/70 hover:bg-red-50"
@@ -80,6 +169,7 @@ function LeadCard({ lead }: { lead: Doc<'leads'> }) {
           </form>
         </div>
       )}
+      {showJob && <JobDetails lead={lead} />}
     </div>
   );
 }

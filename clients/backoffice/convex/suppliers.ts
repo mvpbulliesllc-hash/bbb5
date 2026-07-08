@@ -1,0 +1,47 @@
+import { mutation, query } from './_generated/server';
+import { v } from 'convex/values';
+
+const material = v.object({
+  name: v.string(),
+  cost: v.optional(v.number()),
+  unit: v.optional(v.string()),
+});
+
+const fields = {
+  company: v.string(),
+  phone: v.optional(v.string()),
+  email: v.optional(v.string()),
+  notes: v.optional(v.string()),
+  materials: v.array(material),
+  extra: v.optional(v.record(v.string(), v.string())),
+};
+
+async function requireAuth(ctx: { auth: { getUserIdentity(): Promise<unknown> } }) {
+  if (!(await ctx.auth.getUserIdentity())) throw new Error('Not signed in');
+}
+
+export const list = query({
+  args: {},
+  handler: async (ctx) => {
+    await requireAuth(ctx);
+    return await ctx.db.query('suppliers').order('desc').collect();
+  },
+});
+
+/** Create when id is omitted, update when present. */
+export const save = mutation({
+  args: { id: v.optional(v.id('suppliers')), ...fields },
+  handler: async (ctx, { id, ...rest }) => {
+    await requireAuth(ctx);
+    if (id) await ctx.db.patch(id, rest);
+    else await ctx.db.insert('suppliers', rest);
+  },
+});
+
+export const remove = mutation({
+  args: { id: v.id('suppliers') },
+  handler: async (ctx, { id }) => {
+    await requireAuth(ctx);
+    await ctx.db.delete(id);
+  },
+});
