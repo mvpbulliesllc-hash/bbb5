@@ -2,7 +2,7 @@
 import { business, integrations } from '@/config/business';
 
 /**
- * "Ask Eli" — Paragon's AI chat/voice assistant, recovered from the
+ * "Ask Ellianna" — Paragon's AI chat/voice assistant, recovered from the
  * production deploy (paragondemo.ecoaisolutions.com) where it previously
  * lived only in the deployed build, never in git.
  *
@@ -22,7 +22,7 @@ import { business, integrations } from '@/config/business';
   data-tenant={integrations.tenant}
   data-phone={business.phone}
   data-phone-href={business.phoneHref}
-> <!-- Launcher --> <button id="eliana-launch" type="button" aria-label="Chat with Eli, Paragon's assistant" class="group fixed bottom-5 right-5 z-[60] flex items-center gap-3 rounded-full bg-navy-950 py-2 pl-2 pr-5 text-white shadow-lift ring-1 ring-white/15 transition hover:scale-105"> <span class="relative block h-12 w-12 overflow-hidden rounded-full ring-2 ring-gold-400"> <img src="/media/eli.jpg" alt="Eli" class="h-full w-full object-cover object-top" onerror="this.style.display='none'"> <span class="absolute inset-0 -z-10 bg-gradient-to-br from-gold-400 to-navy-800"></span> <span class="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-navy-950 bg-green-400"></span> </span> <span class="text-left leading-tight"> <span class="block font-display text-sm font-bold">Ask Eli</span> <span class="block text-[0.7rem] text-white/60">Roofing help · 24/7</span> </span> </button> <!-- Panel --> <div id="eliana-panel" hidden class="fixed bottom-5 right-5 z-[61] flex h-[min(80vh,640px)] w-[min(94vw,400px)] flex-col overflow-hidden rounded-3xl bg-white shadow-lift ring-1 ring-navy-200"> <!-- Presenter header --> <div class="relative shrink-0 bg-navy-950"> <div id="eliana-stage" class="relative aspect-[16/10] w-full overflow-hidden bg-navy-900"> <video id="eliana-video" class="h-full w-full object-cover object-center" autoplay muted loop playsinline poster="/media/eli.jpg" preload="auto"> <source src="/media/eli.mp4" type="video/mp4"> </video> <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/10 to-transparent"></div> <!-- speaking ring --> <span id="eliana-ring" class="pointer-events-none absolute inset-0 opacity-0 ring-4 ring-inset ring-gold-400 transition-opacity"></span> <!-- live badge --> <span class="absolute left-4 top-3 flex items-center gap-1.5 rounded-full bg-black/40 px-2.5 py-1 backdrop-blur"> <span class="h-1.5 w-1.5 rounded-full bg-green-400"></span> <span class="text-[0.6rem] font-bold uppercase tracking-wider text-white">Live</span> </span> <div class="absolute bottom-3 left-4 right-4 flex items-end justify-between"> <div> <p class="font-display text-lg font-extrabold leading-none text-white">Eli</p> <p class="text-[0.72rem] text-gold-300" id="eliana-status">Paragon's roofing assistant</p> </div> <button id="eliana-close" type="button" aria-label="Close" class="rounded-full bg-white/15 p-2 text-white hover:bg-white/25"> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"></path></svg> </button> </div> </div> </div> <!-- Transcript --> <div id="eliana-log" class="flex-1 space-y-3 overflow-y-auto bg-sand-50 px-4 py-4 text-sm"></div> <!-- Composer --> <form id="eliana-form" class="shrink-0 border-t border-navy-100 bg-white p-3"> <div class="flex items-center gap-2"> <button id="eliana-mic" type="button" aria-label="Push to talk" class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-sand-100 text-navy-800 transition hover:bg-sand-200"> <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"></path><path d="M19 11a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V21a1 1 0 1 0 2 0v-3.08A7 7 0 0 0 19 11Z"></path></svg> </button> <input id="eliana-input" autocomplete="off" placeholder="Ask about your roof…" class="h-11 w-full rounded-full border border-navy-200 px-4 text-sm focus:border-gold-500 focus:outline-none"> <button type="submit" aria-label="Send" class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-gold-500 text-navy-950 transition hover:bg-gold-400"> <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l18-8-8 18-2.5-7.5L3 11Z"></path></svg> </button> </div> <p class="mt-1.5 text-center text-[0.68rem] text-navy-900/45">Eli is Paragon's assistant · she can book your free estimate</p> </form> </div> </div>
+> <!-- Launcher --> <button id="eliana-launch" type="button" aria-label="Chat with Ellianna, Paragon's assistant" class="group fixed bottom-5 right-5 z-[60] flex items-center gap-3 rounded-full bg-navy-950 py-2 pl-2 pr-5 text-white shadow-lift ring-1 ring-white/15 transition hover:scale-105"> <span class="relative block h-12 w-12 overflow-hidden rounded-full ring-2 ring-gold-400"> <img src="/media/eli.jpg" alt="Ellianna" class="h-full w-full object-cover object-top" onerror="this.style.display='none'"> <span class="absolute inset-0 -z-10 bg-gradient-to-br from-gold-400 to-navy-800"></span> <span class="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-navy-950 bg-green-400"></span> </span> <span class="text-left leading-tight"> <span class="block font-display text-sm font-bold">Ask Ellianna</span> <span class="block text-[0.7rem] text-white/60">Roofing help · 24/7</span> </span> </button> <!-- Panel --> <div id="eliana-panel" hidden class="fixed bottom-5 right-5 z-[61] flex h-[min(80vh,640px)] w-[min(94vw,400px)] flex-col overflow-hidden rounded-3xl bg-white shadow-lift ring-1 ring-navy-200"> <!-- Presenter header --> <div class="relative shrink-0 bg-navy-950"> <div id="eliana-stage" class="relative aspect-[16/10] w-full overflow-hidden bg-navy-900"> <video id="eliana-video" class="h-full w-full object-cover object-center" autoplay muted loop playsinline poster="/media/eli.jpg" preload="auto"> <source src="/media/eli.mp4" type="video/mp4"> </video> <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/10 to-transparent"></div> <!-- speaking ring --> <span id="eliana-ring" class="pointer-events-none absolute inset-0 opacity-0 ring-4 ring-inset ring-gold-400 transition-opacity"></span> <!-- live badge --> <span class="absolute left-4 top-3 flex items-center gap-1.5 rounded-full bg-black/40 px-2.5 py-1 backdrop-blur"> <span class="h-1.5 w-1.5 rounded-full bg-green-400"></span> <span class="text-[0.6rem] font-bold uppercase tracking-wider text-white">Live</span> </span> <div class="absolute bottom-3 left-4 right-4 flex items-end justify-between"> <div> <p class="font-display text-lg font-extrabold leading-none text-white">Ellianna</p> <p class="text-[0.72rem] text-gold-300" id="eliana-status">Paragon's roofing assistant</p> </div> <button id="eliana-close" type="button" aria-label="Close" class="rounded-full bg-white/15 p-2 text-white hover:bg-white/25"> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 6l12 12M18 6L6 18"></path></svg> </button> </div> </div> </div> <!-- Transcript --> <div id="eliana-log" class="flex-1 space-y-3 overflow-y-auto bg-sand-50 px-4 py-4 text-sm"></div> <!-- Composer --> <form id="eliana-form" class="shrink-0 border-t border-navy-100 bg-white p-3"> <div class="flex items-center gap-2"> <button id="eliana-mic" type="button" aria-label="Push to talk" class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-sand-100 text-navy-800 transition hover:bg-sand-200"> <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z"></path><path d="M19 11a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V21a1 1 0 1 0 2 0v-3.08A7 7 0 0 0 19 11Z"></path></svg> </button> <input id="eliana-input" autocomplete="off" placeholder="Ask about your roof…" class="h-11 w-full rounded-full border border-navy-200 px-4 text-sm focus:border-gold-500 focus:outline-none"> <button type="submit" aria-label="Send" class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-gold-500 text-navy-950 transition hover:bg-gold-400"> <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l18-8-8 18-2.5-7.5L3 11Z"></path></svg> </button> </div> <p class="mt-1.5 text-center text-[0.68rem] text-navy-900/45">Ellianna is Paragon's assistant · she can book your free estimate</p> </form> </div> </div>
 
 <script is:inline define:vars={{
   PHONE: business.phone,
@@ -48,7 +48,7 @@ import { business, integrations } from '@/config/business';
     var started = false;
     function playVideo() { try { if (video) { video.muted = true; var p = video.play(); if (p && p.catch) p.catch(function () {}); } } catch (e) {} }
 
-    // ---------- speech (ElevenLabs if API set, else browser TTS) ----------
+    // ---------- speech (Hume TTS via /api/eli, else browser TTS) ----------
     var voice = null;
     function pickVoice() {
       try {
@@ -63,15 +63,57 @@ import { business, integrations } from '@/config/business';
       statusEl.textContent = on ? 'Speaking…' : "Paragon's roofing assistant";
       if (video) { video.style.transition = 'transform .4s ease'; video.style.transform = on ? 'scale(1.04)' : 'scale(1)'; }
     }
+
+    // Hume TTS takes seconds to generate; Chrome's transient user activation
+    // expires (~5s) before the audio arrives, so `new Audio().play()` gets
+    // blocked and the widget used to silently fall back to browser TTS. An
+    // AudioContext resumed inside a real gesture stays unlocked for the whole
+    // page lifetime, so playback works no matter how slow the fetch is.
+    var actx = null, playingSrc = null;
+    // Half-duplex: assigned by the mic block below; a no-op when there's no mic.
+    // Ellianna must never speak while the mic listens (she'd hear herself and
+    // answer her own answers in an endless loop) and vice versa.
+    var stopListening = function () {};
+    function unlockAudio() {
+      try {
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (AC && !actx) actx = new AC();
+        if (actx && actx.state === 'suspended') actx.resume();
+      } catch (e) {}
+    }
+    function stopVoice() {
+      var p = playingSrc; playingSrc = null;
+      try { if (p) { p.onended = null; if (p.stop) p.stop(0); else p.pause(); } } catch (e) {}
+      try { window.speechSynthesis.cancel(); } catch (e) {}
+      speaking(false);
+    }
+    function startPlayback(src) {
+      stopListening();
+      playingSrc = src; speaking(true);
+      src.onended = function () { if (playingSrc === src) { playingSrc = null; speaking(false); } };
+    }
     async function say(text) {
       var clean = text.replace(/\s+/g, ' ').trim();
+      stopVoice();
       if (API) {
         try {
-          var r = await fetch(API.replace(/\/$/, '') + '/voice', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: clean }) });
+          // Trailing slash: vercel.json's `trailingSlash: true` 308-redirects
+          // the bare path on every call otherwise.
+          var r = await fetch(API.replace(/\/$/, '') + '/voice/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: clean }) });
           if (r.ok) {
             var buf = await r.arrayBuffer();
-            var audio = new Audio(URL.createObjectURL(new Blob([buf], { type: 'audio/mpeg' })));
-            speaking(true); audio.onended = function () { speaking(false); }; await audio.play(); return;
+            if (actx) {
+              var src = actx.createBufferSource();
+              src.buffer = await actx.decodeAudioData(buf);
+              src.connect(actx.destination);
+              startPlayback(src);
+              src.start(0);
+            } else {
+              var audio = new Audio(URL.createObjectURL(new Blob([buf], { type: 'audio/mpeg' })));
+              startPlayback(audio);
+              await audio.play();
+            }
+            return;
           }
         } catch (e) { /* fall through to browser TTS */ }
       }
@@ -80,7 +122,7 @@ import { business, integrations } from '@/config/business';
           window.speechSynthesis.cancel();
           var u = new SpeechSynthesisUtterance(clean);
           if (voice) u.voice = voice; u.rate = 1.02; u.pitch = 1.05;
-          u.onstart = function () { speaking(true); }; u.onend = function () { speaking(false); };
+          u.onstart = function () { stopListening(); speaking(true); }; u.onend = function () { speaking(false); };
           window.speechSynthesis.speak(u);
         } catch (e) {}
       }
@@ -117,7 +159,7 @@ import { business, integrations } from '@/config/business';
 
     // ---------- grounded Paragon knowledge base (offline brain) ----------
     var KB = [
-      { k: ['hello','hi','hey','yo','sup'], a: "Hi! I'm Eli, Paragon Exteriors' assistant. I can answer anything about your roof or exterior — or get you a free estimate. What's going on with your home?" },
+      { k: ['hello','hi','hey','yo','sup'], a: "Hi! I'm Ellianna, Paragon Exteriors' assistant. I can answer anything about your roof or exterior — or get you a free estimate. What's going on with your home?" },
       { k: ['service','offer','do you','what do you do','siding','window','door','deck','gutter','commercial'], a: "Paragon does it all: roof replacement & repair, siding, windows, doors, decks, gutters, and commercial roofing. Roofing's our specialty. What are you thinking about?" },
       { k: ['area','where','town','serve','location','near me','county'], a: "We cover " + AREA + " — Toms River, Brick, Jackson, Howell, Point Pleasant, Rumson, Holmdel and dozens more. Where's your home?" },
       { k: ['cost','price','how much','estimate','quote','expensive','afford'], a: "Most Jersey Shore roof replacements run about $8,000–$18,000 depending on size and shingle. Want a real number in 30 seconds? I can run our instant estimator — or just have someone come look, free.", chips: ['Run my instant quote','Book a free estimate'] },
@@ -150,7 +192,7 @@ import { business, integrations } from '@/config/business';
       var reply = null, chipList = null, doIntake = false;
       if (API) {
         try {
-          var r = await fetch(API.replace(/\/$/, '') + '/chat', {
+          var r = await fetch(API.replace(/\/$/, '') + '/chat/', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: q, history: history.slice(-8) }),
           });
@@ -193,19 +235,19 @@ import { business, integrations } from '@/config/business';
     }
     async function submitLead() {
       var d = intake.data;
-      var msg = "Ask-Eli lead — Issue: " + (d.issue || '') ;
+      var msg = "Ask-Ellianna lead — Issue: " + (d.issue || '') ;
       var parts = (d.name || '').trim().split(' ');
       var payload = {
-        firstName: parts[0] || d.name || 'Website', lastName: parts.slice(1).join(' ') || '(via Eli)',
+        firstName: parts[0] || d.name || 'Website', lastName: parts.slice(1).join(' ') || '(via Ellianna)',
         phone: d.phone || '', address: d.address || '', serviceType: 'Roofing',
         message: msg, source: 'Website', preferredContactMethod: 'Phone', landingPage: location.pathname,
       };
       var wait = typing();
       var ok = false;
-      // Prefer the live Eli API (writes to Attio + notifies Joe); else the site CRM; else mailto.
+      // Prefer the live Ellianna API (writes to Attio + notifies Joe); else the site CRM; else mailto.
       try {
         if (API) {
-          var r = await fetch(API.replace(/\/$/, '') + '/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+          var r = await fetch(API.replace(/\/$/, '') + '/lead/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
           ok = r.ok;
         }
         if (!ok && LEADS) {
@@ -222,7 +264,7 @@ import { business, integrations } from '@/config/business';
       } else {
         var body = encodeURIComponent('Name: ' + (d.name||'') + '\nPhone: ' + (d.phone||'') + '\nAddress: ' + (d.address||'') + '\nIssue: ' + (d.issue||''));
         var fb = "Got it! The fastest way to lock this in: tap to send it to us, or call " + PHONE + ".";
-        var b = bubble('eliana', esc(fb) + ' <a class="font-bold text-gold-700 underline" href="mailto:Paragonexteriors.co@gmail.com?subject=Eli%20lead&body=' + body + '">Send my request</a>');
+        var b = bubble('eliana', esc(fb) + ' <a class="font-bold text-gold-700 underline" href="mailto:Paragonexteriors.co@gmail.com?subject=Ellianna%20lead&body=' + body + '">Send my request</a>');
         say(fb);
       }
     }
@@ -230,6 +272,7 @@ import { business, integrations } from '@/config/business';
     // ---------- input routing ----------
     function handle(text) {
       var q = (text || '').trim(); if (!q) return;
+      unlockAudio();
       bubble('user', esc(q));
       if (intake) { intakeStep(q); return; }
       if (/run my instant quote|instant quote/i.test(q)) { var m = "You got it — opening the instant estimator."; bubble('eliana', esc(m)); say(m); setTimeout(function(){ location.href = '/instant-quote/'; }, 900); return; }
@@ -241,10 +284,18 @@ import { business, integrations } from '@/config/business';
     // ---------- mic (Web Speech API push-to-talk) ----------
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SR) {
-      var rec = new SR(); rec.lang = 'en-US'; rec.interimResults = false;
+      var rec = new SR(); rec.lang = 'en-US'; rec.continuous = false; rec.interimResults = false;
       var listening = false;
+      // abort() (not stop()) discards anything already heard — if Ellianna's
+      // own voice reached the mic, it must never come back as a "result".
+      stopListening = function () { if (listening) { try { rec.abort(); } catch (e) {} listening = false; } };
       mic.addEventListener('click', function () {
-        try { if (listening) { rec.stop(); return; } rec.start(); listening = true; mic.classList.add('bg-red-500','text-white'); statusEl.textContent = 'Listening…'; } catch (e) {}
+        unlockAudio();
+        try {
+          if (listening) { rec.stop(); return; }
+          stopVoice(); // barge-in: cut her off before the mic opens, or she hears herself
+          rec.start(); listening = true; mic.classList.add('bg-red-500','text-white'); statusEl.textContent = 'Listening…';
+        } catch (e) {}
       });
       rec.onresult = function (ev) { var t = ev.results[0][0].transcript; input.value = ''; handle(t); };
       rec.onend = function () { listening = false; mic.classList.remove('bg-red-500','text-white'); statusEl.textContent = "Paragon's roofing assistant"; };
@@ -252,18 +303,25 @@ import { business, integrations } from '@/config/business';
 
     // ---------- open / close ----------
     function open() {
+      unlockAudio();
       panel.hidden = false; launch.style.display = 'none';
       playVideo();
       if (!started) {
         started = true;
-        var hi = "Hey! I'm Eli, Paragon's roofing assistant. Ask me anything about your roof — or I can get you a free estimate in seconds.";
+        var hi = "Hey! I'm Ellianna, Paragon's roofing assistant. Ask me anything about your roof — or I can get you a free estimate in seconds.";
         bubble('eliana', esc(hi)); say(hi);
         chips(['How much is a new roof?','Do you handle storm damage?','Book a free estimate']);
       }
       setTimeout(function () { input.focus(); }, 100);
     }
-    function close() { panel.hidden = true; launch.style.display = 'flex'; try { if (video) video.pause(); } catch(e){} try { window.speechSynthesis.cancel(); } catch(e){} speaking(false); }
+    function close() { panel.hidden = true; launch.style.display = 'flex'; try { if (video) video.pause(); } catch(e){} stopListening(); stopVoice(); }
     launch.addEventListener('click', open);
     document.getElementById('eliana-close').addEventListener('click', close);
+
+    // Pre-warm the TTS function on hover/touch so the greeting isn't stuck
+    // behind a serverless cold start.
+    function warmVoice() { if (API) { try { fetch(API.replace(/\/$/, '') + '/voice/', { method: 'OPTIONS' }); } catch (e) {} } }
+    launch.addEventListener('mouseenter', warmVoice, { once: true });
+    launch.addEventListener('touchstart', warmVoice, { once: true, passive: true });
   })();
 </script>

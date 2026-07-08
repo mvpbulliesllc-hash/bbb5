@@ -1,5 +1,5 @@
 /**
- * Eli voice endpoint — expressive TTS via Hume (https://dev.hume.ai).
+ * Ellianna voice endpoint — expressive TTS via Hume (https://dev.hume.ai).
  *
  * POST { text: string } → audio/mpeg
  *
@@ -8,15 +8,15 @@
  * Configure in Vercel → Settings → Environment Variables:
  *   HUME_API_KEY     required — Hume API key
  *   HUME_VOICE_NAME  optional — a Hume Voice Library / custom voice name;
- *                    when unset, Hume generates a voice from ELI_DESCRIPTION
+ *                    when unset, Hume generates a voice from VOICE_DESCRIPTION
  *   HUME_VOICE_ID    optional — takes precedence over HUME_VOICE_NAME
  *
  * Without HUME_API_KEY the endpoint returns 503 and the chat widget falls
  * back to browser speech synthesis — degraded, never broken.
  */
 
-const ELI_DESCRIPTION =
-  'Eli, a warm, upbeat woman in her early thirties from the Jersey Shore. ' +
+const VOICE_DESCRIPTION =
+  'Ellianna, a warm, upbeat woman in her early thirties from the Jersey Shore. ' +
   'A friendly, confident roofing company assistant: natural conversational pace, ' +
   'reassuring and helpful, never salesy or robotic.';
 
@@ -46,7 +46,7 @@ module.exports = async (req, res) => {
     return res.status(200).send(Buffer.from(cached));
   }
 
-  const utterance = { text, description: ELI_DESCRIPTION };
+  const utterance = { text, description: VOICE_DESCRIPTION };
   if (process.env.HUME_VOICE_ID) utterance.voice = { id: process.env.HUME_VOICE_ID };
   else utterance.voice = { name: process.env.HUME_VOICE_NAME || 'Ava Song', provider: 'HUME_AI' };
 
