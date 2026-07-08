@@ -48,7 +48,7 @@ module.exports = async (req, res) => {
 
   const utterance = { text, description: ELI_DESCRIPTION };
   if (process.env.HUME_VOICE_ID) utterance.voice = { id: process.env.HUME_VOICE_ID };
-  else if (process.env.HUME_VOICE_NAME) utterance.voice = { name: process.env.HUME_VOICE_NAME, provider: 'HUME_AI' };
+  else utterance.voice = { name: process.env.HUME_VOICE_NAME || 'Ava Song', provider: 'HUME_AI' };
 
   try {
     const r = await fetch('https://api.hume.ai/v0/tts/file', {
