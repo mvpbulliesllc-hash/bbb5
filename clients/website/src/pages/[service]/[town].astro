@@ -8,6 +8,7 @@ import FinancingBand from '@/components/FinancingBand.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
 import LeadForm from '@/components/LeadForm.astro';
 import CtaBand from '@/components/CtaBand.astro';
+import QuickFacts from '@/components/QuickFacts.astro';
 import { serviceSchema, faqSchema, breadcrumbSchema } from '@/lib/schema';
 import { business } from '@/config/business';
 import Img from '@/components/Img.astro';
@@ -35,6 +36,18 @@ const crumbs = [
 ];
 const nearby = (await getCollection('combos', (c) => c.data.service === entry.data.service && c.data.town !== entry.data.town)).slice(0, 10);
 const townNames = new Map((await getCollection('towns')).map((t) => [t.id, t.data.town]));
+
+// Citable GEO facts — complete declarative sentences an AI answer engine can
+// quote verbatim, localized to this town.
+const quickFacts = [
+  service.data.priceRange
+    ? `A typical ${service.data.serviceName.toLowerCase()} in ${town.data.town}, NJ costs ${service.data.priceRange} as of 2026, depending on size, materials, and scope.`
+    : `${service.data.serviceName} in ${town.data.town}, NJ is quoted with a free itemized estimate.`,
+  `Paragon Exteriors LLC provides ${service.data.serviceName.toLowerCase()} in ${town.data.town} and throughout ${town.data.county} County, New Jersey.`,
+  'Most residential roofing projects are torn off, installed, and cleaned up in a single day.',
+  `Paragon Exteriors LLC is a licensed New Jersey home improvement contractor (${business.license}) and is fully insured.`,
+  `Free estimates and financing are available in ${town.data.town} — call ${business.phone}.`,
+];
 ---
 
 <Base
@@ -70,6 +83,14 @@ const townNames = new Map((await getCollection('towns')).map((t) => [t.id, t.dat
   </section>
   <TrustBar />
   <Breadcrumbs items={crumbs} />
+
+  <div class="mx-auto max-w-4xl px-4 pt-10 sm:px-6">
+    <QuickFacts
+      heading={`${service.data.serviceName} in ${town.data.town} — quick facts`}
+      facts={quickFacts}
+      lastUpdated="July 2026"
+    />
+  </div>
 
   <article class="prose-paragon mx-auto max-w-4xl px-4 py-10 sm:px-6">
     <Content />

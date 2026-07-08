@@ -3,6 +3,7 @@ import Base from '@/layouts/Base.astro';
 import MuxHero from '@/components/MuxHero.astro';
 import MuxFeatureVideo from '@/components/MuxFeatureVideo.astro';
 import TrustBar from '@/components/TrustBar.astro';
+import BeforeAfterSlider from '@/components/BeforeAfterSlider.astro';
 import ServicesGrid from '@/components/ServicesGrid.astro';
 import RoofQuoteCalculator from '@/components/RoofQuoteCalculator.astro';
 import InstagramBand from '@/components/InstagramBand.astro';
@@ -48,6 +49,14 @@ const faqs = [
   <MuxHero />
   <MuxFeatureVideo />
   <TrustBar />
+  <BeforeAfterSlider
+    heading="Drag to see what a Paragon roof does for a home"
+    subheading="Real projects from Ocean & Monmouth County — most of them torn off and finished in a single day."
+    before="/media/projects/project-03.jpg"
+    after="/media/projects/project-01.jpg"
+    beforeAlt="Jersey Shore home before roof replacement by Paragon Exteriors"
+    afterAlt="Completed architectural shingle roof replacement by Paragon Exteriors at the Jersey Shore"
+  />
   <ServicesGrid heading="Roofing & exteriors, done to a higher standard" />
   <RoofQuoteCalculator />
   <InstagramBand />

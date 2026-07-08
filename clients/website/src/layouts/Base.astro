@@ -2,8 +2,9 @@
 import '@fontsource-variable/inter';
 import '@fontsource-variable/archivo';
 import '@/styles/global.css';
+import { getCollection } from 'astro:content';
 import { business, integrations } from '@/config/business';
-import { orgSchema } from '@/lib/schema';
+import { buildGraph, orgNode, websiteNode, webPageNode } from '@/lib/schema';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import StickyCallBar from '@/components/StickyCallBar.astro';
@@ -22,7 +23,20 @@ interface Props {
 const { title, description, ogImage = '/media/og-default.jpg', ogType = 'website', schemas = [], noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImageAbs = ogImage.startsWith('http') ? ogImage : new URL(ogImage, Astro.site).href;
-const allSchemas = [orgSchema(), ...schemas.filter(Boolean)];
+
+// One connected @graph per page: Organization (with offer catalog built from
+// the services collection) ← WebSite ← WebPage + page-specific nodes.
+const serviceEntries = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const offerCatalog = serviceEntries.map((s) => ({
+  name: s.data.serviceName,
+  url: `${business.url}/${s.id}/`,
+}));
+const graph = buildGraph([
+  orgNode(offerCatalog),
+  websiteNode(),
+  webPageNode({ url: canonical, title, description, image: ogImageAbs }),
+  ...schemas,
+]);
 ---
 
 <!doctype html>
@@ -34,7 +48,10 @@ const allSchemas = [orgSchema(), ...schemas.filter(Boolean)];
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex,nofollow" />}
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
@@ -48,7 +65,7 @@ const allSchemas = [orgSchema(), ...schemas.filter(Boolean)];
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageAbs} />
     <meta name="theme-color" content="#0b1a2b" />
-    {allSchemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} />
     {
       integrations.ga4Id && (
         <>

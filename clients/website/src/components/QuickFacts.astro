@@ -1,0 +1,43 @@
+---
+/**
+ * QuickFacts — a citable fact block for GEO (AI-search) visibility.
+ *
+ * AI answer engines lift plain declarative sentences verbatim, so every fact
+ * should be a complete, standalone sentence ("A typical asphalt shingle roof
+ * replacement in Toms River, NJ costs $8,000–$18,000 as of 2026."), not a
+ * fragment. The "Last updated" date signals freshness — bump `lastUpdated`
+ * whenever the numbers change.
+ */
+interface Props {
+  heading?: string;
+  facts: readonly string[];
+  /** Human-readable date, e.g. "July 2026". */
+  lastUpdated: string;
+  class?: string;
+}
+
+const { heading = 'Quick facts', facts, lastUpdated, class: className } = Astro.props;
+---
+
+<aside
+  class:list={[
+    'mx-auto max-w-4xl rounded-2xl border-2 border-gold-400/60 bg-sand-50 px-6 py-5',
+    className,
+  ]}
+  aria-label={heading}
+>
+  <p class="font-display text-sm font-extrabold uppercase tracking-[0.2em] text-navy-950">{heading}</p>
+  <ul class="mt-3 space-y-2 text-[0.95rem] leading-relaxed text-navy-900">
+    {
+      facts.map((fact) => (
+        <li class="flex gap-2.5">
+          <span class="mt-0.5 shrink-0 text-gold-500" aria-hidden="true">
+            ✓
+          </span>
+          <span>{fact}</span>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="mt-4 text-xs text-navy-900/55">Last updated: {lastUpdated}</p>
+</aside>

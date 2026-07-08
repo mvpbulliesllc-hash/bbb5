@@ -7,15 +7,44 @@ import { integrations } from '@/config/business';
  * The agent is prompted (in the ElevenLabs dashboard) to qualify roofing
  * leads and hand off to the CRM capture endpoint via its webhook tool.
  * See docs/voice-agent.md at the repo root of clients/website.
+ *
+ * CWV: the widget bundle stays OUT of the critical path — it is injected on
+ * the first user interaction (pointer, scroll, key) or when the browser goes
+ * idle after load, whichever comes first. It never competes with the hero
+ * LCP or blocks interactivity.
  */
 const agentId = integrations.elevenLabsAgentId;
+
+const loader = `
+(function () {
+  var loaded = false;
+  var events = ['pointerdown', 'keydown', 'scroll', 'touchstart'];
+  function loadWidget() {
+    if (loaded) return;
+    loaded = true;
+    var s = document.createElement('script');
+    s.src = 'https://unpkg.com/@elevenlabs/convai-widget-embed';
+    s.async = true;
+    document.head.appendChild(s);
+    events.forEach(function (e) { removeEventListener(e, loadWidget); });
+  }
+  events.forEach(function (e) { addEventListener(e, loadWidget, { passive: true }); });
+  addEventListener('load', function () {
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(loadWidget, { timeout: 5000 });
+    } else {
+      setTimeout(loadWidget, 5000);
+    }
+  });
+})();
+`;
 ---
 
 {
   agentId && (
     <>
       <elevenlabs-convai agent-id={agentId} />
-      <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript" />
+      <script is:inline set:html={loader} />
     </>
   )
 }

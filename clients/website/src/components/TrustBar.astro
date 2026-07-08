@@ -1,17 +1,39 @@
 ---
 import { business } from '@/config/business';
+import { aggregateRating } from '@/config/reviews';
 
+/**
+ * Trust bar — sits directly under the hero. Leads with the star rating
+ * (the single biggest local-SEO / CTR lever), then license, speed,
+ * insurance, and financing. Rating value + count come from
+ * src/config/reviews.ts so the bar always matches the Review JSON-LD.
+ */
 const items = [
+  { label: 'Most Roofs Done in 1 Day', sub: 'Tear-off to cleanup' },
   { label: business.license, sub: 'NJ licensed contractor' },
   { label: 'Fully Insured', sub: 'Liability & workers comp' },
   { label: 'Financing Available', sub: 'Flexible monthly payments' },
-  { label: 'Residential + Commercial', sub: 'Homes, HOAs & businesses' },
   { label: 'Free Estimates', sub: 'Fast, honest quotes' },
 ];
 ---
 
 <section class="border-b border-sand-200 bg-sand-50" aria-label="Credentials">
-  <div class="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-4 px-4 py-6 sm:px-6 md:grid-cols-5">
+  <div class="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-4 px-4 py-6 sm:px-6 md:grid-cols-6">
+    <div class="text-center">
+      <div class="flex items-center justify-center gap-1 text-gold-400" aria-hidden="true">
+        {
+          Array.from({ length: 5 }).map(() => (
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" />
+            </svg>
+          ))
+        }
+      </div>
+      <p class="mt-0.5 text-xs text-navy-900/60">
+        <strong class="font-display font-extrabold text-navy-900">{aggregateRating.ratingValue.toFixed(1)}</strong>
+        · {aggregateRating.reviewCount} homeowner reviews
+      </p>
+    </div>
     {
       items.map((item) => (
         <div class="text-center">

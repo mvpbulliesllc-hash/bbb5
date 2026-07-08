@@ -13,8 +13,11 @@ export const business = {
   tagline: 'Protecting homes. Perfecting exteriors.',
   phone: '848-633-6440',
   phoneHref: 'tel:+18486336440',
-  email: 'Paragonexteriors.co@gmail.com',
-  emailHref: 'mailto:Paragonexteriors.co@gmail.com',
+  // Domain email — keep NAP + email identical across site, schema, GBP and
+  // socials. (The old Gmail address is a weak brand/entity signal; make sure
+  // this mailbox exists before launch.)
+  email: 'info@paragonexteriorsnj.com',
+  emailHref: 'mailto:info@paragonexteriorsnj.com',
   license: 'NJ HIC #13VH13814500',
   url: 'https://www.paragonexteriorsnj.com',
   areaServed: 'Ocean County, Monmouth County & the Jersey Shore, NJ',
@@ -40,7 +43,11 @@ export const business = {
   social: {
     instagram: 'https://www.instagram.com/paragonexteriorsnj/',
     facebook: 'https://www.facebook.com/paragonexteriorsnj',
+    /** Google Business Profile share URL — fill in at launch for entity linking. */
+    googleBusinessProfile: '',
   },
+  /** NJ Division of Consumer Affairs HIC license verification portal. */
+  licenseRegistryUrl: 'https://newjersey.mylicense.com/verification/',
   hours: 'Mon–Sat 7:00 AM – 7:00 PM',
   openingHoursSpec: [
     { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '07:00', closes: '19:00' },

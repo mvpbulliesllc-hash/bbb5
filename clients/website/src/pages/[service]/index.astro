@@ -10,6 +10,8 @@ import FaqAccordion from '@/components/FaqAccordion.astro';
 import LeadForm from '@/components/LeadForm.astro';
 import TownGrid from '@/components/TownGrid.astro';
 import CtaBand from '@/components/CtaBand.astro';
+import BeforeAfterSlider from '@/components/BeforeAfterSlider.astro';
+import QuickFacts from '@/components/QuickFacts.astro';
 import { serviceSchema, faqSchema, breadcrumbSchema } from '@/lib/schema';
 import { business } from '@/config/business';
 import Img from '@/components/Img.astro';
@@ -27,6 +29,18 @@ const crumbs = [
   { name: 'Services', url: '/services/' },
   { name: entry.data.title, url: `/${entry.id}/` },
 ];
+// Citable GEO facts — complete declarative sentences an AI answer engine can
+// quote verbatim. Keep in sync with page copy; bump the date on changes.
+const quickFacts = [
+  entry.data.priceRange
+    ? `A typical ${entry.data.serviceName.toLowerCase()} at the Jersey Shore costs ${entry.data.priceRange} as of 2026, depending on size, materials, and scope.`
+    : `${entry.data.serviceName} pricing is quoted with a free itemized estimate — no allowances, no surprises.`,
+  `Paragon Exteriors LLC provides ${entry.data.serviceName.toLowerCase()} across Ocean County and Monmouth County, New Jersey.`,
+  'Most residential roofing projects are torn off, installed, and cleaned up in a single day.',
+  `Paragon Exteriors LLC is a licensed New Jersey home improvement contractor (${business.license}) and is fully insured.`,
+  `Free estimates and financing are available — call ${business.phone}.`,
+];
+
 const leadServiceMap: Record<string, string> = {
   'roof-replacement': 'RoofReplacement',
   'roof-repair': 'RoofRepair',
@@ -46,7 +60,12 @@ const leadServiceMap: Record<string, string> = {
   description={entry.data.metaDescription}
   ogImage={await ogImageUrl(entry.data.image, Astro.site)}
   schemas={[
-    serviceSchema({ name: entry.data.serviceName, description: entry.data.metaDescription, url: `${business.url}/${entry.id}/` }),
+    serviceSchema({
+      name: entry.data.serviceName,
+      description: entry.data.metaDescription,
+      url: `${business.url}/${entry.id}/`,
+      priceRange: entry.data.priceRange,
+    }),
     faqSchema(entry.data.faqs),
     breadcrumbSchema(crumbs),
   ]}
@@ -67,9 +86,22 @@ const leadServiceMap: Record<string, string> = {
   <TrustBar />
   <Breadcrumbs items={crumbs} />
 
+  <div class="mx-auto max-w-4xl px-4 pt-10 sm:px-6">
+    <QuickFacts heading={`${entry.data.serviceName} — quick facts`} facts={quickFacts} lastUpdated="July 2026" />
+  </div>
+
   <article class="prose-paragon mx-auto max-w-4xl px-4 py-10 sm:px-6">
     <Content />
   </article>
+
+  <BeforeAfterSlider
+    heading={`${entry.data.serviceName} — before and after`}
+    subheading="Drag the handle to compare. Every project gets the same spec: full tear-off, proper flashing, and a magnetic-sweep cleanup."
+    before="/media/projects/project-03.jpg"
+    after="/media/projects/project-01.jpg"
+    beforeAlt={`Home before ${entry.data.serviceName.toLowerCase()} by Paragon Exteriors`}
+    afterAlt={`Completed ${entry.data.serviceName.toLowerCase()} by Paragon Exteriors in Ocean County NJ`}
+  />
 
   <ProcessSteps />
   <Testimonials />

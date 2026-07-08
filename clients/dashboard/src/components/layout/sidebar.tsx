@@ -89,19 +89,16 @@ export function Sidebar() {
         )}
       >
         <div className={cn("flex items-center", collapsed ? "" : "gap-2.5")}>
-          <span
+          <img
             aria-hidden
-            className={cn(
-              "brand-mark grid size-8 place-items-center rounded-lg shrink-0",
-              "font-display text-[12px] font-bold text-[var(--color-primary-foreground)]",
-            )}
-          >
-            F
-          </span>
+            src="/logo-paragon.png"
+            alt=""
+            className="size-8 shrink-0 object-contain"
+          />
           {!collapsed && (
             <div className="flex flex-col">
               <span className="whitespace-nowrap font-display text-[15px] font-bold leading-none tracking-tight text-[var(--color-foreground)]">
-                fullstack<span className="text-[var(--color-primary)]">hero</span>
+                Paragon <span className="text-[var(--color-primary)]">Exteriors</span>
               </span>
               <span className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-[oklch(from_var(--color-muted-foreground)_l_c_h_/_0.7)]">
                 Dashboard
