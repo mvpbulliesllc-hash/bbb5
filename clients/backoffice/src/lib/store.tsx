@@ -83,6 +83,48 @@ export async function logout() {
   await fetch(`${API}/login/`, { method: 'DELETE', credentials: 'same-origin' }).catch(() => {});
 }
 
+/** Fire-and-forget create of any record kind (used to log activities). */
+export async function saveKind<T extends object>(kind: string, data: T): Promise<number | undefined> {
+  try {
+    const d = await call({ op: 'save', kind, data });
+    return d.id as number;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * The unified activity timeline — "the spine" (brief §7). Every meaningful
+ * event (lead created, stage moved, note, call, sms, email, estimate,
+ * invoice, payment, signature, list push) writes one row here so six tools
+ * feel like one product. Retrofitting this later is a rewrite, so it exists
+ * from day one — even before the comms integrations that will feed it.
+ */
+export type ActivityType =
+  | 'note' | 'stage' | 'created' | 'call' | 'sms' | 'email'
+  | 'meeting' | 'signature' | 'payment' | 'estimate' | 'invoice' | 'task' | 'list';
+
+export type Activity = {
+  type: ActivityType;
+  title: string;
+  body?: string;
+  direction?: 'in' | 'out';
+  actor?: string;
+  at: number;
+  // polymorphic links into the CRM
+  leadId?: number;
+  leadName?: string;
+  estimateId?: number;
+  invoiceId?: number;
+  // reserved for provider webhooks (Telnyx/AgentMail/Docuseal/Stripe)
+  provider?: string;
+  providerId?: string;
+};
+
+export function logActivity(a: Omit<Activity, 'at'> & { at?: number }) {
+  return saveKind<Activity>('activity', { ...a, at: a.at ?? Date.now() });
+}
+
 // ---------- record shapes ----------
 
 export type Lead = {
@@ -183,6 +225,46 @@ export type ListJob = {
   count?: number;
   runId?: string;
 };
+
+export type LineItem = { name: string; qty: number; unit?: string; unitPrice: number };
+
+/** Estimate → the sales-to-cash entry point (brief §1/§2). Converts to an invoice. */
+export type Estimate = {
+  number: string; // EST-0001
+  customer: string;
+  address?: string;
+  leadId?: number;
+  tradeType?: string; // roofing | siding | windows | decks
+  lineItems: LineItem[];
+  // roofing squares calculator inputs (optional)
+  roofSquares?: number;
+  wastePct?: number;
+  pricePerSquare?: number;
+  taxPct?: number;
+  status: string; // draft | sent | accepted | declined | invoiced
+  notes?: string;
+};
+
+export type Invoice = {
+  number: string; // INV-0001
+  customer: string;
+  address?: string;
+  leadId?: number;
+  estimateId?: number;
+  lineItems: LineItem[];
+  taxPct?: number;
+  amountPaid?: number;
+  status: string; // unpaid | partial | paid
+  dueAt?: number;
+  notes?: string;
+};
+
+/** Sum a line-item list + tax → subtotal, tax, total. */
+export function invoiceTotals(items: LineItem[], taxPct = 0) {
+  const subtotal = items.reduce((n, li) => n + (li.qty || 0) * (li.unitPrice || 0), 0);
+  const tax = subtotal * (taxPct / 100);
+  return { subtotal, tax, total: subtotal + tax };
+}
 
 export async function listBuilderOp(body: Record<string, unknown>) {
   const r = await fetch(`${API}/listbuilder/`, {

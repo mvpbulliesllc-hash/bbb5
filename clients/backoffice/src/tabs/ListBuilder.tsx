@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { LiquidMetalButton } from '../components/LiquidMetalButton';
-import { listBuilderOp, useKind } from '../lib/store';
+import { listBuilderOp, logActivity, useKind } from '../lib/store';
 import type { Contact, Lead, ListJob, Rec } from '../lib/store';
 import { btnMini, btnPrimary, inp, inpMini } from '../lib/ui';
 
@@ -243,6 +243,8 @@ export default function ListBuilder() {
                           stage: 'new',
                           notes: [],
                         });
+                        const who = c.ownerName || `Homeowner @ ${c.address}`;
+                        logActivity({ type: 'list', title: `Pushed to pipeline from ${c.list || 'list'}`, body: c.address, leadName: who, actor: 'list-builder' });
                         setPushed(new Set(pushed).add(c.id));
                       }}
                       className={`${btnMini} mr-1`}

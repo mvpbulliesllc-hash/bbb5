@@ -6,8 +6,18 @@ const INTEGRATIONS: Array<{ name: string; status: 'live' | 'ready' | 'waiting'; 
   { name: 'Hume (Ellianna voice)', status: 'live', detail: 'Expressive TTS on the marketing site, Ava Song voice.' },
   { name: 'Mux (hero video)', status: 'live', detail: 'Homepage hook video streams via Mux.' },
   { name: 'Expenses ledger', status: 'live', detail: 'Replaces QuickBooks day-to-day: categories, totals, ad-channel breakout, add-your-own categories.' },
+  { name: 'Estimates + roofing squares calculator', status: 'live', detail: 'Build a quote (sqft → squares → material/labor), then one-tap convert to an invoice.' },
+  { name: 'Invoices + AR aging', status: 'live', detail: 'Deposits & progress payments, balance owed, 0–30/31–60/61–90/90+ aging. Stripe card+ACH is the next wire-up.' },
+  { name: 'Unified activity timeline', status: 'live', detail: 'The spine: every lead, stage move, note, estimate, invoice and payment on one feed — ready for call/SMS/email/signature webhooks.' },
   { name: 'List Builder (Parallel web research)', status: 'live', detail: 'Zip → homeowner list, CSV import/export, one-tap push to Pipeline.' },
   { name: 'Clay / Apollo / Nimble / Bright Data / Firecrawl / Browserbase enrichment', status: 'ready', detail: 'Keys on file — next step is enriching contacts (phones, emails, socials) through these providers.' },
+  // OpsCenter brief roadmap — integrations that each need vendor keys/DevOps
+  { name: 'Stripe (cards + ACH)', status: 'waiting', detail: 'OpsCenter Phase 1: pay invoices online; route large invoices to ACH (0.8% capped at $5). Needs Stripe keys.' },
+  { name: 'Docuseal e-signature', status: 'waiting', detail: 'OpsCenter Phase 1: send any contract/quote for signature from the deal; self-hosted (Docker). Needs a Docuseal instance.' },
+  { name: 'Telnyx voice + SMS softphone', status: 'waiting', detail: 'OpsCenter Phase 1: click-to-call & text from the lead, logged to the timeline. Needs Telnyx account + number.' },
+  { name: 'ElevenLabs AI phone agent (via Telnyx SIP)', status: 'waiting', detail: 'OpsCenter Phase 2: AI answers inbound, books inspections, writes the lead + activity. Reuses client-owned ElevenLabs.' },
+  { name: 'EagleView + ABC Supply', status: 'waiting', detail: 'OpsCenter Phase 2: aerial roof measurements into the estimate; material ordering + live pricing (ABC public API).' },
+  { name: 'Plaid bank feeds · Check payroll · LiveKit video', status: 'waiting', detail: 'OpsCenter Phase 2–3: reconciliation, payroll, embedded meetings (recordings to Mux). Each needs a vendor contract.' },
 ];
 
 const BADGE: Record<string, string> = {

@@ -8,7 +8,10 @@
 const { sql, ensureSchema } = require('../_lib/db.js');
 const { verify } = require('../_lib/auth.js');
 
-const KINDS = ['lead', 'contractor', 'dumpster', 'supplier', 'expense', 'expense_category', 'contact', 'listjob'];
+const KINDS = [
+  'lead', 'contractor', 'dumpster', 'supplier', 'expense', 'expense_category',
+  'contact', 'listjob', 'activity', 'estimate', 'invoice',
+];
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });

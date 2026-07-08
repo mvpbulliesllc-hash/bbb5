@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { LiquidMetalButton } from '../components/LiquidMetalButton';
-import { bare, useKind } from '../lib/store';
+import { bare, logActivity, useKind } from '../lib/store';
 import type { Contractor, Lead, Rec } from '../lib/store';
 import { fromDateInput, money, toDateInput, toNum } from '../lib/ui';
 
@@ -153,7 +153,12 @@ function LeadCard({ lead, save, remove }: { lead: Rec<Lead>; save: Save; remove:
       <div className="mt-2.5 flex items-center gap-1.5">
         <select
           value={lead.stage}
-          onChange={(e) => save({ ...bare(lead), stage: e.target.value }, lead.id)}
+          onChange={(e) => {
+            const to = e.target.value;
+            if (to === lead.stage) return;
+            save({ ...bare(lead), stage: to }, lead.id);
+            logActivity({ type: 'stage', title: `Moved ${STAGE_LABEL[lead.stage] ?? lead.stage} → ${STAGE_LABEL[to] ?? to}`, leadId: lead.id, leadName: lead.name, actor: 'admin' });
+          }}
           className="rounded-md border border-white/15 bg-white/5 px-1.5 py-1 text-xs font-semibold text-white"
         >
           {STAGES.map((s) => (
@@ -210,6 +215,7 @@ function LeadCard({ lead, save, remove }: { lead: Rec<Lead>; save: Save; remove:
               e.preventDefault();
               if (note.trim()) {
                 save({ ...bare(lead), notes: [...lead.notes, { text: note.trim(), at: Date.now() }] }, lead.id);
+                logActivity({ type: 'note', title: 'Note added', body: note.trim(), leadId: lead.id, leadName: lead.name, actor: 'admin' });
                 setNote('');
               }
             }}
@@ -270,6 +276,7 @@ function LeadFormCard({ doc, save, onDone }: { doc?: Rec<Lead>; save: Save; onDo
           },
           doc?.id,
         );
+        if (!doc) logActivity({ type: 'created', title: `Lead created — ${f.name.trim()}`, body: [values.service, values.town].filter(Boolean).join(' · ') || undefined, leadName: f.name.trim(), actor: 'admin' });
         onDone();
       }}
     >

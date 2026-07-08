@@ -3,10 +3,13 @@ import { LiquidMetalButton } from './components/LiquidMetalButton';
 import {
   Activity,
   BarChart3,
+  FileText,
+  History,
   LogOut,
   Package,
   Radar,
   Receipt,
+  ReceiptText,
   Settings as SettingsIcon,
   Trash2,
   TrendingUp,
@@ -16,10 +19,13 @@ import Background from './components/Background';
 import Overview from './tabs/Overview';
 import Analytics from './tabs/Analytics';
 import Pipeline from './tabs/Pipeline';
+import TimelineTab from './tabs/Timeline';
 import ListBuilder from './tabs/ListBuilder';
 import Contractors from './tabs/Contractors';
 import Dumpsters from './tabs/Dumpsters';
 import Suppliers from './tabs/Suppliers';
+import Estimates from './tabs/Estimates';
+import Invoices from './tabs/Invoices';
 import Expenses from './tabs/Expenses';
 import Settings from './tabs/Settings';
 import { checkSession, login, logout } from './lib/store';
@@ -31,6 +37,7 @@ const GROUPS = [
       { id: 'overview', label: 'Dashboard', Icon: BarChart3 },
       { id: 'analytics', label: 'Analytics', Icon: Activity },
       { id: 'pipeline', label: 'Pipeline', Icon: TrendingUp },
+      { id: 'timeline', label: 'Activity', Icon: History },
       { id: 'listbuilder', label: 'List Builder', Icon: Radar },
       { id: 'contractors', label: 'Contractors', Icon: Users },
       { id: 'dumpsters', label: 'Dumpsters', Icon: Trash2 },
@@ -39,7 +46,11 @@ const GROUPS = [
   },
   {
     title: 'Billing & CRM',
-    tabs: [{ id: 'expenses', label: 'Expenses', Icon: Receipt }],
+    tabs: [
+      { id: 'estimates', label: 'Estimates', Icon: FileText },
+      { id: 'invoices', label: 'Invoices', Icon: ReceiptText },
+      { id: 'expenses', label: 'Expenses', Icon: Receipt },
+    ],
   },
   {
     title: 'Administration',
@@ -181,10 +192,13 @@ export default function App() {
         {tab === 'overview' && <Overview />}
         {tab === 'analytics' && <Analytics />}
         {tab === 'pipeline' && <Pipeline />}
+        {tab === 'timeline' && <TimelineTab />}
         {tab === 'listbuilder' && <ListBuilder />}
         {tab === 'contractors' && <Contractors />}
         {tab === 'dumpsters' && <Dumpsters />}
         {tab === 'suppliers' && <Suppliers />}
+        {tab === 'estimates' && <Estimates />}
+        {tab === 'invoices' && <Invoices />}
         {tab === 'expenses' && <Expenses />}
         {tab === 'settings' && <Settings />}
       </main>
