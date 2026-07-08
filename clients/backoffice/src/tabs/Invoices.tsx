@@ -22,7 +22,7 @@ function InvoiceRow({ inv }: { inv: Rec<Invoice> }) {
     const newPaid = Math.min(t.total, paid + amt);
     const status = newPaid >= t.total - 0.005 ? 'paid' : 'partial';
     await save({ ...bare(inv), amountPaid: newPaid, status }, inv.id);
-    logActivity({ type: 'payment', title: `Payment ${money(amt)} on ${inv.number}`, body: status === 'paid' ? 'Invoice paid in full' : `${money(t.total - newPaid)} remaining`, leadName: inv.customer, direction: 'in', actor: 'admin' });
+    logActivity({ type: 'payment', title: `Payment ${money(amt)} on ${inv.number}`, body: status === 'paid' ? 'Invoice paid in full' : `${money(t.total - newPaid)} remaining`, leadName: inv.customer, direction: 'in', amount: amt, actor: 'admin' });
     setPay('');
   };
 

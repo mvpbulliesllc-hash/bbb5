@@ -3,6 +3,7 @@ import { LiquidMetalButton } from './components/LiquidMetalButton';
 import {
   Activity,
   BarChart3,
+  FileBarChart,
   FileText,
   History,
   LogOut,
@@ -18,6 +19,7 @@ import {
 import Background from './components/Background';
 import Overview from './tabs/Overview';
 import Analytics from './tabs/Analytics';
+import Reports from './tabs/Reports';
 import Pipeline from './tabs/Pipeline';
 import TimelineTab from './tabs/Timeline';
 import ListBuilder from './tabs/ListBuilder';
@@ -36,6 +38,7 @@ const GROUPS = [
     tabs: [
       { id: 'overview', label: 'Dashboard', Icon: BarChart3 },
       { id: 'analytics', label: 'Analytics', Icon: Activity },
+      { id: 'reports', label: 'Reports', Icon: FileBarChart },
       { id: 'pipeline', label: 'Pipeline', Icon: TrendingUp },
       { id: 'timeline', label: 'Activity', Icon: History },
       { id: 'listbuilder', label: 'List Builder', Icon: Radar },
@@ -62,12 +65,12 @@ type TabId = (typeof GROUPS)[number]['tabs'][number]['id'];
 type TabDef = { id: TabId; label: string; Icon: typeof BarChart3 };
 const ALL_TABS = GROUPS.flatMap((g) => g.tabs as ReadonlyArray<TabDef>);
 
+const LOGO = `${import.meta.env.BASE_URL}logo.png`;
+
 function Logo() {
   return (
     <div className="flex items-center gap-3">
-      <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-matrix-400/30 bg-matrix-400/15">
-        <span className="text-lg font-bold text-matrix-300">P</span>
-      </div>
+      <img src={LOGO} alt="Paragon Exteriors" className="h-11 w-11 shrink-0 object-contain" />
       <div>
         <h1 className="font-display text-xl font-bold leading-tight text-white">Paragon</h1>
         <p className="text-xs text-white/50">Back Office</p>
@@ -94,9 +97,7 @@ function Login({ onOk }: { onOk: () => void }) {
           else onOk();
         }}
       >
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-matrix-400/30 bg-matrix-400/15">
-          <span className="text-2xl font-bold text-matrix-300">P</span>
-        </div>
+        <img src={LOGO} alt="Paragon Exteriors" className="mx-auto h-20 w-20 object-contain" />
         <h1 className="font-display mt-4 text-xl font-extrabold text-white">Paragon Back Office</h1>
         <p className="mt-1 text-sm text-white/55">Enter the admin password to continue.</p>
         <input
@@ -191,6 +192,7 @@ export default function App() {
       <main className="min-w-0 flex-1 pb-20 md:pb-0">
         {tab === 'overview' && <Overview />}
         {tab === 'analytics' && <Analytics />}
+        {tab === 'reports' && <Reports />}
         {tab === 'pipeline' && <Pipeline />}
         {tab === 'timeline' && <TimelineTab />}
         {tab === 'listbuilder' && <ListBuilder />}

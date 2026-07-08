@@ -110,6 +110,7 @@ export type Activity = {
   body?: string;
   direction?: 'in' | 'out';
   actor?: string;
+  amount?: number; // $ value for payment/invoice/estimate rows — feeds Reports
   at: number;
   // polymorphic links into the CRM
   leadId?: number;

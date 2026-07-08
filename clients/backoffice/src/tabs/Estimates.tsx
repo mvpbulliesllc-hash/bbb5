@@ -70,7 +70,7 @@ function EstimateForm({ estimates, onDone }: { estimates: Array<Rec<Estimate>>; 
           status: 'draft',
           notes: f.notes.trim() || undefined,
         });
-        logActivity({ type: 'estimate', title: `Estimate ${number} created — ${money(preview.total)}`, leadName: f.customer.trim(), actor: 'admin' });
+        logActivity({ type: 'estimate', title: `Estimate ${number} created — ${money(preview.total)}`, leadName: f.customer.trim(), amount: preview.total, actor: 'admin' });
         onDone();
       }}
     >
@@ -151,7 +151,7 @@ function EstimateCard({ e, onInvoiced }: { e: Rec<Estimate>; onInvoiced: () => v
       status: 'unpaid',
     });
     await save({ ...bare(e), status: 'invoiced' }, e.id);
-    logActivity({ type: 'invoice', title: `Invoice ${number} created from ${e.number} — ${money(t.total)}`, leadName: e.customer, actor: 'admin' });
+    logActivity({ type: 'invoice', title: `Invoice ${number} created from ${e.number} — ${money(t.total)}`, leadName: e.customer, amount: t.total, actor: 'admin' });
     onInvoiced();
   };
 
