@@ -68,8 +68,9 @@ export function Sidebar() {
       data-collapsed={collapsed || undefined}
       aria-label="Primary navigation"
       className={cn(
-        "hidden shrink-0 flex-col border-r border-[var(--color-border)]",
-        "bg-[oklch(from_var(--color-card)_l_c_h_/_0.85)] backdrop-blur-xl backdrop-saturate-150 md:flex",
+        "hidden shrink-0 flex-col border-r border-[oklch(1_0_0_/_0.1)]",
+        "bg-[linear-gradient(180deg,oklch(1_0_0_/_0.07),oklch(1_0_0_/_0.02))] backdrop-blur-2xl backdrop-saturate-[1.6] md:flex",
+        "shadow-[inset_-1px_0_0_oklch(1_0_0_/_0.04)]",
         "transition-[width] duration-[var(--duration-default)] ease-[var(--ease-out-cubic)]",
         collapsed ? "w-[52px]" : "w-[220px]",
       )}

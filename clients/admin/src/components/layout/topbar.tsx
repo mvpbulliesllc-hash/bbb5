@@ -2,12 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
-  Check,
   ChevronsUpDown,
   LogOut,
-  Moon,
   Settings as SettingsIcon,
-  Sun,
   UserRound,
 } from "lucide-react";
 import { MobileNavTrigger } from "@/components/layout/mobile-nav";
@@ -33,7 +30,6 @@ import {
 import { Avatar } from "@/components/ui/avatar";
 import { useAuth } from "@/auth/use-auth";
 import { getMyProfile } from "@/api/users";
-import { useTheme } from "@/components/theme/theme-provider";
 import { cn } from "@/lib/cn";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -91,33 +87,6 @@ function ProfileTile({ src, initials }: { src: string | null; initials: string }
   );
 }
 
-function ThemeMenuItem({
-  icon: Icon,
-  label,
-  active,
-  onSelect,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-  active: boolean;
-  onSelect: () => void;
-}) {
-  return (
-    <DropdownMenuItem
-      onSelect={onSelect}
-      className="!my-0 flex cursor-pointer items-center gap-2.5 rounded-md !px-2.5 !py-1.5"
-    >
-      <Icon className="size-3.5 shrink-0 text-[var(--color-muted-foreground)]" />
-      <span className="flex-1 text-[12.5px] font-medium text-[var(--color-foreground)]">
-        {label}
-      </span>
-      {active && (
-        <Check className="size-3.5 shrink-0 text-[var(--color-primary)]" aria-hidden />
-      )}
-    </DropdownMenuItem>
-  );
-}
-
 function SimpleMenuItem({
   icon: Icon,
   label,
@@ -146,7 +115,6 @@ function SimpleMenuItem({
 
 export function Topbar() {
   const { user, logout } = useAuth();
-  const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -170,8 +138,8 @@ export function Topbar() {
     <header
       className={cn(
         "sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2",
-        "border-b border-[var(--color-border)] bg-[oklch(from_var(--color-background)_l_c_h_/_0.8)]",
-        "px-3 backdrop-blur-sm md:px-5",
+        "border-b border-[oklch(1_0_0_/_0.1)] bg-[linear-gradient(180deg,oklch(1_0_0_/_0.06),oklch(1_0_0_/_0.02))]",
+        "px-3 backdrop-blur-2xl backdrop-saturate-[1.6] md:px-5",
       )}
     >
       {/* Mobile nav trigger — leading edge on small screens */}
@@ -246,27 +214,6 @@ export function Topbar() {
                 </span>
               </div>
             )}
-          </div>
-
-          <DropdownMenuSeparator className="!my-0" />
-
-          {/* Theme */}
-          <DropdownMenuLabel className="px-3 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--color-muted-foreground)]">
-            Theme
-          </DropdownMenuLabel>
-          <div className="px-1 pb-1">
-            <ThemeMenuItem
-              icon={Sun}
-              label="Light"
-              active={theme === "light"}
-              onSelect={() => setTheme("light")}
-            />
-            <ThemeMenuItem
-              icon={Moon}
-              label="Dark"
-              active={theme === "dark"}
-              onSelect={() => setTheme("dark")}
-            />
           </div>
 
           <DropdownMenuSeparator className="!my-0" />

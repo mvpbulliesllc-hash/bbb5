@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
+import { GLBackdrop } from "@/components/layout/gl-backdrop";
 import {
   MobileNavProvider,
   MobileNavRoot,
@@ -32,7 +33,10 @@ export function AppShell() {
         Skip to content
       </a>
 
-      <div className="flex h-screen flex-col overflow-hidden bg-[var(--color-background)] text-[var(--color-foreground)]">
+      {/* Live liquid-glass backdrop — fixed behind the whole shell. */}
+      <GLBackdrop />
+
+      <div className="relative z-10 flex h-screen flex-col overflow-hidden bg-transparent text-[var(--color-foreground)]">
         <div className="flex min-h-0 flex-1">
           <Sidebar />
           <div className="flex min-w-0 flex-1 flex-col">

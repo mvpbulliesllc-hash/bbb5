@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo } from "react";
 
 type Theme = "light" | "dark";
 
@@ -8,36 +8,32 @@ type ThemeContextValue = {
   toggle: () => void;
 };
 
-const STORAGE_KEY = "fsh.admin.theme";
-
-// Console is dark-first. We try storage → system pref → dark, in that order.
-function resolveInitialTheme(): Theme {
-  if (typeof window === "undefined") return "dark";
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-  if (stored === "light" || stored === "dark") return stored;
-  if (window.matchMedia?.("(prefers-color-scheme: light)").matches) return "light";
-  return "dark";
-}
-
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
+/**
+ * The admin now ships a single dark, liquid-glass theme (see globals.css).
+ * The light theme has been retired: the WebGL backdrop and glass surfaces
+ * are dark-first and don't translate to a light canvas. We keep the provider
+ * and hook surface intact so consumers (sonner theme, menus) still work, but
+ * the theme is pinned to "dark" and the setters are inert.
+ */
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(resolveInitialTheme);
+  const theme: Theme = "dark";
 
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.toggle("dark", theme === "dark");
-    root.style.colorScheme = theme;
-    window.localStorage.setItem(STORAGE_KEY, theme);
-  }, [theme]);
+    root.classList.add("dark");
+    root.classList.remove("light");
+    root.style.colorScheme = "dark";
+  }, []);
 
   const value = useMemo<ThemeContextValue>(
     () => ({
       theme,
-      setTheme: setThemeState,
-      toggle: () => setThemeState((t) => (t === "dark" ? "light" : "dark")),
+      setTheme: () => {},
+      toggle: () => {},
     }),
-    [theme],
+    [],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
