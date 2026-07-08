@@ -69,19 +69,33 @@ import { business, integrations } from '@/config/business';
     // blocked and the widget used to silently fall back to browser TTS. An
     // AudioContext resumed inside a real gesture stays unlocked for the whole
     // page lifetime, so playback works no matter how slow the fetch is.
-    var actx = null, playingSrc = null;
+    // sayToken invalidates in-flight TTS: every stopVoice() bumps it, and a
+    // reply whose token went stale while fetching/decoding is dropped instead
+    // of playing over newer speech or interrupting the user's dictation.
+    var actx = null, playingSrc = null, sayToken = 0;
     // Half-duplex: assigned by the mic block below; a no-op when there's no mic.
     // Ellianna must never speak while the mic listens (she'd hear herself and
     // answer her own answers in an endless loop) and vice versa.
     var stopListening = function () {};
     function unlockAudio() {
       try {
+        // iOS mutes Web Audio (but not <audio>) under the hardware silent
+        // switch unless the page opts into the 'playback' audio session.
+        if (navigator.audioSession) navigator.audioSession.type = 'playback';
+        var isIOS = /iP(hone|ad|od)/.test(navigator.platform || '') || (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform || ''));
+        // Older iOS without audioSession: stay on the HTMLAudioElement path —
+        // it plays through the silent switch, and the AudioContext unlock is
+        // only needed for Chrome's transient-activation expiry anyway.
+        if (isIOS && !navigator.audioSession) return;
         var AC = window.AudioContext || window.webkitAudioContext;
         if (AC && !actx) actx = new AC();
-        if (actx && actx.state === 'suspended') actx.resume();
+        // 'interrupted' (iOS after a call/Siri/route change) needs resume too,
+        // so check for anything that isn't running — not just 'suspended'.
+        if (actx && actx.state !== 'running') actx.resume();
       } catch (e) {}
     }
     function stopVoice() {
+      sayToken++;
       var p = playingSrc; playingSrc = null;
       try { if (p) { p.onended = null; if (p.stop) p.stop(0); else p.pause(); } } catch (e) {}
       try { window.speechSynthesis.cancel(); } catch (e) {}
@@ -95,6 +109,7 @@ import { business, integrations } from '@/config/business';
     async function say(text) {
       var clean = text.replace(/\s+/g, ' ').trim();
       stopVoice();
+      var token = sayToken;
       if (API) {
         try {
           // Trailing slash: vercel.json's `trailingSlash: true` 308-redirects
@@ -102,9 +117,14 @@ import { business, integrations } from '@/config/business';
           var r = await fetch(API.replace(/\/$/, '') + '/voice/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: clean }) });
           if (r.ok) {
             var buf = await r.arrayBuffer();
-            if (actx) {
+            if (token !== sayToken) return; // superseded while fetching — drop, don't overlap
+            // A non-running context (iOS interruption) would "play" silence;
+            // try to recover it, else use the <audio> path below.
+            if (actx && actx.state !== 'running') { try { await actx.resume(); } catch (e) {} }
+            if (actx && actx.state === 'running') {
               var src = actx.createBufferSource();
               src.buffer = await actx.decodeAudioData(buf);
+              if (token !== sayToken) return;
               src.connect(actx.destination);
               startPlayback(src);
               src.start(0);
@@ -117,6 +137,7 @@ import { business, integrations } from '@/config/business';
           }
         } catch (e) { /* fall through to browser TTS */ }
       }
+      if (token !== sayToken) return;
       if ('speechSynthesis' in window) {
         try {
           window.speechSynthesis.cancel();
@@ -298,7 +319,7 @@ import { business, integrations } from '@/config/business';
         } catch (e) {}
       });
       rec.onresult = function (ev) { var t = ev.results[0][0].transcript; input.value = ''; handle(t); };
-      rec.onend = function () { listening = false; mic.classList.remove('bg-red-500','text-white'); statusEl.textContent = "Paragon's roofing assistant"; };
+      rec.onend = function () { listening = false; mic.classList.remove('bg-red-500','text-white'); statusEl.textContent = playingSrc ? 'Speaking…' : "Paragon's roofing assistant"; };
     } else { mic.style.display = 'none'; }
 
     // ---------- open / close ----------
