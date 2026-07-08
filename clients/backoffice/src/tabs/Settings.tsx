@@ -10,22 +10,22 @@ const INTEGRATIONS: Array<{ name: string; status: 'live' | 'ready' | 'waiting'; 
 ];
 
 const BADGE: Record<string, string> = {
-  live: 'bg-green-100 text-green-800',
-  ready: 'bg-gold-100 text-gold-600',
-  waiting: 'bg-sand-100 text-navy-900/60',
+  live: 'bg-green-400/20 text-green-200 ring-1 ring-green-300/30',
+  ready: 'bg-emerald-400/15 text-emerald-200 ring-1 ring-emerald-300/25',
+  waiting: 'bg-white/10 text-white/60 ring-1 ring-white/15',
 };
 
 export default function Settings() {
   return (
     <div>
-      <h1 className="font-display text-2xl font-extrabold text-navy-950">Settings</h1>
-      <p className="mt-1 text-sm text-navy-900/60">Integration status across the stack.</p>
+      <h1 className="font-display text-2xl font-extrabold text-white">Settings</h1>
+      <p className="mt-1 text-sm text-white/60">Integration status across the stack.</p>
       <div className="mt-6 space-y-2.5">
         {INTEGRATIONS.map((i) => (
-          <div key={i.name} className="flex items-start justify-between gap-4 rounded-2xl bg-white p-4 ring-1 ring-sand-200">
+          <div key={i.name} className="flex items-start justify-between gap-4 liquid-glass rounded-2xl p-4">
             <div>
-              <p className="font-display text-sm font-bold text-navy-950">{i.name}</p>
-              <p className="mt-0.5 text-xs text-navy-900/60">{i.detail}</p>
+              <p className="font-display text-sm font-bold text-white">{i.name}</p>
+              <p className="mt-0.5 text-xs text-white/60">{i.detail}</p>
             </div>
             <span className={`shrink-0 rounded-full px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wider ${BADGE[i.status]}`}>
               {i.status}

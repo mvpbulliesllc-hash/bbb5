@@ -25,7 +25,7 @@ function ContractorForm({ doc, save, onDone }: { doc?: Rec<Contractor>; save: Sa
   );
   return (
     <form
-      className="grid gap-2 rounded-2xl bg-white p-4 ring-1 ring-sand-200 sm:grid-cols-3"
+      className="grid gap-2 liquid-glass rounded-2xl p-4 sm:grid-cols-3"
       onSubmit={async (e) => {
         e.preventDefault();
         if (!f.name.trim()) return;
@@ -69,21 +69,21 @@ function ContractorCard({ c, save, remove }: { c: Rec<Contractor>; save: Save; r
     ['Notes', c.notes],
   ];
   return (
-    <div className="rounded-xl bg-white p-4 ring-1 ring-sand-200">
+    <div className="liquid-glass rounded-2xl p-4">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className="truncate font-display text-sm font-bold text-navy-950">{c.name}</p>
-          <p className="truncate text-xs text-navy-900/60">
-            {c.phone && <a className="hover:text-gold-600" href={`tel:${c.phone}`}>{c.phone}</a>}
+          <p className="truncate font-display text-sm font-bold text-white">{c.name}</p>
+          <p className="truncate text-xs text-white/60">
+            {c.phone && <a className="hover:text-emerald-300" href={`tel:${c.phone}`}>{c.phone}</a>}
             {c.phone && c.email && ' · '}
-            {c.email && <a className="hover:text-gold-600" href={`mailto:${c.email}`}>{c.email}</a>}
+            {c.email && <a className="hover:text-emerald-300" href={`mailto:${c.email}`}>{c.email}</a>}
           </p>
         </div>
         <div className="flex shrink-0 gap-1.5">
-          <button onClick={() => setEditing(true)} className="rounded-md px-1.5 py-1 text-xs font-semibold text-navy-900/60 hover:bg-sand-100">Edit</button>
+          <button onClick={() => setEditing(true)} className="rounded-md px-1.5 py-1 text-xs font-semibold text-white/60 hover:bg-white/10">Edit</button>
           <button
             onClick={() => { if (confirm(`Delete contractor "${c.name}"?`)) remove(c.id); }}
-            className="rounded-md px-1.5 py-1 text-xs text-red-600/70 hover:bg-red-50"
+            className="rounded-md px-1.5 py-1 text-xs text-red-300/80 hover:bg-red-400/10"
           >
             Delete
           </button>
@@ -92,8 +92,8 @@ function ContractorCard({ c, save, remove }: { c: Rec<Contractor>; save: Save; r
       <dl className="mt-2 grid gap-x-4 gap-y-0.5 sm:grid-cols-2">
         {rows.filter(([, val]) => val).map(([label, val]) => (
           <div key={label} className="flex gap-1.5 text-xs">
-            <dt className="shrink-0 font-semibold text-navy-900/50">{label}:</dt>
-            <dd className="truncate text-navy-900/80">{val}</dd>
+            <dt className="shrink-0 font-semibold text-white/50">{label}:</dt>
+            <dd className="truncate text-white/80">{val}</dd>
           </div>
         ))}
       </dl>
@@ -110,8 +110,8 @@ export default function Contractors() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-extrabold text-navy-950">Contractors</h1>
-          <p className="mt-1 text-sm text-navy-900/60">Subs on file — specialty, HIC, insurance, W9 and license all in one place.</p>
+          <h1 className="font-display text-2xl font-extrabold text-white">Contractors</h1>
+          <p className="mt-1 text-sm text-white/60">Subs on file — specialty, HIC, insurance, W9 and license all in one place.</p>
         </div>
         <button onClick={() => setAdding(!adding)} className={btnDark}>{adding ? 'Close' : 'New contractor'}</button>
       </div>
@@ -119,7 +119,7 @@ export default function Contractors() {
       <div className="mt-6 grid gap-3 lg:grid-cols-2">
         {(contractors ?? []).map((c) => <ContractorCard key={c.id} c={c} save={save} remove={remove} />)}
         {contractors && !contractors.length && !adding && (
-          <p className="text-sm text-navy-900/50">No contractors yet — add your first sub above.</p>
+          <p className="text-sm text-white/50">No contractors yet — add your first sub above.</p>
         )}
       </div>
     </div>

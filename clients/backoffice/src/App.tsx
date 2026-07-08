@@ -1,4 +1,15 @@
 import { useEffect, useState } from 'react';
+import {
+  BarChart3,
+  LogOut,
+  Package,
+  Receipt,
+  Settings as SettingsIcon,
+  Trash2,
+  TrendingUp,
+  Users,
+} from 'lucide-react';
+import Background from './components/Background';
 import Overview from './tabs/Overview';
 import Pipeline from './tabs/Pipeline';
 import Contractors from './tabs/Contractors';
@@ -8,26 +19,54 @@ import Expenses from './tabs/Expenses';
 import Settings from './tabs/Settings';
 import { checkSession, login, logout } from './lib/store';
 
-const TABS = [
-  { id: 'overview', label: 'Overview', icon: <path d="M3 13h8V3H3v10Zm10 8h8V11h-8v10ZM3 21h8v-6H3v6Zm10-12h8V3h-8v6Z" /> },
-  { id: 'pipeline', label: 'Pipeline', icon: <path d="M4 5h16v3H4V5Zm2 5.5h12v3H6v-3ZM8 16h8v3H8v-3Z" /> },
-  { id: 'contractors', label: 'Contractors', icon: <path d="M12 2a5 5 0 0 1 5 5v1h1a1 1 0 1 1 0 2h-1.1A5 5 0 0 1 7.1 10H6a1 1 0 1 1 0-2h1V7a5 5 0 0 1 5-5Zm-8 18a8 8 0 0 1 16 0v2H4v-2Z" /> },
-  { id: 'dumpsters', label: 'Dumpsters', icon: <path d="M3 8h18l-1.5 12a2 2 0 0 1-2 1.8h-11A2 2 0 0 1 4.5 20L3 8Zm5-4h8l1 3H7l1-3Z" /> },
-  { id: 'suppliers', label: 'Suppliers', icon: <path d="M3 7l9-4 9 4v10l-9 4-9-4V7Zm9-1.8L6.2 7.6 12 10l5.8-2.4L12 5.2ZM5 9.4l6 2.5v6.9l-6-2.6V9.4Zm14 0v6.8l-6 2.6v-6.9l6-2.5Z" /> },
-  { id: 'expenses', label: 'Expenses', icon: <path d="M4 4h16v4H4V4Zm0 6h16v10H4V10Zm4 3v2h8v-2H8Z" /> },
-  { id: 'settings', label: 'Settings', icon: <path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm8.9 4a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7.6 7.6 0 0 0-2-1.2L16 3h-4l-.4 2.6a7.6 7.6 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6a7 7 0 0 0 0 2.4l-2 1.6 2 3.4 2.4-1a7.6 7.6 0 0 0 2 1.2L12 21h4l.4-2.6a7.6 7.6 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.07-.4.1-.8.1-1.2Z" /> },
+const GROUPS = [
+  {
+    title: 'Operations',
+    tabs: [
+      { id: 'overview', label: 'Dashboard', Icon: BarChart3 },
+      { id: 'pipeline', label: 'Pipeline', Icon: TrendingUp },
+      { id: 'contractors', label: 'Contractors', Icon: Users },
+      { id: 'dumpsters', label: 'Dumpsters', Icon: Trash2 },
+      { id: 'suppliers', label: 'Suppliers', Icon: Package },
+    ],
+  },
+  {
+    title: 'Billing & CRM',
+    tabs: [{ id: 'expenses', label: 'Expenses', Icon: Receipt }],
+  },
+  {
+    title: 'Administration',
+    tabs: [{ id: 'settings', label: 'Settings', Icon: SettingsIcon }],
+  },
 ] as const;
 
-type TabId = (typeof TABS)[number]['id'];
+type TabId = (typeof GROUPS)[number]['tabs'][number]['id'];
+type TabDef = { id: TabId; label: string; Icon: typeof BarChart3 };
+const ALL_TABS = GROUPS.flatMap((g) => g.tabs as ReadonlyArray<TabDef>);
+
+function Logo() {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-400/30 bg-emerald-400/15">
+        <span className="text-lg font-bold text-emerald-300">P</span>
+      </div>
+      <div>
+        <h1 className="font-display text-xl font-bold leading-tight text-white">Paragon</h1>
+        <p className="text-xs text-white/50">Back Office</p>
+      </div>
+    </div>
+  );
+}
 
 function Login({ onOk }: { onOk: () => void }) {
   const [pw, setPw] = useState('');
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   return (
-    <div className="grid min-h-screen place-items-center bg-navy-950 px-4">
+    <div className="grid min-h-screen place-items-center px-4">
+      <Background />
       <form
-        className="w-full max-w-sm rounded-2xl bg-white p-8 text-center shadow-xl"
+        className="liquid-glass w-full max-w-sm rounded-3xl p-8 text-center"
         onSubmit={async (e) => {
           e.preventDefault();
           setBusy(true);
@@ -37,21 +76,23 @@ function Login({ onOk }: { onOk: () => void }) {
           else onOk();
         }}
       >
-        <img src="favicon.png" alt="" className="mx-auto h-14 w-14" />
-        <h1 className="font-display mt-4 text-xl font-extrabold text-navy-950">Paragon Back Office</h1>
-        <p className="mt-1 text-sm text-navy-900/60">Enter the admin password to continue.</p>
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-400/30 bg-emerald-400/15">
+          <span className="text-2xl font-bold text-emerald-300">P</span>
+        </div>
+        <h1 className="font-display mt-4 text-xl font-extrabold text-white">Paragon Back Office</h1>
+        <p className="mt-1 text-sm text-white/55">Enter the admin password to continue.</p>
         <input
           type="password"
           value={pw}
           onChange={(e) => { setPw(e.target.value); setErr(null); }}
           placeholder="Password"
           autoFocus
-          className="mt-5 w-full rounded-xl border border-sand-200 px-4 py-2.5 text-center text-sm focus:border-gold-500 focus:outline-none"
+          className="mt-5 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm text-white placeholder-white/35 focus:border-emerald-300/60 focus:outline-none"
         />
-        {err && <p className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-xs text-red-800">{err}</p>}
+        {err && <p className="mt-2 rounded-lg border border-red-400/25 bg-red-400/10 px-3 py-2 text-xs text-red-200">{err}</p>}
         <button
           disabled={busy || !pw}
-          className="mt-4 w-full rounded-xl bg-gold-500 px-4 py-2.5 font-display font-bold text-navy-950 transition hover:bg-gold-400 disabled:opacity-50"
+          className="mt-4 w-full rounded-full bg-emerald-400/90 px-4 py-2.5 font-display font-bold text-black transition hover:bg-emerald-300 disabled:opacity-50"
         >
           {busy ? 'Checking…' : 'Sign in'}
         </button>
@@ -69,8 +110,9 @@ export default function App() {
 
   if (authed === null) {
     return (
-      <div className="grid min-h-screen place-items-center bg-navy-950">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-gold-400 border-t-transparent" />
+      <div className="grid min-h-screen place-items-center">
+        <Background />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-emerald-300 border-t-transparent" />
       </div>
     );
   }
@@ -78,39 +120,60 @@ export default function App() {
   if (!authed) return <Login onOk={() => setAuthed(true)} />;
 
   return (
-    <div className="flex min-h-screen">
-      <aside className="flex w-56 shrink-0 flex-col bg-navy-950 text-white">
-        <div className="flex items-center gap-2.5 px-5 py-5">
-          <img src="favicon.png" alt="" className="h-9 w-9" />
-          <div className="font-display leading-tight">
-            <p className="text-sm font-extrabold tracking-wide">PARAGON</p>
-            <p className="text-[0.6rem] font-semibold tracking-[0.25em] text-gold-300">BACK OFFICE</p>
-          </div>
-        </div>
-        <nav className="mt-2 flex-1 space-y-1 px-3">
-          {TABS.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
-              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left font-display text-sm font-semibold transition ${
-                tab === t.id ? 'bg-white/10 text-gold-300' : 'text-white/70 hover:bg-white/5 hover:text-white'
-              }`}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">{t.icon}</svg>
-              {t.label}
-            </button>
+    <div className="relative flex min-h-screen gap-6 p-4 lg:p-6">
+      <Background />
+      <aside className="liquid-glass sticky top-6 hidden h-fit w-60 shrink-0 flex-col rounded-3xl p-6 md:flex">
+        <Logo />
+        <nav className="mt-6 space-y-6">
+          {GROUPS.map((g) => (
+            <div key={g.title}>
+              <h4 className="mb-2.5 text-xs font-semibold uppercase tracking-wider text-white/45">{g.title}</h4>
+              <div className="space-y-1.5">
+                {g.tabs.map(({ id, label, Icon }) => (
+                  <button
+                    key={id}
+                    onClick={() => setTab(id)}
+                    className={`flex w-full items-center gap-3 rounded-full px-4 py-2.5 text-left font-display text-sm font-semibold transition ${
+                      tab === id
+                        ? 'liquid-glass-inset text-white'
+                        : 'text-white/60 hover:bg-white/5 hover:text-white'
+                    }`}
+                  >
+                    <Icon size={16} className={tab === id ? 'text-emerald-300' : ''} />
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
           ))}
         </nav>
-        <div className="border-t border-white/10 px-5 py-4">
-          <button
-            onClick={async () => { await logout(); window.location.reload(); }}
-            className="text-xs font-semibold text-gold-300 hover:text-gold-200"
-          >
-            Sign out
-          </button>
-        </div>
+        <button
+          onClick={async () => { await logout(); window.location.reload(); }}
+          className="mt-8 flex items-center gap-3 rounded-full px-4 py-2.5 text-left font-display text-sm font-semibold text-white/55 transition hover:bg-white/5 hover:text-white"
+        >
+          <LogOut size={16} />
+          Sign out
+        </button>
       </aside>
-      <main className="min-w-0 flex-1 p-6 lg:p-8">
+
+      {/* phone nav */}
+      <nav className="liquid-glass fixed inset-x-3 bottom-3 z-40 flex justify-between gap-1 overflow-x-auto rounded-full px-3 py-2 md:hidden">
+        {ALL_TABS.map(({ id, Icon }) => (
+          <button
+            key={id}
+            onClick={() => setTab(id)}
+            aria-label={id}
+            className={`rounded-full p-2.5 ${tab === id ? 'liquid-glass-inset text-emerald-300' : 'text-white/60'}`}
+          >
+            <Icon size={18} />
+          </button>
+        ))}
+        <button onClick={async () => { await logout(); window.location.reload(); }} aria-label="Sign out" className="rounded-full p-2.5 text-white/60">
+          <LogOut size={18} />
+        </button>
+      </nav>
+
+      <main className="min-w-0 flex-1 pb-20 md:pb-0">
         {tab === 'overview' && <Overview />}
         {tab === 'pipeline' && <Pipeline />}
         {tab === 'contractors' && <Contractors />}

@@ -7,9 +7,9 @@ const STAGE_LABEL: Record<string, string> = { new: 'New', contacted: 'Contacted'
 
 function Tile({ label, value, accent }: { label: string; value: string | number; accent?: boolean }) {
   return (
-    <div className={`rounded-2xl p-5 ring-1 ${accent ? 'bg-navy-950 text-white ring-navy-950' : 'bg-white ring-sand-200'}`}>
-      <p className={`text-xs font-semibold uppercase tracking-wider ${accent ? 'text-gold-300' : 'text-navy-900/50'}`}>{label}</p>
-      <p className="font-display mt-1.5 text-3xl font-extrabold">{value}</p>
+    <div className={`liquid-glass rounded-3xl p-5 ${accent ? 'text-white' : ''}`}>
+      <p className={`text-xs font-semibold uppercase tracking-wider ${accent ? 'text-emerald-300' : 'text-white/50'}`}>{label}</p>
+      <p className={`font-display mt-1.5 text-3xl font-extrabold ${accent ? 'text-emerald-200' : 'text-white'}`}>{value}</p>
     </div>
   );
 }
@@ -32,21 +32,21 @@ export default function Overview() {
 
   return (
     <div>
-      <h1 className="font-display text-2xl font-extrabold text-navy-950">Control center</h1>
-      <p className="mt-1 text-sm text-navy-900/60">Live view of leads, jobs and spend for Paragon Exteriors.</p>
+      <h1 className="font-display text-2xl font-extrabold text-white">Control center</h1>
+      <p className="mt-1 text-sm text-white/60">Live view of leads, jobs and spend for Paragon Exteriors.</p>
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Tile label="Total leads" value={leads ? all.length : '—'} accent />
         <Tile label="Leads · last 7 days" value={leads ? last7 : '—'} />
         <Tile label="Balance owed (all jobs)" value={leads ? String(money(openBalance)) : '—'} />
         <Tile label="Expenses this month" value={expenses ? String(money(spendThisMonth)) : '—'} />
       </div>
-      <div className="mt-6 rounded-2xl bg-white p-5 ring-1 ring-sand-200">
-        <p className="text-xs font-semibold uppercase tracking-wider text-navy-900/50">Pipeline</p>
+      <div className="mt-6 liquid-glass rounded-2xl p-5">
+        <p className="text-xs font-semibold uppercase tracking-wider text-white/50">Pipeline</p>
         <div className="mt-3 grid gap-3 sm:grid-cols-5">
           {STAGES.map((s) => (
-            <div key={s} className="rounded-xl bg-sand-50 p-4 ring-1 ring-sand-200">
-              <p className="text-xs font-semibold text-navy-900/60">{STAGE_LABEL[s]}</p>
-              <p className="font-display mt-1 text-2xl font-extrabold text-navy-950">{byStage[s] ?? 0}</p>
+            <div key={s} className="liquid-glass-inset rounded-xl p-4">
+              <p className="text-xs font-semibold text-white/60">{STAGE_LABEL[s]}</p>
+              <p className="font-display mt-1 text-2xl font-extrabold text-white">{byStage[s] ?? 0}</p>
             </div>
           ))}
         </div>

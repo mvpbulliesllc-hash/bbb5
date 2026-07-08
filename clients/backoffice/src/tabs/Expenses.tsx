@@ -27,9 +27,9 @@ const DEFAULT_CATEGORIES = [
 
 function Tile({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl bg-white p-4 ring-1 ring-sand-200">
-      <p className="text-xs font-semibold uppercase tracking-wider text-navy-900/50">{label}</p>
-      <p className="font-display mt-1 text-2xl font-extrabold text-navy-950">{value}</p>
+    <div className="liquid-glass rounded-2xl p-4">
+      <p className="text-xs font-semibold uppercase tracking-wider text-white/50">{label}</p>
+      <p className="font-display mt-1 text-2xl font-extrabold text-white">{value}</p>
     </div>
   );
 }
@@ -60,8 +60,8 @@ export default function Expenses() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-extrabold text-navy-950">Business expenses</h1>
-          <p className="mt-1 text-sm text-navy-900/60">QuickBooks-style categories — log spend here, add new categories any time.</p>
+          <h1 className="font-display text-2xl font-extrabold text-white">Business expenses</h1>
+          <p className="mt-1 text-sm text-white/60">QuickBooks-style categories — log spend here, add new categories any time.</p>
         </div>
       </div>
 
@@ -73,7 +73,7 @@ export default function Expenses() {
 
       {/* Add expense */}
       <form
-        className="mt-5 grid gap-2 rounded-2xl bg-white p-4 ring-1 ring-sand-200 sm:grid-cols-3"
+        className="mt-5 grid gap-2 liquid-glass rounded-2xl p-4 sm:grid-cols-3"
         onSubmit={async (e) => {
           e.preventDefault();
           const amount = toNum(f.amount);
@@ -107,9 +107,9 @@ export default function Expenses() {
       </form>
 
       {/* Category manager + breakout */}
-      <div className="mt-5 rounded-2xl bg-white p-4 ring-1 ring-sand-200">
+      <div className="mt-5 liquid-glass rounded-2xl p-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-xs font-semibold uppercase tracking-wider text-navy-900/50">Totals by category</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-white/50">Totals by category</p>
           <form
             className="flex gap-1.5"
             onSubmit={async (e) => {
@@ -120,14 +120,14 @@ export default function Expenses() {
               setNewCat('');
             }}
           >
-            <input value={newCat} onChange={(e) => setNewCat(e.target.value)} placeholder="New category" className="rounded-md border border-sand-200 px-2 py-1 text-xs focus:border-gold-500 focus:outline-none" />
-            <button className="rounded-md bg-navy-950 px-2.5 py-1 text-xs font-bold text-white">Add category</button>
+            <input value={newCat} onChange={(e) => setNewCat(e.target.value)} placeholder="New category" className="rounded-md border border-white/15 bg-white/5 px-2 py-1 text-xs text-white placeholder-white/35 focus:border-emerald-300/60 focus:outline-none" />
+            <button className="rounded-md bg-emerald-400/20 px-2.5 py-1 text-xs font-bold text-emerald-200 ring-1 ring-emerald-300/30 hover:bg-emerald-400/30">Add category</button>
           </form>
         </div>
         <div className="mt-3 flex flex-wrap gap-1.5">
           <button
             onClick={() => setCatFilter('')}
-            className={`rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${!catFilter ? 'bg-navy-950 text-white ring-navy-950' : 'bg-sand-50 text-navy-900/70 ring-sand-200 hover:bg-sand-100'}`}
+            className={`rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${!catFilter ? 'bg-emerald-400/90 text-black ring-emerald-300/60' : 'bg-white/5 text-white/70 ring-white/15 hover:bg-white/10'}`}
           >
             All {money(sum(all))}
           </button>
@@ -135,7 +135,7 @@ export default function Expenses() {
             <button
               key={c}
               onClick={() => setCatFilter(catFilter === c ? '' : c)}
-              className={`rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${catFilter === c ? 'bg-navy-950 text-white ring-navy-950' : 'bg-sand-50 text-navy-900/70 ring-sand-200 hover:bg-sand-100'}`}
+              className={`rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${catFilter === c ? 'bg-emerald-400/90 text-black ring-emerald-300/60' : 'bg-white/5 text-white/70 ring-white/15 hover:bg-white/10'}`}
             >
               {c}{byCategory.has(c) ? ` · ${money(byCategory.get(c))}` : ''}
             </button>
@@ -144,10 +144,10 @@ export default function Expenses() {
       </div>
 
       {/* Ledger */}
-      <div className="mt-5 overflow-x-auto rounded-2xl bg-white ring-1 ring-sand-200">
+      <div className="mt-5 overflow-x-auto liquid-glass rounded-2xl">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-sand-200 text-xs uppercase tracking-wider text-navy-900/50">
+            <tr className="border-b border-white/15 text-xs uppercase tracking-wider text-white/50">
               <th className="px-4 py-2.5 font-semibold">Date</th>
               <th className="px-4 py-2.5 font-semibold">Category</th>
               <th className="px-4 py-2.5 font-semibold">Payee</th>
@@ -158,16 +158,16 @@ export default function Expenses() {
           </thead>
           <tbody>
             {shown.map((e) => (
-              <tr key={e.id} className="border-b border-sand-100 last:border-0">
-                <td className="whitespace-nowrap px-4 py-2 text-navy-900/70">{new Date(e.date).toLocaleDateString()}</td>
-                <td className="px-4 py-2 font-semibold text-navy-950">{e.category}</td>
-                <td className="px-4 py-2 text-navy-900/80">{e.payee ?? '—'}</td>
-                <td className="max-w-[16rem] truncate px-4 py-2 text-navy-900/70">{[e.channel, e.notes].filter(Boolean).join(' · ') || '—'}</td>
-                <td className="whitespace-nowrap px-4 py-2 text-right font-semibold text-navy-950">{money(e.amount)}</td>
+              <tr key={e.id} className="border-b border-white/10 last:border-0">
+                <td className="whitespace-nowrap px-4 py-2 text-white/70">{new Date(e.date).toLocaleDateString()}</td>
+                <td className="px-4 py-2 font-semibold text-white">{e.category}</td>
+                <td className="px-4 py-2 text-white/80">{e.payee ?? '—'}</td>
+                <td className="max-w-[16rem] truncate px-4 py-2 text-white/70">{[e.channel, e.notes].filter(Boolean).join(' · ') || '—'}</td>
+                <td className="whitespace-nowrap px-4 py-2 text-right font-semibold text-white">{money(e.amount)}</td>
                 <td className="px-2 py-2 text-right">
                   <button
                     onClick={() => { if (confirm(`Delete ${money(e.amount)} ${e.category} expense?`)) remove(e.id); }}
-                    className="rounded-md px-1.5 py-1 text-xs text-red-600/70 hover:bg-red-50"
+                    className="rounded-md px-1.5 py-1 text-xs text-red-300/80 hover:bg-red-400/10"
                   >
                     Delete
                   </button>
@@ -175,12 +175,12 @@ export default function Expenses() {
               </tr>
             ))}
             {!shown.length && (
-              <tr><td colSpan={6} className="px-4 py-6 text-center text-sm text-navy-900/40">No expenses logged{catFilter ? ` for ${catFilter}` : ''} yet.</td></tr>
+              <tr><td colSpan={6} className="px-4 py-6 text-center text-sm text-white/40">No expenses logged{catFilter ? ` for ${catFilter}` : ''} yet.</td></tr>
             )}
           </tbody>
         </table>
       </div>
-      <p className="mt-3 text-xs text-navy-900/45">Tip: for marketing spend, use the detail field to break out the advertising channel — the ledger shows it next to the notes.</p>
+      <p className="mt-3 text-xs text-white/45">Tip: for marketing spend, use the detail field to break out the advertising channel — the ledger shows it next to the notes.</p>
     </div>
   );
 }

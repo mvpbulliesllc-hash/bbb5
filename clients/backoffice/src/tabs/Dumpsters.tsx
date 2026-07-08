@@ -19,7 +19,7 @@ function DumpsterForm({ doc, save, onDone }: { doc?: Rec<Dumpster>; save: Save; 
   const set = (k: keyof Form) => (e: React.ChangeEvent<HTMLInputElement>) => setF({ ...f, [k]: e.target.value });
   return (
     <form
-      className="grid gap-2 rounded-2xl bg-white p-4 ring-1 ring-sand-200 sm:grid-cols-3"
+      className="grid gap-2 liquid-glass rounded-2xl p-4 sm:grid-cols-3"
       onSubmit={async (e) => {
         e.preventDefault();
         if (!f.company.trim()) return;
@@ -55,22 +55,22 @@ function DumpsterCard({ d, save, remove }: { d: Rec<Dumpster>; save: Save; remov
   const [editing, setEditing] = useState(false);
   if (editing) return <DumpsterForm doc={d} save={save} onDone={() => setEditing(false)} />;
   return (
-    <div className="rounded-xl bg-white p-4 ring-1 ring-sand-200">
+    <div className="liquid-glass rounded-2xl p-4">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className="truncate font-display text-sm font-bold text-navy-950">{d.company}</p>
-          <p className="truncate text-xs text-navy-900/60">
-            {d.phone && <a className="hover:text-gold-600" href={`tel:${d.phone}`}>{d.phone}</a>}
+          <p className="truncate font-display text-sm font-bold text-white">{d.company}</p>
+          <p className="truncate text-xs text-white/60">
+            {d.phone && <a className="hover:text-emerald-300" href={`tel:${d.phone}`}>{d.phone}</a>}
             {d.phone && d.email && ' · '}
-            {d.email && <a className="hover:text-gold-600" href={`mailto:${d.email}`}>{d.email}</a>}
+            {d.email && <a className="hover:text-emerald-300" href={`mailto:${d.email}`}>{d.email}</a>}
           </p>
-          {d.info && <p className="mt-0.5 text-xs text-navy-900/70">{d.info}</p>}
+          {d.info && <p className="mt-0.5 text-xs text-white/70">{d.info}</p>}
         </div>
         <div className="flex shrink-0 gap-1.5">
-          <button onClick={() => setEditing(true)} className="rounded-md px-1.5 py-1 text-xs font-semibold text-navy-900/60 hover:bg-sand-100">Edit</button>
+          <button onClick={() => setEditing(true)} className="rounded-md px-1.5 py-1 text-xs font-semibold text-white/60 hover:bg-white/10">Edit</button>
           <button
             onClick={() => { if (confirm(`Delete "${d.company}"?`)) remove(d.id); }}
-            className="rounded-md px-1.5 py-1 text-xs text-red-600/70 hover:bg-red-50"
+            className="rounded-md px-1.5 py-1 text-xs text-red-300/80 hover:bg-red-400/10"
           >
             Delete
           </button>
@@ -78,9 +78,9 @@ function DumpsterCard({ d, save, remove }: { d: Rec<Dumpster>; save: Save; remov
       </div>
       <div className="mt-3 grid grid-cols-3 gap-2">
         {([['10 yd', d.cost10], ['20 yd', d.cost20], ['30 yd', d.cost30]] as const).map(([label, cost]) => (
-          <div key={label} className="rounded-lg bg-sand-50 p-2 text-center ring-1 ring-sand-200">
-            <p className="text-[0.65rem] font-bold uppercase tracking-wider text-navy-900/50">{label}</p>
-            <p className="font-display text-sm font-extrabold text-navy-950">{money(cost)}</p>
+          <div key={label} className="liquid-glass-inset rounded-lg p-2 text-center">
+            <p className="text-[0.65rem] font-bold uppercase tracking-wider text-white/50">{label}</p>
+            <p className="font-display text-sm font-extrabold text-white">{money(cost)}</p>
           </div>
         ))}
       </div>
@@ -96,8 +96,8 @@ export default function Dumpsters() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-extrabold text-navy-950">Dumpsters</h1>
-          <p className="mt-1 text-sm text-navy-900/60">Haulers on file with 10 / 20 / 30-yarder pricing.</p>
+          <h1 className="font-display text-2xl font-extrabold text-white">Dumpsters</h1>
+          <p className="mt-1 text-sm text-white/60">Haulers on file with 10 / 20 / 30-yarder pricing.</p>
         </div>
         <button onClick={() => setAdding(!adding)} className={btnDark}>{adding ? 'Close' : 'New company'}</button>
       </div>
@@ -105,7 +105,7 @@ export default function Dumpsters() {
       <div className="mt-6 grid gap-3 lg:grid-cols-2">
         {(dumpsters ?? []).map((d) => <DumpsterCard key={d.id} d={d} save={save} remove={remove} />)}
         {dumpsters && !dumpsters.length && !adding && (
-          <p className="text-sm text-navy-900/50">No dumpster companies yet — add one above.</p>
+          <p className="text-sm text-white/50">No dumpster companies yet — add one above.</p>
         )}
       </div>
     </div>
