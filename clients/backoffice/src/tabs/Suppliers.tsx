@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import { useMutation, useQuery } from 'convex/react';
-import { api } from '../../convex/_generated/api';
-import type { Doc } from '../../convex/_generated/dataModel';
+import { bare, useKind } from '../lib/store';
+import type { Rec, Supplier } from '../lib/store';
 import { ExtraFields, btnDark, btnPrimary, inp, money, toNum } from '../lib/ui';
 
+type Save = (data: Supplier, id?: number) => Promise<void>;
 type Form = { company: string; phone: string; email: string; notes: string };
 const empty: Form = { company: '', phone: '', email: '', notes: '' };
 
-function SupplierForm({ doc, onDone }: { doc?: Doc<'suppliers'>; onDone: () => void }) {
-  const save = useMutation(api.suppliers.save);
+function SupplierForm({ doc, save, onDone }: { doc?: Rec<Supplier>; save: Save; onDone: () => void }) {
   const [f, setF] = useState<Form>(() =>
     doc ? { company: doc.company, phone: doc.phone ?? '', email: doc.email ?? '', notes: doc.notes ?? '' } : empty,
   );
@@ -19,15 +18,17 @@ function SupplierForm({ doc, onDone }: { doc?: Doc<'suppliers'>; onDone: () => v
       onSubmit={async (e) => {
         e.preventDefault();
         if (!f.company.trim()) return;
-        await save({
-          id: doc?._id,
-          company: f.company.trim(),
-          phone: f.phone.trim() || undefined,
-          email: f.email.trim() || undefined,
-          notes: f.notes.trim() || undefined,
-          materials: doc?.materials ?? [],
-          extra: doc?.extra,
-        });
+        await save(
+          {
+            company: f.company.trim(),
+            phone: f.phone.trim() || undefined,
+            email: f.email.trim() || undefined,
+            notes: f.notes.trim() || undefined,
+            materials: doc?.materials ?? [],
+            extra: doc?.extra,
+          },
+          doc?.id,
+        );
         onDone();
       }}
     >
@@ -40,16 +41,13 @@ function SupplierForm({ doc, onDone }: { doc?: Doc<'suppliers'>; onDone: () => v
   );
 }
 
-function SupplierCard({ s }: { s: Doc<'suppliers'> }) {
-  const save = useMutation(api.suppliers.save);
-  const remove = useMutation(api.suppliers.remove);
+function SupplierCard({ s, save, remove }: { s: Rec<Supplier>; save: Save; remove: (id: number) => Promise<void> }) {
   const [editing, setEditing] = useState(false);
   const [m, setM] = useState({ name: '', cost: '', unit: '' });
 
-  const saveMaterials = (materials: Doc<'suppliers'>['materials']) =>
-    save({ id: s._id, company: s.company, phone: s.phone, email: s.email, notes: s.notes, materials, extra: s.extra });
+  const saveMaterials = (materials: Supplier['materials']) => save({ ...bare(s), materials }, s.id);
 
-  if (editing) return <SupplierForm doc={s} onDone={() => setEditing(false)} />;
+  if (editing) return <SupplierForm doc={s} save={save} onDone={() => setEditing(false)} />;
   return (
     <div className="rounded-xl bg-white p-4 ring-1 ring-sand-200">
       <div className="flex items-start justify-between gap-2">
@@ -65,7 +63,7 @@ function SupplierCard({ s }: { s: Doc<'suppliers'> }) {
         <div className="flex shrink-0 gap-1.5">
           <button onClick={() => setEditing(true)} className="rounded-md px-1.5 py-1 text-xs font-semibold text-navy-900/60 hover:bg-sand-100">Edit</button>
           <button
-            onClick={() => { if (confirm(`Delete supplier "${s.company}"?`)) remove({ id: s._id }); }}
+            onClick={() => { if (confirm(`Delete supplier "${s.company}"?`)) remove(s.id); }}
             className="rounded-md px-1.5 py-1 text-xs text-red-600/70 hover:bg-red-50"
           >
             Delete
@@ -103,16 +101,13 @@ function SupplierCard({ s }: { s: Doc<'suppliers'> }) {
         <button className="rounded-md bg-navy-950 px-2.5 py-1 text-xs font-bold text-white">Add</button>
       </form>
 
-      <ExtraFields
-        extra={s.extra}
-        onSave={(extra) => save({ id: s._id, company: s.company, phone: s.phone, email: s.email, notes: s.notes, materials: s.materials, extra })}
-      />
+      <ExtraFields extra={s.extra} onSave={(extra) => save({ ...bare(s), extra }, s.id)} />
     </div>
   );
 }
 
 export default function Suppliers() {
-  const suppliers = useQuery(api.suppliers.list);
+  const { items: suppliers, save, remove } = useKind<Supplier>('supplier');
   const [adding, setAdding] = useState(false);
   return (
     <div>
@@ -123,9 +118,9 @@ export default function Suppliers() {
         </div>
         <button onClick={() => setAdding(!adding)} className={btnDark}>{adding ? 'Close' : 'New supplier'}</button>
       </div>
-      {adding && <div className="mt-4"><SupplierForm onDone={() => setAdding(false)} /></div>}
+      {adding && <div className="mt-4"><SupplierForm save={save} onDone={() => setAdding(false)} /></div>}
       <div className="mt-6 grid gap-3 lg:grid-cols-2">
-        {(suppliers ?? []).map((s) => <SupplierCard key={s._id} s={s} />)}
+        {(suppliers ?? []).map((s) => <SupplierCard key={s.id} s={s} save={save} remove={remove} />)}
         {suppliers && !suppliers.length && !adding && (
           <p className="text-sm text-navy-900/50">No suppliers yet — add one above, then build its price list from your invoices.</p>
         )}

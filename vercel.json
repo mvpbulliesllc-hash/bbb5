@@ -1,8 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "installCommand": "npm --prefix clients/website install",
-  "buildCommand": "npm --prefix clients/website run build",
+  "installCommand": "npm --prefix clients/website install && npm --prefix clients/backoffice install",
+  "buildCommand": "npm --prefix clients/website run build && npm --prefix clients/backoffice run build && rm -rf clients/website/dist/admin && mkdir -p clients/website/dist/admin && cp -r clients/backoffice/dist/. clients/website/dist/admin/",
   "outputDirectory": "clients/website/dist",
   "cleanUrls": true,
   "trailingSlash": true,
@@ -14,6 +14,10 @@
     {
       "source": "/media/(.*)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/admin/(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     },
     {
       "source": "/(.*)",

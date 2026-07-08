@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { useMutation, useQuery } from 'convex/react';
-import { api } from '../../convex/_generated/api';
-import type { Doc } from '../../convex/_generated/dataModel';
+import { bare, useKind } from '../lib/store';
+import type { Contractor, Rec } from '../lib/store';
 import { ExtraFields, btnDark, btnPrimary, inp } from '../lib/ui';
 
 const FIELDS = [
@@ -16,11 +15,11 @@ const FIELDS = [
   { key: 'notes', label: 'Notes' },
 ] as const;
 
+type Save = (data: Contractor, id?: number) => Promise<void>;
 type Form = Record<(typeof FIELDS)[number]['key'], string>;
 const empty = (): Form => Object.fromEntries(FIELDS.map((f) => [f.key, ''])) as Form;
 
-function ContractorForm({ doc, onDone }: { doc?: Doc<'contractors'>; onDone: () => void }) {
-  const save = useMutation(api.contractors.save);
+function ContractorForm({ doc, save, onDone }: { doc?: Rec<Contractor>; save: Save; onDone: () => void }) {
   const [f, setF] = useState<Form>(() =>
     doc ? (Object.fromEntries(FIELDS.map((x) => [x.key, (doc[x.key] as string | undefined) ?? ''])) as Form) : empty(),
   );
@@ -30,19 +29,21 @@ function ContractorForm({ doc, onDone }: { doc?: Doc<'contractors'>; onDone: () 
       onSubmit={async (e) => {
         e.preventDefault();
         if (!f.name.trim()) return;
-        await save({
-          id: doc?._id,
-          name: f.name.trim(),
-          phone: f.phone.trim() || undefined,
-          email: f.email.trim() || undefined,
-          specializedIn: f.specializedIn.trim() || undefined,
-          hicNumber: f.hicNumber.trim() || undefined,
-          insurance: f.insurance.trim() || undefined,
-          w9: f.w9.trim() || undefined,
-          license: f.license.trim() || undefined,
-          notes: f.notes.trim() || undefined,
-          extra: doc?.extra,
-        });
+        await save(
+          {
+            name: f.name.trim(),
+            phone: f.phone.trim() || undefined,
+            email: f.email.trim() || undefined,
+            specializedIn: f.specializedIn.trim() || undefined,
+            hicNumber: f.hicNumber.trim() || undefined,
+            insurance: f.insurance.trim() || undefined,
+            w9: f.w9.trim() || undefined,
+            license: f.license.trim() || undefined,
+            notes: f.notes.trim() || undefined,
+            extra: doc?.extra,
+          },
+          doc?.id,
+        );
         onDone();
       }}
     >
@@ -54,12 +55,10 @@ function ContractorForm({ doc, onDone }: { doc?: Doc<'contractors'>; onDone: () 
   );
 }
 
-function ContractorCard({ c }: { c: Doc<'contractors'> }) {
-  const save = useMutation(api.contractors.save);
-  const remove = useMutation(api.contractors.remove);
+function ContractorCard({ c, save, remove }: { c: Rec<Contractor>; save: Save; remove: (id: number) => Promise<void> }) {
   const [editing, setEditing] = useState(false);
 
-  if (editing) return <ContractorForm doc={c} onDone={() => setEditing(false)} />;
+  if (editing) return <ContractorForm doc={c} save={save} onDone={() => setEditing(false)} />;
 
   const rows: Array<[string, string | undefined]> = [
     ['Specialized in', c.specializedIn],
@@ -83,7 +82,7 @@ function ContractorCard({ c }: { c: Doc<'contractors'> }) {
         <div className="flex shrink-0 gap-1.5">
           <button onClick={() => setEditing(true)} className="rounded-md px-1.5 py-1 text-xs font-semibold text-navy-900/60 hover:bg-sand-100">Edit</button>
           <button
-            onClick={() => { if (confirm(`Delete contractor "${c.name}"?`)) remove({ id: c._id }); }}
+            onClick={() => { if (confirm(`Delete contractor "${c.name}"?`)) remove(c.id); }}
             className="rounded-md px-1.5 py-1 text-xs text-red-600/70 hover:bg-red-50"
           >
             Delete
@@ -98,13 +97,13 @@ function ContractorCard({ c }: { c: Doc<'contractors'> }) {
           </div>
         ))}
       </dl>
-      <ExtraFields extra={c.extra} onSave={(extra) => save({ id: c._id, name: c.name, extra })} />
+      <ExtraFields extra={c.extra} onSave={(extra) => save({ ...bare(c), extra }, c.id)} />
     </div>
   );
 }
 
 export default function Contractors() {
-  const contractors = useQuery(api.contractors.list);
+  const { items: contractors, save, remove } = useKind<Contractor>('contractor');
   const [adding, setAdding] = useState(false);
 
   return (
@@ -116,9 +115,9 @@ export default function Contractors() {
         </div>
         <button onClick={() => setAdding(!adding)} className={btnDark}>{adding ? 'Close' : 'New contractor'}</button>
       </div>
-      {adding && <div className="mt-4"><ContractorForm onDone={() => setAdding(false)} /></div>}
+      {adding && <div className="mt-4"><ContractorForm save={save} onDone={() => setAdding(false)} /></div>}
       <div className="mt-6 grid gap-3 lg:grid-cols-2">
-        {(contractors ?? []).map((c) => <ContractorCard key={c._id} c={c} />)}
+        {(contractors ?? []).map((c) => <ContractorCard key={c.id} c={c} save={save} remove={remove} />)}
         {contractors && !contractors.length && !adding && (
           <p className="text-sm text-navy-900/50">No contractors yet — add your first sub above.</p>
         )}

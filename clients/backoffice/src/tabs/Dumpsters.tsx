@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import { useMutation, useQuery } from 'convex/react';
-import { api } from '../../convex/_generated/api';
-import type { Doc } from '../../convex/_generated/dataModel';
+import { bare, useKind } from '../lib/store';
+import type { Dumpster, Rec } from '../lib/store';
 import { ExtraFields, btnDark, btnPrimary, inp, money, toNum } from '../lib/ui';
 
+type Save = (data: Dumpster, id?: number) => Promise<void>;
 type Form = { company: string; phone: string; email: string; info: string; cost10: string; cost20: string; cost30: string };
 const empty: Form = { company: '', phone: '', email: '', info: '', cost10: '', cost20: '', cost30: '' };
 
-function DumpsterForm({ doc, onDone }: { doc?: Doc<'dumpsters'>; onDone: () => void }) {
-  const save = useMutation(api.dumpsters.save);
+function DumpsterForm({ doc, save, onDone }: { doc?: Rec<Dumpster>; save: Save; onDone: () => void }) {
   const [f, setF] = useState<Form>(() =>
     doc
       ? {
@@ -24,17 +23,19 @@ function DumpsterForm({ doc, onDone }: { doc?: Doc<'dumpsters'>; onDone: () => v
       onSubmit={async (e) => {
         e.preventDefault();
         if (!f.company.trim()) return;
-        await save({
-          id: doc?._id,
-          company: f.company.trim(),
-          phone: f.phone.trim() || undefined,
-          email: f.email.trim() || undefined,
-          info: f.info.trim() || undefined,
-          cost10: toNum(f.cost10),
-          cost20: toNum(f.cost20),
-          cost30: toNum(f.cost30),
-          extra: doc?.extra,
-        });
+        await save(
+          {
+            company: f.company.trim(),
+            phone: f.phone.trim() || undefined,
+            email: f.email.trim() || undefined,
+            info: f.info.trim() || undefined,
+            cost10: toNum(f.cost10),
+            cost20: toNum(f.cost20),
+            cost30: toNum(f.cost30),
+            extra: doc?.extra,
+          },
+          doc?.id,
+        );
         onDone();
       }}
     >
@@ -50,11 +51,9 @@ function DumpsterForm({ doc, onDone }: { doc?: Doc<'dumpsters'>; onDone: () => v
   );
 }
 
-function DumpsterCard({ d }: { d: Doc<'dumpsters'> }) {
-  const save = useMutation(api.dumpsters.save);
-  const remove = useMutation(api.dumpsters.remove);
+function DumpsterCard({ d, save, remove }: { d: Rec<Dumpster>; save: Save; remove: (id: number) => Promise<void> }) {
   const [editing, setEditing] = useState(false);
-  if (editing) return <DumpsterForm doc={d} onDone={() => setEditing(false)} />;
+  if (editing) return <DumpsterForm doc={d} save={save} onDone={() => setEditing(false)} />;
   return (
     <div className="rounded-xl bg-white p-4 ring-1 ring-sand-200">
       <div className="flex items-start justify-between gap-2">
@@ -70,7 +69,7 @@ function DumpsterCard({ d }: { d: Doc<'dumpsters'> }) {
         <div className="flex shrink-0 gap-1.5">
           <button onClick={() => setEditing(true)} className="rounded-md px-1.5 py-1 text-xs font-semibold text-navy-900/60 hover:bg-sand-100">Edit</button>
           <button
-            onClick={() => { if (confirm(`Delete "${d.company}"?`)) remove({ id: d._id }); }}
+            onClick={() => { if (confirm(`Delete "${d.company}"?`)) remove(d.id); }}
             className="rounded-md px-1.5 py-1 text-xs text-red-600/70 hover:bg-red-50"
           >
             Delete
@@ -85,13 +84,13 @@ function DumpsterCard({ d }: { d: Doc<'dumpsters'> }) {
           </div>
         ))}
       </div>
-      <ExtraFields extra={d.extra} onSave={(extra) => save({ id: d._id, company: d.company, extra })} />
+      <ExtraFields extra={d.extra} onSave={(extra) => save({ ...bare(d), extra }, d.id)} />
     </div>
   );
 }
 
 export default function Dumpsters() {
-  const dumpsters = useQuery(api.dumpsters.list);
+  const { items: dumpsters, save, remove } = useKind<Dumpster>('dumpster');
   const [adding, setAdding] = useState(false);
   return (
     <div>
@@ -102,9 +101,9 @@ export default function Dumpsters() {
         </div>
         <button onClick={() => setAdding(!adding)} className={btnDark}>{adding ? 'Close' : 'New company'}</button>
       </div>
-      {adding && <div className="mt-4"><DumpsterForm onDone={() => setAdding(false)} /></div>}
+      {adding && <div className="mt-4"><DumpsterForm save={save} onDone={() => setAdding(false)} /></div>}
       <div className="mt-6 grid gap-3 lg:grid-cols-2">
-        {(dumpsters ?? []).map((d) => <DumpsterCard key={d._id} d={d} />)}
+        {(dumpsters ?? []).map((d) => <DumpsterCard key={d.id} d={d} save={save} remove={remove} />)}
         {dumpsters && !dumpsters.length && !adding && (
           <p className="text-sm text-navy-900/50">No dumpster companies yet — add one above.</p>
         )}

@@ -56,7 +56,28 @@ module.exports = async (req, res) => {
     (extra.length ? `\n\nOther fields:\n${extra.join('\n')}` : '') +
     `\n\nReceived: ${new Date().toISOString()}`;
 
-  // Fan out to the back-office pipeline (Convex) — best-effort, never blocks the lead.
+  // Fan out to the /admin back-office pipeline (Postgres) — best-effort, never blocks the lead.
+  try {
+    const { sql, ensureSchema } = require('../_lib/db.js');
+    await ensureSchema();
+    const rec = {
+      name: who,
+      phone: lead.phone || '',
+      email: lead.email || '',
+      address: lead.address || '',
+      town: lead.town || '',
+      service: what,
+      message: lead.message || '',
+      source: lead.source || 'website',
+      stage: 'new',
+      notes: [],
+    };
+    await sql(`INSERT INTO backoffice_records (kind, data) VALUES ('lead', $1::jsonb)`, [JSON.stringify(rec)]);
+  } catch (err) {
+    console.error('pg lead insert error', err);
+  }
+
+  // Legacy fan-out to the old Convex pipeline — best-effort, never blocks the lead.
   const ingestUrl = process.env.CONVEX_INGEST_URL;
   if (ingestUrl) {
     try {

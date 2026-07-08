@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { useMutation, useQuery } from 'convex/react';
-import { api } from '../../convex/_generated/api';
-import type { Doc, Id } from '../../convex/_generated/dataModel';
+import { bare, useKind } from '../lib/store';
+import type { Contractor, Lead, Rec } from '../lib/store';
 import { fromDateInput, money, toDateInput, toNum } from '../lib/ui';
 
 const STAGES = ['new', 'contacted', 'estimate', 'won', 'lost'] as const;
@@ -14,10 +13,11 @@ const STAGE_TINT: Record<string, string> = {
   lost: 'bg-red-50 text-red-700',
 };
 
+type Save = (data: Lead, id?: number) => Promise<void>;
+
 /** CRM job header (Joe's outline) — scope, dates, sub, and money on the job. */
-function JobDetails({ lead }: { lead: Doc<'leads'> }) {
-  const updateJob = useMutation(api.leads.updateJob);
-  const contractors = useQuery(api.contractors.list);
+function JobDetails({ lead, save }: { lead: Rec<Lead>; save: Save }) {
+  const { items: contractors } = useKind<Contractor>('contractor');
   const [f, setF] = useState({
     scope: lead.scope ?? '',
     proposalSentAt: toDateInput(lead.proposalSentAt),
@@ -54,7 +54,7 @@ function JobDetails({ lead }: { lead: Doc<'leads'> }) {
         <label className="col-span-2">
           <span className={lbl}>Sub assigned</span>
           <input list="contractor-names" value={f.subAssigned} onChange={set('subAssigned')} className={box} />
-          <datalist id="contractor-names">{(contractors ?? []).map((c) => <option key={c._id} value={c.name} />)}</datalist>
+          <datalist id="contractor-names">{(contractors ?? []).map((c) => <option key={c.id} value={c.name} />)}</datalist>
         </label>
         <label><span className={lbl}>Schedule date</span><input type="date" value={f.scheduledAt} onChange={set('scheduledAt')} className={box} /></label>
         <label><span className={lbl}>Completed date</span><input type="date" value={f.completedAt} onChange={set('completedAt')} className={box} /></label>
@@ -71,22 +71,25 @@ function JobDetails({ lead }: { lead: Doc<'leads'> }) {
         <span className="font-semibold text-navy-900/60">Net: <span className="text-navy-950">{money(net)}</span></span>
         <button
           onClick={async () => {
-            await updateJob({
-              id: lead._id,
-              scope: f.scope.trim() || undefined,
-              proposalSentAt: fromDateInput(f.proposalSentAt),
-              contractSignedAt: fromDateInput(f.contractSignedAt),
-              subAssigned: f.subAssigned.trim() || undefined,
-              scheduledAt: fromDateInput(f.scheduledAt),
-              completedAt: fromDateInput(f.completedAt),
-              jobCost: toNum(f.jobCost),
-              deposit: toNum(f.deposit),
-              additionalPayment: toNum(f.additionalPayment),
-              finalPayment: toNum(f.finalPayment),
-              materialCost: toNum(f.materialCost),
-              laborCost: toNum(f.laborCost),
-              dumpsterCost: toNum(f.dumpsterCost),
-            });
+            await save(
+              {
+                ...bare(lead),
+                scope: f.scope.trim() || undefined,
+                proposalSentAt: fromDateInput(f.proposalSentAt),
+                contractSignedAt: fromDateInput(f.contractSignedAt),
+                subAssigned: f.subAssigned.trim() || undefined,
+                scheduledAt: fromDateInput(f.scheduledAt),
+                completedAt: fromDateInput(f.completedAt),
+                jobCost: toNum(f.jobCost),
+                deposit: toNum(f.deposit),
+                additionalPayment: toNum(f.additionalPayment),
+                finalPayment: toNum(f.finalPayment),
+                materialCost: toNum(f.materialCost),
+                laborCost: toNum(f.laborCost),
+                dumpsterCost: toNum(f.dumpsterCost),
+              },
+              lead.id,
+            );
             setSaved(true);
           }}
           className="ml-auto rounded-md bg-navy-950 px-2.5 py-1 text-xs font-bold text-white"
@@ -98,10 +101,7 @@ function JobDetails({ lead }: { lead: Doc<'leads'> }) {
   );
 }
 
-function LeadCard({ lead }: { lead: Doc<'leads'> }) {
-  const setStage = useMutation(api.leads.setStage);
-  const addNote = useMutation(api.leads.addNote);
-  const remove = useMutation(api.leads.remove);
+function LeadCard({ lead, save, remove }: { lead: Rec<Lead>; save: Save; remove: (id: number) => Promise<void> }) {
   const [open, setOpen] = useState(false);
   const [showJob, setShowJob] = useState(false);
   const [note, setNote] = useState('');
@@ -127,7 +127,7 @@ function LeadCard({ lead }: { lead: Doc<'leads'> }) {
       <div className="mt-2.5 flex items-center gap-1.5">
         <select
           value={lead.stage}
-          onChange={(e) => setStage({ id: lead._id, stage: e.target.value })}
+          onChange={(e) => save({ ...bare(lead), stage: e.target.value }, lead.id)}
           className="rounded-md border border-sand-200 bg-sand-50 px-1.5 py-1 text-xs font-semibold text-navy-900"
         >
           {STAGES.map((s) => (
@@ -141,7 +141,7 @@ function LeadCard({ lead }: { lead: Doc<'leads'> }) {
           Job{lead.jobCost != null ? ' ✓' : ''}
         </button>
         <button
-          onClick={() => { if (confirm(`Delete lead "${lead.name}"?`)) remove({ id: lead._id }); }}
+          onClick={() => { if (confirm(`Delete lead "${lead.name}"?`)) remove(lead.id); }}
           className="ml-auto rounded-md px-1.5 py-1 text-xs text-red-600/70 hover:bg-red-50"
         >
           Delete
@@ -157,7 +157,13 @@ function LeadCard({ lead }: { lead: Doc<'leads'> }) {
           ))}
           <form
             className="mt-2 flex gap-1.5"
-            onSubmit={(e) => { e.preventDefault(); if (note.trim()) { addNote({ id: lead._id, text: note.trim() }); setNote(''); } }}
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (note.trim()) {
+                save({ ...bare(lead), notes: [...lead.notes, { text: note.trim(), at: Date.now() }] }, lead.id);
+                setNote('');
+              }
+            }}
           >
             <input
               value={note}
@@ -169,13 +175,12 @@ function LeadCard({ lead }: { lead: Doc<'leads'> }) {
           </form>
         </div>
       )}
-      {showJob && <JobDetails lead={lead} />}
+      {showJob && <JobDetails lead={lead} save={save} />}
     </div>
   );
 }
 
-function NewLeadForm({ onDone }: { onDone: () => void }) {
-  const create = useMutation(api.leads.create);
+function NewLeadForm({ save, onDone }: { save: Save; onDone: () => void }) {
   const [f, setF] = useState({ name: '', phone: '', email: '', town: '', service: '', message: '' });
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement>) => setF({ ...f, [k]: e.target.value });
   return (
@@ -184,7 +189,7 @@ function NewLeadForm({ onDone }: { onDone: () => void }) {
       onSubmit={async (e) => {
         e.preventDefault();
         if (!f.name.trim()) return;
-        await create({
+        await save({
           name: f.name.trim(),
           phone: f.phone.trim() || undefined,
           email: f.email.trim() || undefined,
@@ -192,6 +197,8 @@ function NewLeadForm({ onDone }: { onDone: () => void }) {
           service: f.service.trim() || undefined,
           message: f.message.trim() || undefined,
           source: 'manual',
+          stage: 'new',
+          notes: [],
         });
         onDone();
       }}
@@ -213,7 +220,7 @@ function NewLeadForm({ onDone }: { onDone: () => void }) {
 }
 
 export default function Pipeline() {
-  const leads = useQuery(api.leads.board);
+  const { items: leads, save, remove } = useKind<Lead>('lead');
   const [adding, setAdding] = useState(false);
   const [filter, setFilter] = useState('');
 
@@ -228,7 +235,7 @@ export default function Pipeline() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-display text-2xl font-extrabold text-navy-950">Pipeline</h1>
-          <p className="mt-1 text-sm text-navy-900/60">Every lead from Eli, the quote calculator, and manual entry — live.</p>
+          <p className="mt-1 text-sm text-navy-900/60">Every lead from Ellianna, the quote calculator, and manual entry — live.</p>
         </div>
         <div className="flex gap-2">
           <input
@@ -245,7 +252,7 @@ export default function Pipeline() {
           </button>
         </div>
       </div>
-      {adding && <div className="mt-4"><NewLeadForm onDone={() => setAdding(false)} /></div>}
+      {adding && <div className="mt-4"><NewLeadForm save={save} onDone={() => setAdding(false)} /></div>}
       <div className="mt-6 grid gap-4 lg:grid-cols-5">
         {STAGES.map((stage) => {
           const col = filtered.filter((l) => l.stage === stage);
@@ -255,7 +262,7 @@ export default function Pipeline() {
                 {STAGE_LABEL[stage]} <span className="text-navy-900/40">· {col.length}</span>
               </p>
               <div className="space-y-2.5">
-                {col.map((l) => <LeadCard key={l._id} lead={l} />)}
+                {col.map((l) => <LeadCard key={l.id} lead={l} save={save} remove={remove} />)}
                 {!col.length && <p className="px-1 py-3 text-center text-xs text-navy-900/40">Empty</p>}
               </div>
             </div>

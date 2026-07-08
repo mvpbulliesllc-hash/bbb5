@@ -1,7 +1,29 @@
 import { useState } from 'react';
-import { useMutation, useQuery } from 'convex/react';
-import { api } from '../../convex/_generated/api';
+import { useKind } from '../lib/store';
+import type { Expense, ExpenseCategory } from '../lib/store';
 import { btnPrimary, inp, money, toNum } from '../lib/ui';
+
+/** Joe's QuickBooks-style chart — defaults always present; more can be added. */
+const DEFAULT_CATEGORIES = [
+  'Gas',
+  'Trucks',
+  'Equipment/Tools',
+  'Insurance',
+  'Contractor Payment',
+  'Supplier Payment',
+  'Promotional Payment',
+  'Marketing — Advertising',
+  'Marketing Collateral (incl. clothes)',
+  'Travel',
+  'Food',
+  'Partner Capital Investment',
+  'Cell Phone',
+  'Petty Cash',
+  'Owners Draw',
+  'CC Fees',
+  'Office Expenses',
+  'EZ Pass',
+];
 
 function Tile({ label, value }: { label: string; value: string }) {
   return (
@@ -13,15 +35,14 @@ function Tile({ label, value }: { label: string; value: string }) {
 }
 
 export default function Expenses() {
-  const expenses = useQuery(api.expenses.list);
-  const categories = useQuery(api.expenses.categories);
-  const save = useMutation(api.expenses.save);
-  const remove = useMutation(api.expenses.remove);
-  const addCategory = useMutation(api.expenses.addCategory);
+  const { items: expenses, save, remove } = useKind<Expense>('expense');
+  const { items: customCats, save: saveCat } = useKind<ExpenseCategory>('expense_category');
 
   const [f, setF] = useState({ date: new Date().toISOString().slice(0, 10), category: '', amount: '', payee: '', channel: '', notes: '' });
   const [newCat, setNewCat] = useState('');
   const [catFilter, setCatFilter] = useState('');
+
+  const categories = [...new Set([...DEFAULT_CATEGORIES, ...(customCats ?? []).map((c) => c.name)])];
 
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
@@ -71,7 +92,7 @@ export default function Expenses() {
         <input type="date" value={f.date} onChange={(e) => setF({ ...f, date: e.target.value })} className={inp} />
         <select value={f.category} onChange={(e) => setF({ ...f, category: e.target.value })} className={inp}>
           <option value="">Category *</option>
-          {(categories ?? []).map((c) => <option key={c} value={c}>{c}</option>)}
+          {categories.map((c) => <option key={c} value={c}>{c}</option>)}
         </select>
         <input value={f.amount} onChange={(e) => setF({ ...f, amount: e.target.value })} placeholder="Amount $ *" inputMode="decimal" className={inp} />
         <input value={f.payee} onChange={(e) => setF({ ...f, payee: e.target.value })} placeholder="Payee / vendor" className={inp} />
@@ -93,8 +114,9 @@ export default function Expenses() {
             className="flex gap-1.5"
             onSubmit={async (e) => {
               e.preventDefault();
-              if (!newCat.trim()) return;
-              await addCategory({ name: newCat.trim() });
+              const name = newCat.trim();
+              if (!name || categories.includes(name)) { setNewCat(''); return; }
+              await saveCat({ name });
               setNewCat('');
             }}
           >
@@ -109,7 +131,7 @@ export default function Expenses() {
           >
             All {money(sum(all))}
           </button>
-          {(categories ?? []).map((c) => (
+          {categories.map((c) => (
             <button
               key={c}
               onClick={() => setCatFilter(catFilter === c ? '' : c)}
@@ -136,7 +158,7 @@ export default function Expenses() {
           </thead>
           <tbody>
             {shown.map((e) => (
-              <tr key={e._id} className="border-b border-sand-100 last:border-0">
+              <tr key={e.id} className="border-b border-sand-100 last:border-0">
                 <td className="whitespace-nowrap px-4 py-2 text-navy-900/70">{new Date(e.date).toLocaleDateString()}</td>
                 <td className="px-4 py-2 font-semibold text-navy-950">{e.category}</td>
                 <td className="px-4 py-2 text-navy-900/80">{e.payee ?? '—'}</td>
@@ -144,7 +166,7 @@ export default function Expenses() {
                 <td className="whitespace-nowrap px-4 py-2 text-right font-semibold text-navy-950">{money(e.amount)}</td>
                 <td className="px-2 py-2 text-right">
                   <button
-                    onClick={() => { if (confirm(`Delete ${money(e.amount)} ${e.category} expense?`)) remove({ id: e._id }); }}
+                    onClick={() => { if (confirm(`Delete ${money(e.amount)} ${e.category} expense?`)) remove(e.id); }}
                     className="rounded-md px-1.5 py-1 text-xs text-red-600/70 hover:bg-red-50"
                   >
                     Delete
