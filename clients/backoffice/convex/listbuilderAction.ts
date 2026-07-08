@@ -71,16 +71,21 @@ export const run = internalAction({
         if (res.ok) {
           const data = (await res.json()) as { output?: { content?: { properties?: Array<Record<string, string>> } } };
           const props = data.output?.content?.properties ?? [];
+          // Parallel marks unfound fields with NOT_FOUND placeholders — drop them.
+          const clean = (val: unknown, max: number) => {
+            const s = typeof val === 'string' ? val.trim() : '';
+            return s && !/^not[_ ]?found/i.test(s) && !/^unknown$/i.test(s) ? s.slice(0, max) : undefined;
+          };
           const rows = props
-            .filter((p) => p.address)
             .map((p) => ({
-              address: String(p.address).slice(0, 300),
-              ownerName: p.owner_name ? String(p.owner_name).slice(0, 200) : undefined,
-              phone: p.phone ? String(p.phone).slice(0, 50) : undefined,
-              email: p.email ? String(p.email).slice(0, 200) : undefined,
-              town: p.town ? String(p.town).slice(0, 100) : town,
-              zip: p.zip ? String(p.zip).slice(0, 10) : zip,
-            }));
+              address: clean(p.address, 300) ?? '',
+              ownerName: clean(p.owner_name, 200),
+              phone: clean(p.phone, 50),
+              email: clean(p.email, 200),
+              town: clean(p.town, 100) ?? town,
+              zip: clean(p.zip, 10) ?? zip,
+            }))
+            .filter((r) => r.address);
           const list = `zip-${zip}-web`;
           const { inserted } = await ctx.runMutation(internal.listbuilder.importRows, { list, rows });
           await ctx.runMutation(internal.listbuilder.finishJob, {
