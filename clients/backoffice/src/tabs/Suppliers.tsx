@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { LiquidMetalButton } from '../components/LiquidMetalButton';
 import { bare, useKind } from '../lib/store';
 import type { Rec, Supplier } from '../lib/store';
 import { ExtraFields, btnDark, btnPrimary, inp, money, toNum } from '../lib/ui';
@@ -36,7 +37,7 @@ function SupplierForm({ doc, save, onDone }: { doc?: Rec<Supplier>; save: Save; 
       <input value={f.phone} onChange={set('phone')} placeholder="Phone" className={inp} />
       <input value={f.email} onChange={set('email')} placeholder="Email" className={inp} />
       <input value={f.notes} onChange={set('notes')} placeholder="Notes / account #" className={inp} />
-      <button className={`${btnPrimary} sm:col-span-2`}>{doc ? 'Save changes' : 'Add supplier'}</button>
+      <div className="flex justify-center sm:col-span-2"><LiquidMetalButton type="submit" width={180} label={doc ? 'Save changes' : 'Add supplier'} /></div>
     </form>
   );
 }

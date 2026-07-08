@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { LiquidMetalButton } from '../components/LiquidMetalButton';
 import { useKind } from '../lib/store';
 import type { Expense, ExpenseCategory } from '../lib/store';
 import { btnPrimary, inp, money, toNum } from '../lib/ui';
@@ -103,7 +104,7 @@ export default function Expenses() {
           className={inp}
         />
         <input value={f.notes} onChange={(e) => setF({ ...f, notes: e.target.value })} placeholder="Notes" className={inp} />
-        <button className={`${btnPrimary} sm:col-span-3`}>Log expense</button>
+        <div className="flex justify-center sm:col-span-3"><LiquidMetalButton type="submit" width={180} label="Log expense" /></div>
       </form>
 
       {/* Category manager + breakout */}

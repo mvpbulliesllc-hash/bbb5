@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { LiquidMetalButton } from './components/LiquidMetalButton';
 import {
   BarChart3,
   LogOut,
@@ -93,12 +94,9 @@ function Login({ onOk }: { onOk: () => void }) {
           className="mt-5 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm text-white placeholder-white/35 focus:border-matrix-300/60 focus:outline-none"
         />
         {err && <p className="mt-2 rounded-lg border border-red-400/25 bg-red-400/10 px-3 py-2 text-xs text-red-200">{err}</p>}
-        <button
-          disabled={busy || !pw}
-          className="mt-4 w-full rounded-full bg-matrix-400/90 px-4 py-2.5 font-display font-bold text-black transition hover:bg-matrix-300 disabled:opacity-50"
-        >
-          {busy ? 'Checking…' : 'Sign in'}
-        </button>
+        <div className="mt-4 flex justify-center">
+          <LiquidMetalButton type="submit" width={220} disabled={busy || !pw} label={busy ? 'Checking…' : 'Sign in'} />
+        </div>
       </form>
     </div>
   );

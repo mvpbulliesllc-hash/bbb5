@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { LiquidMetalButton } from '../components/LiquidMetalButton';
 import { listBuilderOp, useKind } from '../lib/store';
 import type { Contact, Lead, ListJob, Rec } from '../lib/store';
 import { btnMini, btnPrimary, inp, inpMini } from '../lib/ui';
@@ -124,7 +125,7 @@ export default function ListBuilder() {
         <p className="font-display text-sm font-bold text-matrix-300">Build a list from the web</p>
         <input value={zip} onChange={(e) => setZip(e.target.value)} placeholder="Zip (e.g. 08753)" className={`w-36 ${inp}`} inputMode="numeric" />
         <input value={town} onChange={(e) => setTown(e.target.value)} placeholder="Town (optional)" className={`w-44 ${inp}`} />
-        <button className={btnPrimary}>Start research</button>
+        <LiquidMetalButton type="submit" width={190} label="Start research" />
         {err && <p className="w-full text-xs text-red-300">{err}</p>}
         <p className="w-full text-xs text-white/45">Runs take a few minutes — results land in the contacts table below automatically.</p>
       </form>
@@ -187,7 +188,7 @@ export default function ListBuilder() {
               className={`w-full ${inp} font-mono text-xs`}
             />
             <div className="mt-2 flex items-center gap-2">
-              <button className={btnPrimary}>Import rows</button>
+              <LiquidMetalButton type="submit" width={170} label="Import rows" />
               {err && <p className="text-xs text-red-300">{err}</p>}
             </div>
           </form>

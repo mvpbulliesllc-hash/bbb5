@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { LiquidMetalButton } from '../components/LiquidMetalButton';
 import { bare, useKind } from '../lib/store';
 import type { Contractor, Rec } from '../lib/store';
 import { ExtraFields, btnDark, btnPrimary, inp } from '../lib/ui';
@@ -50,7 +51,7 @@ function ContractorForm({ doc, save, onDone }: { doc?: Rec<Contractor>; save: Sa
       {FIELDS.map(({ key, label }) => (
         <input key={key} value={f[key]} onChange={(e) => setF({ ...f, [key]: e.target.value })} placeholder={label} className={inp} />
       ))}
-      <button className={`${btnPrimary} sm:col-span-3`}>{doc ? 'Save changes' : 'Add contractor'}</button>
+      <div className="flex justify-center sm:col-span-3"><LiquidMetalButton type="submit" width={190} label={doc ? 'Save changes' : 'Add contractor'} /></div>
     </form>
   );
 }

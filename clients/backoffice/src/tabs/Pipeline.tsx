@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { LiquidMetalButton } from '../components/LiquidMetalButton';
 import { bare, useKind } from '../lib/store';
 import type { Contractor, Lead, Rec } from '../lib/store';
 import { fromDateInput, money, toDateInput, toNum } from '../lib/ui';
@@ -281,9 +282,9 @@ function LeadFormCard({ doc, save, onDone }: { doc?: Rec<Lead>; save: Save; onDo
           className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/35 focus:border-matrix-300/60 focus:outline-none"
         />
       ))}
-      <button className="rounded-full bg-matrix-400/90 px-4 py-2 font-display text-sm font-bold text-black transition hover:bg-matrix-300 sm:col-span-3">
-        {doc ? 'Save changes' : 'Add lead'}
-      </button>
+      <div className="flex justify-center sm:col-span-3">
+        <LiquidMetalButton type="submit" width={170} label={doc ? 'Save changes' : 'Add lead'} />
+      </div>
     </form>
   );
 }

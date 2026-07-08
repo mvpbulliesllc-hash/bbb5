@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { LiquidMetalButton } from '../components/LiquidMetalButton';
 import { bare, useKind } from '../lib/store';
 import type { Dumpster, Rec } from '../lib/store';
 import { ExtraFields, btnDark, btnPrimary, inp, money, toNum } from '../lib/ui';
@@ -46,7 +47,7 @@ function DumpsterForm({ doc, save, onDone }: { doc?: Rec<Dumpster>; save: Save; 
       <input value={f.cost10} onChange={set('cost10')} placeholder="10-yarder cost ($)" className={inp} inputMode="decimal" />
       <input value={f.cost20} onChange={set('cost20')} placeholder="20-yarder cost ($)" className={inp} inputMode="decimal" />
       <input value={f.cost30} onChange={set('cost30')} placeholder="30-yarder cost ($)" className={inp} inputMode="decimal" />
-      <button className={`${btnPrimary} sm:col-span-3`}>{doc ? 'Save changes' : 'Add dumpster company'}</button>
+      <div className="flex justify-center sm:col-span-3"><LiquidMetalButton type="submit" width={230} label={doc ? 'Save changes' : 'Add dumpster company'} /></div>
     </form>
   );
 }
