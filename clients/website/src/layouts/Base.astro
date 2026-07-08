@@ -7,7 +7,7 @@ import { orgSchema } from '@/lib/schema';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import StickyCallBar from '@/components/StickyCallBar.astro';
-import VoiceWidget from '@/components/VoiceWidget.astro';
+import EliChat from '@/components/EliChat.astro';
 
 interface Props {
   title: string;
@@ -34,7 +34,8 @@ const allSchemas = [orgSchema(), ...schemas.filter(Boolean)];
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex,nofollow" />}
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
@@ -78,6 +79,6 @@ const allSchemas = [orgSchema(), ...schemas.filter(Boolean)];
     </main>
     <Footer />
     <StickyCallBar />
-    <VoiceWidget />
+    <EliChat />
   </body>
 </html>

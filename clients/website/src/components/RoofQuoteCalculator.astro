@@ -114,15 +114,31 @@ const { id = 'quote' } = Astro.props;
     var root = document.querySelector('[data-quote]');
     if (!root) return;
 
+    // Brand-consistent line icons (no emoji) — 24px stroke glyphs.
+    function ic(paths) {
+      return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + paths + '</svg>';
+    }
+    var ICONS = {
+      roof: ic('<path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 9.6V20h13V9.6"/><path d="M10 20v-6h4v6"/>'),
+      repair: ic('<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>'),
+      siding: ic('<rect x="3" y="5" width="18" height="14.5" rx="1"/><path d="M3 9.8h18M3 14.6h18"/>'),
+      windows: ic('<rect x="4.5" y="4" width="15" height="16" rx="1.5"/><path d="M12 4v16M4.5 12h15"/>'),
+      gutters: ic('<path d="M12 3.5s6 6.7 6 10.7a6 6 0 0 1-12 0c0-4 6-10.7 6-10.7Z"/>'),
+      decks: ic('<rect x="3" y="7" width="18" height="10" rx="1"/><path d="M8.5 7v10M14 7v10"/>'),
+      bolt: ic('<path d="M13 2.5 4 14h7l-1 7.5L19 10h-7l1-7.5Z"/>'),
+      calendar: ic('<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M16 3v4M8 3v4M3.5 11h17"/>'),
+      search: ic('<circle cx="11" cy="11" r="6.5"/><path d="m20.5 20.5-4.9-4.9"/>'),
+    };
+
     // ---- pricing model (tunable) ----------------------------------------
     var MODEL = {
       services: [
-        { id: 'roof-replacement', label: 'Roof Replacement', emoji: '🏠', flow: 'roof' },
-        { id: 'roof-repair', label: 'Roof Repair', emoji: '🔧', flow: 'repair' },
-        { id: 'siding', label: 'Siding', emoji: '🧱', flow: 'range', range: [9000, 26000], sizes: true },
-        { id: 'windows', label: 'Windows', emoji: '🪟', flow: 'range', range: [7000, 22000], sizes: true },
-        { id: 'gutters', label: 'Gutters', emoji: '🌧️', flow: 'range', range: [1400, 4800], sizes: false },
-        { id: 'decks', label: 'Decks', emoji: '🪵', flow: 'range', range: [12000, 45000], sizes: false },
+        { id: 'roof-replacement', label: 'Roof Replacement', icon: ICONS.roof, flow: 'roof' },
+        { id: 'roof-repair', label: 'Roof Repair', icon: ICONS.repair, flow: 'repair' },
+        { id: 'siding', label: 'Siding', icon: ICONS.siding, flow: 'range', range: [9000, 26000], sizes: true },
+        { id: 'windows', label: 'Windows', icon: ICONS.windows, flow: 'range', range: [7000, 22000], sizes: true },
+        { id: 'gutters', label: 'Gutters', icon: ICONS.gutters, flow: 'range', range: [1400, 4800], sizes: false },
+        { id: 'decks', label: 'Decks', icon: ICONS.decks, flow: 'range', range: [12000, 45000], sizes: false },
       ],
       // roof squares (100 sqft) by home size
       sizes: [
@@ -144,9 +160,9 @@ const { id = 'quote' } = Astro.props;
         { id: 'storm', label: 'Storm / large damage', sub: 'Often insurance-eligible — we handle the claim', lo: 4500, hi: 12000 },
       ],
       timeline: [
-        { id: 'asap', label: 'ASAP / storm damage', emoji: '⚡' },
-        { id: 'soon', label: 'Next 1–3 months', emoji: '📅' },
-        { id: 'explore', label: 'Just exploring', emoji: '👀' },
+        { id: 'asap', label: 'ASAP / storm damage', icon: ICONS.bolt },
+        { id: 'soon', label: 'Next 1–3 months', icon: ICONS.calendar },
+        { id: 'explore', label: 'Just exploring', icon: ICONS.search },
       ],
     };
 
@@ -177,7 +193,9 @@ const { id = 'quote' } = Astro.props;
       b.type = 'button';
       b.className = 'group flex w-full items-center gap-3 rounded-xl border-2 border-sand-200 bg-white p-4 text-left transition hover:border-gold-500 hover:bg-gold-50';
       b.innerHTML =
-        (opts.emoji ? '<span class="text-2xl">' + opts.emoji + '</span>' : '') +
+        (opts.icon
+          ? '<span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-sand-100 text-navy-800 transition group-hover:bg-gold-100 group-hover:text-gold-700">' + opts.icon + '</span>'
+          : '') +
         '<span><span class="block font-display font-bold text-navy-950">' + opts.label + '</span>' +
         (opts.sub ? '<span class="block text-xs text-navy-900/60">' + opts.sub + '</span>' : '') + '</span>';
       b.addEventListener('click', opts.onClick);
@@ -187,7 +205,7 @@ const { id = 'quote' } = Astro.props;
     function render(sel, items, onPick) {
       var box = root.querySelector('[data-choices="' + sel + '"]');
       box.innerHTML = '';
-      items.forEach(function (it) { box.appendChild(card({ emoji: it.emoji, label: it.label, sub: it.sub, onClick: function () { onPick(it); } })); });
+      items.forEach(function (it) { box.appendChild(card({ icon: it.icon, label: it.label, sub: it.sub, onClick: function () { onPick(it); } })); });
     }
 
     // step 1

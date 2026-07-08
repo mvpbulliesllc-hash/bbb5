@@ -59,6 +59,8 @@ export const integrations = {
   plausibleDomain: import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN ?? '',
   /** ElevenLabs Conversational AI agent id — enables the web voice widget. */
   elevenLabsAgentId: import.meta.env.PUBLIC_ELEVENLABS_AGENT_ID ?? '',
+  /** Eli assistant backend base URL (`/chat`, `/voice`, `/lead`) — optional; the widget's offline brain covers the gap. */
+  eliApi: import.meta.env.PUBLIC_ELI_API ?? '',
   /** Finbuckle tenant identifier the CRM capture endpoint requires. */
   tenant: import.meta.env.PUBLIC_TENANT ?? 'root',
   /** Calendly scheduling URL (optional "book an estimate" flow). */
