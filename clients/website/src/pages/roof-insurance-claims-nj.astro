@@ -1,0 +1,156 @@
+---
+import Base from '@/layouts/Base.astro';
+import TrustBar from '@/components/TrustBar.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import LeadForm from '@/components/LeadForm.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { faqSchema, breadcrumbSchema, serviceSchema } from '@/lib/schema';
+import { business } from '@/config/business';
+
+/**
+ * Flagship insurance-claims page (SEO brief §3/§6): owns the Tier-3
+ * insurance-claim query cluster with an answer-first block, extractable
+ * process steps, concrete numbers, and FAQPage schema.
+ */
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Roof Insurance Claims', url: '/roof-insurance-claims-nj/' },
+];
+
+const faqs = [
+  {
+    q: 'Will my homeowners insurance pay for a new roof in NJ?',
+    a: 'Yes — if the damage is sudden and caused by a covered peril like wind, hail, a nor’easter, or a fallen tree. Insurance does not pay for age or wear. The claim is decided by the evidence, which is why we document every roof with drone photos before your carrier’s adjuster ever climbs a ladder.',
+  },
+  {
+    q: 'Should I call a roofer or my insurance company first?',
+    a: 'Call a licensed local roofer first. A pre-claim inspection tells you whether the damage will clear your deductible and gives you photo evidence from day one. Filing a claim that gets denied still goes on your CLUE report — so know what you have before you file.',
+  },
+  {
+    q: 'Do you meet the insurance adjuster at my house?',
+    a: 'Yes. Paragon meets your carrier’s adjuster on site, walks the roof with them, and points out every wind crease, hail bruise and broken seal so nothing gets missed. Homeowners who meet adjusters alone routinely have covered damage written off as “wear.”',
+  },
+  {
+    q: 'How long do I have to file a storm damage roof claim in New Jersey?',
+    a: 'Report promptly — most NJ carriers expect notice within days of the storm, and many policies set a hard one-year window from the date of loss. Waiting makes it easier for the carrier to call the damage old wear instead of a covered event.',
+  },
+  {
+    q: 'What does a roof insurance claim cost me out of pocket?',
+    a: 'Your deductible — typically $1,000–$2,500 on NJ policies, or 1–2% of dwelling coverage on hurricane deductibles. Paragon’s inspection and adjuster meeting are free, and we never charge to look at a claim.',
+  },
+  {
+    q: 'Do you handle emergency tarping while the claim is open?',
+    a: `Yes — active leaks get tarped fast, and emergency mitigation is a covered expense on most policies (your policy actually requires you to prevent further damage). Call ${business.phone} any day, ${business.hours}.`,
+  },
+];
+
+const steps = [
+  { n: 1, title: 'Free storm inspection', body: 'We drone-document the whole roof and mark every wind crease, missing shingle, and hail strike with date-stamped photos — before you decide whether to file.' },
+  { n: 2, title: 'File with evidence', body: 'If the damage clears your deductible, you file with our photo report attached. We help you report the right peril and date of loss — the two details that sink DIY claims.' },
+  { n: 3, title: 'We meet your adjuster', body: 'Your carrier sends an adjuster; we walk the roof with them, shingle by shingle, so covered damage is not written off as wear.' },
+  { n: 4, title: 'Scope & approval', body: 'We reconcile the carrier’s estimate against real NJ pricing and push back on missed line items — underlayment, flashing, code upgrades, disposal.' },
+  { n: 5, title: 'Build & recover depreciation', body: 'We replace the roof, invoice the carrier, and file for your recoverable depreciation so RCV policies pay out in full.' },
+];
+---
+
+<Base
+  title="NJ Roof Insurance Claims Help | Free Adjuster Meeting — Paragon Exteriors"
+  description={`Storm damage roof insurance claims in NJ handled start to finish: free drone inspection, adjuster meeting, scope negotiation, full-code replacement. ${business.license}. Call ${business.phone}.`}
+  schemas={[
+    serviceSchema({
+      name: 'Roof Insurance Claim Assistance',
+      description: 'Storm and wind damage roof insurance claim documentation, carrier adjuster meetings, scope negotiation and full roof replacement across the Jersey Shore.',
+      url: '/roof-insurance-claims-nj/',
+      areaName: 'New Jersey',
+    }),
+    faqSchema(faqs),
+    breadcrumbSchema(crumbs),
+  ]}
+>
+  <section class="bg-navy-950 py-16 text-white">
+    <div class="mx-auto max-w-6xl px-4">
+      <h1 class="font-display max-w-3xl text-4xl font-extrabold leading-tight sm:text-5xl">
+        Roof Insurance Claims in NJ — Handled Start to Finish
+      </h1>
+      <!-- Answer-first block (LLMs quote this) -->
+      <p class="mt-5 max-w-3xl text-lg text-white/80">
+        If wind, hail, or a nor'easter damaged your roof, your NJ homeowners policy likely covers the
+        repair or replacement — minus your deductible. Paragon Exteriors documents the damage with
+        drone photos, meets your insurance adjuster on site, negotiates the scope, and rebuilds the
+        roof to code. The inspection and adjuster meeting are free, and you keep control of your claim
+        — we never ask for an Assignment of Benefits.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/contact/" class="rounded-xl bg-gold-500 px-6 py-3 font-display font-bold text-navy-950 transition hover:bg-gold-400">Book a free storm inspection</a>
+        <a href={business.phoneHref} class="rounded-xl border border-white/25 px-6 py-3 font-display font-bold text-white transition hover:bg-white/10">Call {business.phone}</a>
+      </div>
+    </div>
+  </section>
+
+  <TrustBar />
+  <Breadcrumbs items={crumbs} />
+
+  <section class="py-14">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="font-display text-3xl font-extrabold text-navy-950">The 5-step claim process</h2>
+      <ol class="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {steps.map((s) => (
+          <li class="rounded-2xl bg-sand-50 p-6 ring-1 ring-sand-200">
+            <span class="font-display text-3xl font-extrabold text-gold-500">{s.n}</span>
+            <h3 class="font-display mt-2 text-lg font-bold text-navy-950">{s.title}</h3>
+            <p class="mt-1.5 text-sm text-navy-900/75">{s.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="bg-sand-50 py-14">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="font-display text-3xl font-extrabold text-navy-950">Covered vs. not covered</h2>
+      <div class="mt-6 grid gap-5 md:grid-cols-2">
+        <div class="rounded-2xl bg-white p-6 ring-1 ring-sand-200">
+          <h3 class="font-display text-lg font-bold text-green-800">Usually covered</h3>
+          <ul class="mt-3 space-y-1.5 text-sm text-navy-900/80">
+            <li>• Wind damage — creased, torn or missing shingles</li>
+            <li>• Hail bruising and granule loss from a specific storm</li>
+            <li>• Fallen trees and wind-borne debris impact</li>
+            <li>• Interior water damage from a storm-created opening</li>
+            <li>• Emergency tarping and mitigation costs</li>
+          </ul>
+        </div>
+        <div class="rounded-2xl bg-white p-6 ring-1 ring-sand-200">
+          <h3 class="font-display text-lg font-bold text-red-700">Usually denied</h3>
+          <ul class="mt-3 space-y-1.5 text-sm text-navy-900/80">
+            <li>• Age, wear and tear, granule loss over time</li>
+            <li>• Neglected maintenance (clogged gutters, rotted flashing)</li>
+            <li>• Pre-existing leaks reported after a later storm</li>
+            <li>• Cosmetic-only damage on some policies (check yours)</li>
+            <li>• Flood-driven water intrusion (separate flood policy)</li>
+          </ul>
+        </div>
+      </div>
+      <p class="mt-6 max-w-3xl text-sm text-navy-900/70">
+        Deep dives: <a class="font-semibold text-gold-600 underline" href="/blog/roof-insurance-claim-nj/">the step-by-step NJ claim guide</a> ·
+        <a class="font-semibold text-gold-600 underline" href="/blog/roof-replacement-cost-nj/">real NJ roof replacement costs</a> ·
+        <a class="font-semibold text-gold-600 underline" href="/storm-damage/">our storm damage service</a>
+      </p>
+    </div>
+  </section>
+
+  <FaqAccordion faqs={faqs} heading="Insurance claim FAQs" />
+
+  <section class="bg-sand-50 py-14">
+    <div class="mx-auto max-w-4xl px-4">
+      <h2 class="font-display text-center text-3xl font-extrabold text-navy-950">Get your free storm inspection</h2>
+      <p class="mx-auto mt-2 max-w-2xl text-center text-navy-900/70">
+        Licensed and insured — {business.license}. Serving {business.areaServed}.
+      </p>
+      <div class="mt-8"><LeadForm service="Storm Damage" heading="Free storm inspection & claim review" /></div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
