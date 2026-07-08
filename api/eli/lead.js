@@ -56,6 +56,20 @@ module.exports = async (req, res) => {
     (extra.length ? `\n\nOther fields:\n${extra.join('\n')}` : '') +
     `\n\nReceived: ${new Date().toISOString()}`;
 
+  // Fan out to the back-office pipeline (Convex) — best-effort, never blocks the lead.
+  const ingestUrl = process.env.CONVEX_INGEST_URL;
+  if (ingestUrl) {
+    try {
+      await fetch(ingestUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-ingest-secret': process.env.CONVEX_INGEST_SECRET || '' },
+        body: JSON.stringify(lead),
+      });
+    } catch (err) {
+      console.error('convex ingest error', err);
+    }
+  }
+
   const inbox = process.env.AGENTMAIL_INBOX || DEFAULT_INBOX;
   try {
     const r = await fetch(`https://api.agentmail.to/v0/inboxes/${encodeURIComponent(inbox)}/messages/send`, {
