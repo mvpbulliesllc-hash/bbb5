@@ -18,14 +18,14 @@ export function BrandMark({ className }: { className?: string }) {
         aria-hidden
         className={cn(
           "brand-mark grid size-8 shrink-0 place-items-center rounded-lg",
-          "font-display text-[12px] font-bold text-[var(--color-primary-foreground)]",
+          "font-display text-[12px] font-bold",
         )}
       >
-        F
+        M
       </span>
       <div className="flex flex-col">
         <span className="whitespace-nowrap font-display text-[15px] font-bold leading-none tracking-tight text-[var(--color-foreground)]">
-          fullstack<span className="text-[var(--color-primary)]">hero</span>
+          MVP <span className="text-[var(--color-primary)]">Built Bullies</span>
         </span>
         <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-[oklch(from_var(--color-muted-foreground)_l_c_h_/_0.7)]">
           Admin
@@ -45,12 +45,12 @@ export function BrandMarkXL({ className }: { className?: string }) {
     <div className={cn("space-y-3", className)}>
       <div className="flex items-center gap-2.5">
         <img
-          src="/logo-fullstackhero.png"
-          alt="fullstackhero"
+          src="/mvp-logo.png"
+          alt="MVP Built Bullies"
           className="size-7 object-contain"
         />
         <span className="font-display text-[18px] font-semibold tracking-tight text-[var(--color-foreground)]">
-          fullstack<span className="text-[var(--color-primary)]">hero</span>
+          MVP <span className="text-[var(--color-primary)]">Built Bullies</span>
         </span>
         <span className="font-mono text-[10px] font-medium uppercase tracking-wider text-[var(--color-muted-foreground)]">
           · platform admin
