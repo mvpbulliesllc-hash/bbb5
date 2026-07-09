@@ -2,9 +2,10 @@ import { expect, test } from "@playwright/test";
 import { seedAuthedSession, TEST_USER } from "../helpers/auth-seed";
 import { installAdminShellMocks, ADMIN_PERMS } from "../helpers/shell-mocks";
 
-// AppearanceSettings is purely client-side: it calls ThemeProvider.setTheme,
-// which toggles the "dark" class on <html> and persists to the
-// "fsh.admin.theme" localStorage key. No API to mock beyond the shell.
+// The admin ships a single dark, liquid-glass theme (see theme-provider.tsx —
+// the light theme was retired with the WebGL backdrop). AppearanceSettings is
+// a statement of that, not a picker: it renders the one Dark card marked
+// Active, and <html> keeps the pinned "dark" class.
 
 test.beforeEach(async ({ page }) => {
   await seedAuthedSession(page, { ...TEST_USER, permissions: [...ADMIN_PERMS] });
@@ -12,50 +13,24 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe("settings · appearance", () => {
-  test("renders the Light and Dark theme options", async ({ page }) => {
+  test("renders the single Dark theme card marked active", async ({ page }) => {
     await page.goto("/settings/appearance");
 
     const main = page.getByRole("main");
     // "Theme" prose appears in the section description AND the settings nav
     // link ("Theme and visual preferences"); anchor to the SettingsSection <h2>.
     await expect(main.getByRole("heading", { name: "Theme" })).toBeVisible({ timeout: 10_000 });
-    // Each mode is an aria-pressed <button>. The accessible name is built from
-    // the label + blurb (+ "Active" when selected), so match the label as a
-    // substring rather than anchoring to the start.
-    await expect(main.getByRole("button", { name: /Light/ })).toBeVisible();
-    await expect(main.getByRole("button", { name: /Dark/ })).toBeVisible();
+    await expect(main.getByText("Dark", { exact: true })).toBeVisible();
+    await expect(main.getByText("Active", { exact: true })).toBeVisible();
+    // No light option exists anymore.
+    await expect(main.getByRole("button", { name: /Light/ })).toHaveCount(0);
   });
 
-  test("selecting Dark applies dark mode and Light reverts it", async ({ page }) => {
+  test("theme is pinned to dark", async ({ page }) => {
     await page.goto("/settings/appearance");
 
     const main = page.getByRole("main");
-    const dark = main.getByRole("button", { name: /Dark/ });
-    const light = main.getByRole("button", { name: /Light/ });
-    await expect(dark).toBeVisible({ timeout: 10_000 });
-
-    // Force a known starting point regardless of the system color-scheme,
-    // then assert each toggle drives the <html> class.
-    await dark.click();
+    await expect(main.getByRole("heading", { name: "Theme" })).toBeVisible({ timeout: 10_000 });
     await expect(page.locator("html")).toHaveClass(/dark/);
-    await expect(dark).toHaveAttribute("aria-pressed", "true");
-
-    await light.click();
-    await expect(page.locator("html")).not.toHaveClass(/dark/);
-    await expect(light).toHaveAttribute("aria-pressed", "true");
-  });
-
-  test("persists the selected theme to localStorage", async ({ page }) => {
-    await page.goto("/settings/appearance");
-
-    const main = page.getByRole("main");
-    const light = main.getByRole("button", { name: /Light/ });
-    await expect(light).toBeVisible({ timeout: 10_000 });
-
-    await light.click();
-    await expect(page.locator("html")).not.toHaveClass(/dark/);
-
-    const stored = await page.evaluate(() => localStorage.getItem("fsh.admin.theme"));
-    expect(stored).toBe("light");
   });
 });

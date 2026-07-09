@@ -3,10 +3,12 @@ import { seedAuthedSession, TEST_USER } from "../helpers/auth-seed";
 import { installAdminShellMocks, ADMIN_PERMS } from "../helpers/shell-mocks";
 
 // Drive the inactivity feature with tiny durations injected via /config.json:
-// idle 2s → a 3s warning countdown → auto sign-out. The guard mounts in the
-// authenticated AppShell, so any protected page exercises it.
+// idle 2s → an 8s warning countdown → auto sign-out. The guard mounts in the
+// authenticated AppShell, so any protected page exercises it. The countdown
+// needs real headroom: under CI load (WebGL backdrop + parallel workers) a
+// 3s window let the sign-out fire before the "I'm here" click landed.
 const IDLE_MS = 2_000;
-const WARNING_MS = 3_000;
+const WARNING_MS = 8_000;
 
 test.beforeEach(async ({ page }) => {
   await page.route("**/config.json", (route) =>

@@ -183,7 +183,9 @@ function StatTile({ icon: Icon, label, value, hint, accent }: StatTileData) {
       <div className="liquid-glass rounded-3xl p-5 transition-all duration-500 ease-out hover:brightness-125">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-[13px] text-[var(--color-muted-foreground)]">{label}</p>
+            <p data-slot="kpi-label" className="text-[13px] text-[var(--color-muted-foreground)]">
+              {label}
+            </p>
             <div className="mt-1.5 text-display text-[28px] font-semibold leading-none tracking-[-0.02em] text-[var(--color-foreground)]">
               {value === null ? <Skeleton className="h-7 w-16" /> : value}
             </div>
