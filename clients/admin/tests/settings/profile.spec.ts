@@ -76,6 +76,11 @@ test.describe("settings · profile", () => {
   test("uploads a new avatar and PUTs the durable URL to /identity/profile/image", async ({
     page,
   }) => {
+    // Four chained mock hops (upload-url → presigned PUT → finalize → GET)
+    // sit between the file pick and the asserted PUT — under CI load the
+    // default budget is too tight, so give this test the slow multiplier.
+    test.slow();
+
     await mockJsonResponse(page, "**/api/v1/identity/profile", PROFILE);
 
     // The avatar editor (ImageInput) now uses the presigned-upload protocol
@@ -133,7 +138,7 @@ test.describe("settings · profile", () => {
 
     const reqPromise = page.waitForRequest(
       (r) => r.url().includes("/api/v1/identity/profile/image") && r.method() === "PUT",
-      { timeout: 10_000 },
+      { timeout: 30_000 },
     );
 
     // The button creates a transient <input type=file> and clicks it, which
