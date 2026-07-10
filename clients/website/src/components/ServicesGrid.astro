@@ -24,7 +24,7 @@ const services = (await getCollection('services')).sort((a, b) => a.data.order -
   <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
     {
       services.map((s) => (
-        <a href={`/${s.id}/`} class="card-premium group overflow-hidden">
+        <a href={`/${s.id}/`} class="card-premium group overflow-hidden" data-spotlight>
           <div class="relative aspect-[4/3] overflow-hidden bg-navy-100">
             <Img
               src={s.data.image}

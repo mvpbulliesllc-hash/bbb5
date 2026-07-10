@@ -9,7 +9,6 @@ import Img from '@/components/Img.astro';
  * sunset clip below — rendered as the LCP image (eager + fetchpriority=high,
  * responsive AVIF/WebP).
  */
-const heroHeadline = 'The Jersey Shore’s New Standard in Roofing & Exteriors';
 ---
 
 <section class="relative isolate overflow-hidden bg-navy-950 text-white">
@@ -20,7 +19,7 @@ const heroHeadline = 'The Jersey Shore’s New Standard in Roofing & Exteriors';
       priority
       widths={[768, 1280, 1920, 2560]}
       sizes="100vw"
-      class="h-full w-full object-cover"
+      class="kenburns h-full w-full object-cover"
     />
     <div class="absolute inset-0 bg-gradient-to-r from-navy-950/95 via-navy-950/70 to-navy-950/30"></div>
     <div class="absolute inset-0 bg-gradient-to-b from-navy-950/40 via-transparent to-navy-950"></div>
@@ -48,7 +47,7 @@ const heroHeadline = 'The Jersey Shore’s New Standard in Roofing & Exteriors';
       Roofing · Siding · Windows · Doors · Decks
     </p>
     <h1 class="h-display mt-4 max-w-3xl text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">
-      {heroHeadline}
+      The Jersey Shore’s <span class="text-shimmer">New Standard</span> in Roofing &amp; Exteriors
     </h1>
     <p class="mt-6 max-w-2xl text-lg leading-relaxed text-white/85">
       {business.tagline} Family-run, {business.license} licensed &amp; insured, serving {business.areaServed} — with
@@ -62,11 +61,15 @@ const heroHeadline = 'The Jersey Shore’s New Standard in Roofing & Exteriors';
     </div>
     <dl class="glass-card mt-14 grid max-w-3xl grid-cols-3 divide-x divide-white/15">
       <div class="px-5 py-5 sm:px-7">
-        <dd class="font-display text-2xl font-extrabold text-gold-300 sm:text-3xl">30/30</dd>
-        <dt class="mt-1 text-xs uppercase tracking-wider text-white/60">Roofs in 30 days</dt>
+        <dd class="font-display text-2xl font-extrabold text-gold-300 [font-variant-numeric:tabular-nums] sm:text-3xl" data-countup="30">
+          30 roofs
+        </dd>
+        <dt class="mt-1 text-xs uppercase tracking-wider text-white/60">In 30 days — our record</dt>
       </div>
       <div class="px-5 py-5 sm:px-7">
-        <dd class="font-display text-2xl font-extrabold text-gold-300 sm:text-3xl">55+ yrs</dd>
+        <dd class="font-display text-2xl font-extrabold text-gold-300 [font-variant-numeric:tabular-nums] sm:text-3xl" data-countup="55">
+          55+ yrs
+        </dd>
         <dt class="mt-1 text-xs uppercase tracking-wider text-white/60">Combined experience</dt>
       </div>
       <div class="px-5 py-5 sm:px-7">

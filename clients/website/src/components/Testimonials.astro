@@ -29,7 +29,11 @@ const reviews = [
     <div class="mt-12 grid gap-6 lg:grid-cols-3" data-reveal-group>
       {
         reviews.map((r) => (
-          <figure class="relative flex flex-col justify-between rounded-2xl bg-gradient-to-b from-white/[0.09] to-white/[0.04] p-7 ring-1 ring-white/10 backdrop-blur-sm transition duration-300 hover:ring-white/20">
+          <figure
+            class="relative flex flex-col justify-between rounded-2xl bg-gradient-to-b from-white/[0.09] to-white/[0.04] p-7 ring-1 ring-white/10 backdrop-blur-sm transition duration-300 hover:ring-white/20"
+            data-spotlight
+            style="--spotlight-color: rgb(223 151 34 / 0.1)"
+          >
             <span class="pointer-events-none absolute -top-1 right-6 font-display text-[5rem] font-extrabold leading-none text-gold-400/15" aria-hidden="true">
               “
             </span>
