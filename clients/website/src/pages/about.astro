@@ -7,6 +7,11 @@ import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Img from '@/components/Img.astro';
 import { business } from '@/config/business';
 import { breadcrumbSchema } from '@/lib/schema';
+import { resolveMedia } from '@/lib/images';
+
+// Jarad's headshot ships separately; until it lands in src/assets/media the
+// card renders a designed monogram instead of a broken image.
+const jaradPhoto = resolveMedia('/media/team-jarad.jpg');
 
 const crumbs = [
   { name: 'Home', url: '/' },
@@ -97,14 +102,24 @@ const crumbs = [
       <div class="mt-10">
         <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-600">The technology behind the craft</p>
         <div class="mt-4 grid overflow-hidden rounded-3xl bg-white shadow-lift ring-1 ring-sand-200 lg:grid-cols-[minmax(0,38%)_1fr]">
-          <div class="relative min-h-[340px] bg-navy-950">
-            <Img
-              src="/media/team-jarad.jpg"
-              alt="Jarad Derochey, Chief Technology Officer of Paragon Exteriors"
-              widths={[440, 700, 900]}
-              sizes="(max-width: 1024px) 100vw, 38vw"
-              class="h-full w-full object-cover object-top"
-            />
+          <div class="section-dark relative min-h-[340px]">
+            {
+              jaradPhoto ? (
+                <Img
+                  src="/media/team-jarad.jpg"
+                  alt="Jarad Derochey, Chief Technology Officer of Paragon Exteriors"
+                  widths={[440, 700, 900]}
+                  sizes="(max-width: 1024px) 100vw, 38vw"
+                  class="absolute inset-0 h-full w-full object-cover object-top"
+                />
+              ) : (
+                <div class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+                  <span class="glass-card flex h-32 w-32 items-center justify-center font-display text-5xl font-extrabold text-gold-300">
+                    JD
+                  </span>
+                </div>
+              )
+            }
             <span class="absolute left-5 top-5 rounded-full bg-gold-500 px-3.5 py-1.5 font-display text-xs font-bold uppercase tracking-wide text-navy-950 shadow-lift">
               See it before we build it
             </span>
