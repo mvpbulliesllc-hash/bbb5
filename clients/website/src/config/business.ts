@@ -37,6 +37,11 @@ export const business = {
       bio: 'Nearly 40 years in construction, leading major builds from Florida high-rises to the Borgata in Atlantic City. A seasoned general contractor who has built everything from bridges to homes.',
     },
   ],
+  cto: {
+    name: 'Jarad Derochey',
+    role: 'Chief Technology Officer',
+    bio: 'A builder of AI-native systems with 20+ years scaling revenue operations — from founding and bootstrapping a consumer brand to $6M ARR to closing $500K commercial infrastructure projects end-to-end. At Paragon, Jarad puts that technology to work for homeowners: photorealistic AI visualizations that show you exactly how your new roof, siding, or deck will look on your home before a single shingle goes on — so you can tweak colors, materials, and details up front instead of wishing you had after the job is done.',
+  },
   social: {
     instagram: 'https://www.instagram.com/paragonexteriorsnj/',
     facebook: 'https://www.facebook.com/paragonexteriorsnj',
