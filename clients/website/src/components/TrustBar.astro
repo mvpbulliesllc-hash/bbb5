@@ -10,13 +10,21 @@ const items = [
 ];
 ---
 
-<section class="border-b border-sand-200 bg-sand-50" aria-label="Credentials">
-  <div class="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-4 px-4 py-6 sm:px-6 md:grid-cols-5">
+<section class="relative border-b border-sand-200 bg-sand-50" aria-label="Credentials">
+  <div class="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-gold-400 to-transparent" aria-hidden="true"></div>
+  <div class="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-5 px-4 py-7 sm:px-6 md:grid-cols-5 md:divide-x md:divide-sand-200">
     {
       items.map((item) => (
-        <div class="text-center">
-          <p class="font-display text-sm font-extrabold text-navy-900">{item.label}</p>
-          <p class="mt-0.5 text-xs text-navy-900/60">{item.sub}</p>
+        <div class="flex items-start justify-center gap-2.5 px-2 text-left">
+          <span class="mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-gold-100 text-gold-700" aria-hidden="true">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m4.5 12.5 5 5 10-11" />
+            </svg>
+          </span>
+          <span>
+            <p class="font-display text-sm font-extrabold text-navy-900">{item.label}</p>
+            <p class="mt-0.5 text-xs text-navy-900/60">{item.sub}</p>
+          </span>
         </div>
       ))
     }

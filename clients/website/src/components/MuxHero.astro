@@ -22,17 +22,35 @@ const heroHeadline = 'The Jersey Shore’s New Standard in Roofing & Exteriors';
       sizes="100vw"
       class="h-full w-full object-cover"
     />
-    <div class="absolute inset-0 bg-gradient-to-b from-navy-950/80 via-navy-950/60 to-navy-950/90"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-navy-950/95 via-navy-950/70 to-navy-950/30"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-navy-950/40 via-transparent to-navy-950"></div>
+    <div
+      class="absolute -right-40 -top-40 h-[36rem] w-[36rem] rounded-full bg-gold-500/10 blur-3xl"
+      aria-hidden="true"
+    >
+    </div>
   </div>
 
   <div class="mx-auto max-w-7xl px-4 pb-24 pt-20 sm:px-6 sm:pt-28 lg:pb-32">
-    <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-300">
+    <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 ring-1 ring-white/20 backdrop-blur-sm">
+      <span class="flex gap-0.5 text-gold-400" aria-hidden="true">
+        {
+          Array.from({ length: 5 }).map(() => (
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+              <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" />
+            </svg>
+          ))
+        }
+      </span>
+      <span class="text-sm font-semibold text-white/90">Trusted by homeowners across the Jersey Shore</span>
+    </div>
+    <p class="eyebrow mt-6 text-gold-300">
       Roofing · Siding · Windows · Doors · Decks
     </p>
     <h1 class="h-display mt-4 max-w-3xl text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">
       {heroHeadline}
     </h1>
-    <p class="mt-6 max-w-2xl text-lg text-white/85">
+    <p class="mt-6 max-w-2xl text-lg leading-relaxed text-white/85">
       {business.tagline} Family-run, {business.license} licensed &amp; insured, serving {business.areaServed} — with
       workmanship that speaks from every ridge line.
     </p>
@@ -42,18 +60,18 @@ const heroHeadline = 'The Jersey Shore’s New Standard in Roofing & Exteriors';
         Call {business.phone}
       </a>
     </div>
-    <dl class="mt-12 grid max-w-2xl grid-cols-3 gap-6 border-t border-white/15 pt-8">
-      <div>
-        <dt class="text-xs uppercase tracking-wider text-white/60">Recent pace</dt>
-        <dd class="font-display text-2xl font-extrabold text-gold-300">30 roofs / 30 days</dd>
+    <dl class="glass-card mt-14 grid max-w-3xl grid-cols-3 divide-x divide-white/15">
+      <div class="px-5 py-5 sm:px-7">
+        <dd class="font-display text-2xl font-extrabold text-gold-300 sm:text-3xl">30/30</dd>
+        <dt class="mt-1 text-xs uppercase tracking-wider text-white/60">Roofs in 30 days</dt>
       </div>
-      <div>
-        <dt class="text-xs uppercase tracking-wider text-white/60">Combined experience</dt>
-        <dd class="font-display text-2xl font-extrabold text-gold-300">55+ years</dd>
+      <div class="px-5 py-5 sm:px-7">
+        <dd class="font-display text-2xl font-extrabold text-gold-300 sm:text-3xl">55+ yrs</dd>
+        <dt class="mt-1 text-xs uppercase tracking-wider text-white/60">Combined experience</dt>
       </div>
-      <div>
-        <dt class="text-xs uppercase tracking-wider text-white/60">Estimates</dt>
-        <dd class="font-display text-2xl font-extrabold text-gold-300">Always free</dd>
+      <div class="px-5 py-5 sm:px-7">
+        <dd class="font-display text-2xl font-extrabold text-gold-300 sm:text-3xl">Free</dd>
+        <dt class="mt-1 text-xs uppercase tracking-wider text-white/60">Itemized estimates</dt>
       </div>
     </dl>
   </div>

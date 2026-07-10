@@ -22,27 +22,35 @@ const reviews = [
 ];
 ---
 
-<section class="bg-navy-950 py-16" aria-label="Customer reviews">
+<section class="section-dark py-20 lg:py-24" aria-label="Customer reviews">
   <div class="mx-auto max-w-7xl px-4 sm:px-6">
-    <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-300">Homeowners on Paragon</p>
+    <p class="eyebrow text-gold-300">Homeowners on Paragon</p>
     <h2 class="h-display mt-3 text-3xl text-white sm:text-4xl">Our neighbors say it best</h2>
-    <div class="mt-10 grid gap-6 lg:grid-cols-3">
+    <div class="mt-12 grid gap-6 lg:grid-cols-3" data-reveal-group>
       {
         reviews.map((r) => (
-          <figure class="flex flex-col justify-between rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
+          <figure class="relative flex flex-col justify-between rounded-2xl bg-gradient-to-b from-white/[0.09] to-white/[0.04] p-7 ring-1 ring-white/10 backdrop-blur-sm transition duration-300 hover:ring-white/20">
+            <span class="pointer-events-none absolute -top-1 right-6 font-display text-[5rem] font-extrabold leading-none text-gold-400/15" aria-hidden="true">
+              “
+            </span>
             <div>
               <div class="flex gap-1 text-gold-400" aria-label="5 out of 5 stars">
                 {Array.from({ length: 5 }).map(() => (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" />
                   </svg>
                 ))}
               </div>
               <blockquote class="mt-4 leading-relaxed text-white/85">“{r.quote}”</blockquote>
             </div>
-            <figcaption class="mt-5 border-t border-white/10 pt-4">
-              <p class="font-display font-bold text-white">{r.name}</p>
-              <p class="text-sm text-white/60">{r.detail}</p>
+            <figcaption class="mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
+              <span class="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-gold-400/15 font-display text-sm font-extrabold text-gold-300" aria-hidden="true">
+                {r.name.charAt(0)}
+              </span>
+              <span>
+                <p class="font-display font-bold text-white">{r.name}</p>
+                <p class="text-sm text-white/60">{r.detail}</p>
+              </span>
             </figcaption>
           </figure>
         ))

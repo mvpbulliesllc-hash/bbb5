@@ -1,0 +1,38 @@
+---
+import BeforeAfterSlider from '@/components/BeforeAfterSlider.astro';
+
+/**
+ * Homepage before/after band — drag-to-compare sliders on real projects.
+ * "Before" frames are AI-aged twins of the finished photos (same shot, same
+ * light), which is exactly the pitch: see the finished job before we build it.
+ */
+---
+
+<section class="bg-sand-50 py-20 lg:py-24" aria-label="Before and after transformations">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow text-gold-600">Drag to compare</p>
+        <h2 class="h-display mt-3 text-3xl text-navy-950 sm:text-4xl">See the transformation</h2>
+        <p class="mt-3 max-w-2xl text-navy-900/70">
+          Slide the handle and watch a tired roof become a Paragon roof. We show every customer their finished
+          project up front — so you tweak it before we build it, not after.
+        </p>
+      </div>
+    </div>
+    <div class="mt-10 grid gap-8 lg:grid-cols-2" data-reveal-group>
+      <BeforeAfterSlider
+        before="/media/projects/project-05-before.jpg"
+        after="/media/projects/project-05.jpg"
+        alt="Colonial home roof replacement in Toms River"
+        caption="Full tear-off & architectural shingle replacement — done in one day."
+      />
+      <BeforeAfterSlider
+        before="/media/projects/project-02-before.jpg"
+        after="/media/projects/project-02.jpg"
+        alt="Aerial view of completed shingle roof"
+        caption="Drone inspection view — new ridge caps, flashing, and ventilation."
+      />
+    </div>
+  </div>
+</section>

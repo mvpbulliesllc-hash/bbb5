@@ -49,6 +49,9 @@ const allSchemas = [orgSchema(), ...schemas.filter(Boolean)];
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageAbs} />
     <meta name="theme-color" content="#0b1a2b" />
+    <!-- Reveal animations are opt-in via the `js` class so content is never
+         hidden when JS fails or is disabled. Inline + early to avoid FOUC. -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
     {allSchemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
     {
       integrations.ga4Id && (
@@ -80,5 +83,31 @@ const allSchemas = [orgSchema(), ...schemas.filter(Boolean)];
     <Footer />
     <StickyCallBar />
     <EliChat />
+    <script>
+      // Scroll-reveal driver: reveals [data-reveal] elements and staggers the
+      // children of [data-reveal-group] containers as they enter the viewport.
+      const items = new Set<Element>();
+      document.querySelectorAll('[data-reveal]').forEach((el) => items.add(el));
+      document.querySelectorAll('[data-reveal-group]').forEach((group) => {
+        [...group.children].forEach((child, i) => {
+          (child as HTMLElement).style.setProperty('--reveal-delay', `${Math.min(i * 90, 450)}ms`);
+          items.add(child);
+        });
+      });
+      if (items.size) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-revealed');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+        );
+        items.forEach((el) => io.observe(el));
+      }
+    </script>
   </body>
 </html>

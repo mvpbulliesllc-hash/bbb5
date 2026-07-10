@@ -19,17 +19,20 @@ const steps = [
 ];
 ---
 
-<section class="bg-sand-50 py-16">
+<section class="bg-sand-50 py-20 lg:py-24">
   <div class="mx-auto max-w-7xl px-4 sm:px-6">
-    <p class="font-display text-sm font-bold uppercase tracking-[0.25em] text-gold-600">How it works</p>
+    <p class="eyebrow text-gold-600">How it works</p>
     <h2 class="h-display mt-3 text-3xl text-navy-950 sm:text-4xl">A process built on showing up</h2>
-    <ol class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <ol class="relative mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4" data-reveal-group>
+      <div class="absolute -top-3 left-[12%] right-[12%] hidden h-px bg-gradient-to-r from-transparent via-sand-200 to-transparent lg:block" aria-hidden="true"></div>
       {
         steps.map((step, i) => (
-          <li class="rounded-2xl bg-white p-6 ring-1 ring-sand-200">
-            <p class="font-display text-4xl font-extrabold text-gold-400">{String(i + 1).padStart(2, '0')}</p>
-            <h3 class="h-display mt-3 text-lg text-navy-950">{step.title}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-navy-900/75">{step.body}</p>
+          <li class="card-premium relative p-7 pt-8">
+            <span class="absolute -top-3 left-7 flex h-7 w-7 items-center justify-center rounded-full bg-navy-950 font-display text-xs font-extrabold text-gold-300 ring-4 ring-sand-50">
+              {i + 1}
+            </span>
+            <h3 class="h-display text-lg text-navy-950">{step.title}</h3>
+            <p class="mt-2.5 text-sm leading-relaxed text-navy-900/75">{step.body}</p>
           </li>
         ))
       }

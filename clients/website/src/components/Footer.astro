@@ -7,7 +7,8 @@ const towns = (await getCollection('towns')).sort((a, b) => a.data.town.localeCo
 const year = new Date().getFullYear();
 ---
 
-<footer class="bg-navy-950 text-white/80">
+<footer class="relative bg-navy-950 text-white/80">
+  <div class="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" aria-hidden="true"></div>
   <div class="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 lg:grid-cols-4">
     <div>
       <p class="font-display text-xl font-extrabold text-white">PARAGON EXTERIORS LLC</p>
