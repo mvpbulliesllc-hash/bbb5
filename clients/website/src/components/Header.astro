@@ -12,7 +12,20 @@ const nav = [
 ];
 ---
 
-<header class="sticky top-0 z-50 border-b border-white/10 bg-navy-950/95 text-white backdrop-blur">
+<header class="sticky top-0 z-50 border-b border-white/10 bg-navy-950/95 text-white shadow-[0_8px_32px_-16px_rgb(11_26_43/0.8)] backdrop-blur">
+  <div class="hidden border-b border-white/10 bg-navy-900/60 md:block">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5 text-xs text-white/60 sm:px-6">
+      <p class="flex items-center gap-4">
+        <span class="font-semibold tracking-wide text-white/75">{business.license}</span>
+        <span class="hidden lg:inline">Licensed &amp; fully insured</span>
+        <span class="hidden xl:inline">Serving {business.areaServed}</span>
+      </p>
+      <p class="flex items-center gap-4">
+        <span>{business.hours}</span>
+        <span class="text-gold-300/90">Free estimates · Same-day response</span>
+      </p>
+    </div>
+  </div>
   <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
     <a href="/" class="flex items-center gap-2.5" aria-label={`${business.name} home`}>
       <img src="/media/logo.png" alt="" width="48" height="48" class="h-12 w-12 object-contain" aria-hidden="true" />
@@ -22,11 +35,18 @@ const nav = [
       </span>
     </a>
 
-    <nav class="hidden items-center gap-6 lg:flex" aria-label="Main">
+    <nav class="hidden items-center gap-7 lg:flex" aria-label="Main">
       {
         nav.map((item) => (
-          <a href={item.href} class="font-display text-sm font-semibold text-white/85 transition hover:text-gold-300">
+          <a
+            href={item.href}
+            class="group relative py-1 font-display text-sm font-semibold text-white/85 transition hover:text-white"
+          >
             {item.label}
+            <span
+              class="absolute inset-x-0 -bottom-0.5 h-0.5 origin-left scale-x-0 rounded-full bg-gold-400 transition-transform duration-200 group-hover:scale-x-100"
+              aria-hidden="true"
+            />
           </a>
         ))
       }

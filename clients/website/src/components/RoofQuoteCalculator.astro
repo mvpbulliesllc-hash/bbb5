@@ -178,14 +178,16 @@ const { id = 'quote' } = Astro.props;
     var stepcount = root.querySelector('[data-stepcount]');
     var backBtn = root.querySelector('[data-back]');
 
-    function show(step) {
+    function show(step, opts) {
       current = step;
       order.forEach(function (k) { panels[k].hidden = k !== step; });
       var idx = order.indexOf(step);
       progress.style.width = ((idx) / (order.length - 1)) * 100 + '%';
       stepcount.textContent = step === 'result' ? 'Your estimate' : 'Step ' + (idx + 1) + ' of 4';
       backBtn.disabled = step === '1';
-      root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Keep the widget in view as the user steps through it — but never on
+      // the initial render, or the whole page scrolls here on load.
+      if (!(opts && opts.initial)) root.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function card(opts) {
@@ -343,6 +345,6 @@ const { id = 'quote' } = Astro.props;
       }
     });
 
-    show('1');
+    show('1', { initial: true });
   })();
 </script>

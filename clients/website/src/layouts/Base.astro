@@ -49,6 +49,9 @@ const allSchemas = [orgSchema(), ...schemas.filter(Boolean)];
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageAbs} />
     <meta name="theme-color" content="#0b1a2b" />
+    <!-- Reveal animations are opt-in via the `js` class so content is never
+         hidden when JS fails or is disabled. Inline + early to avoid FOUC. -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
     {allSchemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
     {
       integrations.ga4Id && (
@@ -80,5 +83,93 @@ const allSchemas = [orgSchema(), ...schemas.filter(Boolean)];
     <Footer />
     <StickyCallBar />
     <EliChat />
+    <script>
+      // Scroll-reveal driver: reveals [data-reveal] elements and staggers the
+      // children of [data-reveal-group] containers as they enter the viewport.
+      const items = new Set<Element>();
+      document.querySelectorAll('[data-reveal]').forEach((el) => items.add(el));
+      document.querySelectorAll('[data-reveal-group]').forEach((group) => {
+        [...group.children].forEach((child, i) => {
+          (child as HTMLElement).style.setProperty('--reveal-delay', `${Math.min(i * 90, 450)}ms`);
+          items.add(child);
+        });
+      });
+      if (items.size) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-revealed');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+        );
+        items.forEach((el) => io.observe(el));
+      }
+
+      const fineMotion =
+        matchMedia('(prefers-reduced-motion: no-preference)').matches && matchMedia('(pointer: fine)').matches;
+
+      // Spotlight cards: one delegated listener updates --sx/--sy on the
+      // hovered card; CSS paints the cursor-tracking glow.
+      if (fineMotion) {
+        document.addEventListener(
+          'pointermove',
+          (e) => {
+            const card = (e.target as Element).closest?.('[data-spotlight]') as HTMLElement | null;
+            if (!card) return;
+            const r = card.getBoundingClientRect();
+            card.style.setProperty('--sx', `${e.clientX - r.left}px`);
+            card.style.setProperty('--sy', `${e.clientY - r.top}px`);
+          },
+          { passive: true }
+        );
+
+        // Magnetic CTAs: primary buttons lean a few px toward the cursor.
+        document.querySelectorAll<HTMLElement>('.btn-gold').forEach((btn) => {
+          btn.addEventListener('pointermove', (e) => {
+            const r = btn.getBoundingClientRect();
+            const x = ((e.clientX - r.left) / r.width - 0.5) * 8;
+            const y = ((e.clientY - r.top) / r.height - 0.5) * 6;
+            btn.style.translate = `${x}px ${y}px`;
+          });
+          btn.addEventListener('pointerleave', () => {
+            btn.style.translate = '';
+          });
+        });
+      }
+
+      // Count-up tickers: [data-countup="55"] animates 0 → 55 when revealed,
+      // preserving any prefix/suffix text around the number.
+      const counters = document.querySelectorAll<HTMLElement>('[data-countup]');
+      if (counters.length) {
+        const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const cio = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              cio.unobserve(entry.target);
+              const el = entry.target as HTMLElement;
+              const target = Number(el.dataset.countup ?? '0');
+              const template = el.textContent ?? '';
+              if (reduced || !Number.isFinite(target)) continue;
+              const start = performance.now();
+              const dur = 1400;
+              const tick = (now: number) => {
+                const t = Math.min((now - start) / dur, 1);
+                const eased = 1 - Math.pow(1 - t, 4);
+                el.textContent = template.replace(/\d[\d,]*/, String(Math.round(target * eased)));
+                if (t < 1) requestAnimationFrame(tick);
+              };
+              requestAnimationFrame(tick);
+            }
+          },
+          { threshold: 0.6 }
+        );
+        counters.forEach((el) => cio.observe(el));
+      }
+    </script>
   </body>
 </html>
