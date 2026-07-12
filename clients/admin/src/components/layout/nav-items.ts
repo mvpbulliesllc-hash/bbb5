@@ -1,5 +1,6 @@
 import {
   Activity,
+  Briefcase,
   Building2,
   Filter,
   LayoutDashboard,
@@ -28,7 +29,24 @@ export type NavSpec = {
   icon: LucideIcon;
   /** One or more permissions the user must hold to see this item. */
   perms?: readonly string[];
+  /**
+   * When set, this item is an external link rendered as an `<a>` that opens in
+   * a new tab, instead of an in-app router route. `to` is still used as the
+   * React key. See the Back Office link below.
+   */
+  href?: string;
 };
+
+/**
+ * Deployed Paragon Back Office (CRM / pipeline) app. Surfaced from the admin
+ * sidebar as an external link that opens in a new tab.
+ *
+ * NOTE: this is currently a Vercel git-branch preview deployment URL and is
+ * ephemeral — swap it for the stable production URL (or wire it to a
+ * PUBLIC_ / VITE_ env var) once one is available.
+ */
+export const BACK_OFFICE_URL =
+  "https://ctimbuild-v1-git-claude-paragon-crm-eec01e-aisolutions-874950d2.vercel.app/";
 
 /** A collapsible section that groups related NavSpecs. */
 export type NavSection = {
@@ -45,6 +63,12 @@ export const topNavTop: NavSpec[] = [
 ];
 
 export const topNavBottom: NavSpec[] = [
+  {
+    to: "back-office",
+    label: "Back Office",
+    icon: Briefcase,
+    href: BACK_OFFICE_URL,
+  },
   { to: "/settings", label: "Settings", icon: Settings },
 ];
 
