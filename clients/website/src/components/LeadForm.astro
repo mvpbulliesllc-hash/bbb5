@@ -34,6 +34,7 @@ const services = [
     data-lead-form
     data-endpoint={integrations.leadsApi}
     data-tenant={integrations.tenant}
+    data-email={business.email}
     novalidate
   >
     <div>
@@ -169,7 +170,8 @@ const services = [
               .map(([k, v]) => `${k}: ${v}`)
               .join('\n')
           );
-          location.href = `mailto:Paragonexteriors.co@gmail.com?subject=${encodeURIComponent('Website estimate request')}&body=${body}`;
+          const to = form.dataset.email ?? '';
+          location.href = `mailto:${to}?subject=${encodeURIComponent('Website estimate request')}&body=${body}`;
         }
         window.gtag?.('event', 'generate_lead', { method: 'lead_form' });
         location.href = '/thank-you/';

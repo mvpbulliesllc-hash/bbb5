@@ -1,14 +1,25 @@
 ---
 import { business } from '@/config/business';
+
+/**
+ * PLACEHOLDERS — owner must fill before merge (see PR description):
+ *   FINANCING_MONTHLY_FROM — the "from $X/month" anchor, e.g. "89"
+ *   FINANCING_TERM         — the plan terms, e.g. "financing up to 12 months, 0% for qualified buyers"
+ * Rendered literally so the tokens are impossible to miss on the page.
+ */
+const FINANCING_MONTHLY_FROM = '{{FINANCING_MONTHLY_FROM}}';
+const FINANCING_TERM = '{{FINANCING_TERM}}';
 ---
 
 <section class="bg-gold-500">
   <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 py-10 sm:px-6 lg:flex-row">
     <div>
-      <h2 class="h-display text-2xl text-navy-950 sm:text-3xl">A new roof, on a monthly payment that fits.</h2>
+      <h2 class="h-display text-2xl text-navy-950 sm:text-3xl">
+        New roofs from ${FINANCING_MONTHLY_FROM}/month.
+      </h2>
       <p class="mt-2 max-w-xl text-navy-950/80">
-        We offer flexible financing so storm damage or an aging roof never has to wait on a lump sum. Ask about current
-        plans when you book your free estimate.
+        We offer flexible financing so storm damage or an aging roof never has to wait on a lump sum —
+        {FINANCING_TERM}.
       </p>
     </div>
     <div class="flex shrink-0 gap-4">

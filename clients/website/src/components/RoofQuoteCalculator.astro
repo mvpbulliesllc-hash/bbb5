@@ -33,6 +33,7 @@ const { id = 'quote' } = Astro.props;
       data-quote
       data-endpoint={integrations.leadsApi}
       data-tenant={integrations.tenant}
+      data-email={business.email}
       data-phone={business.phone}
       data-phone-href={business.phoneHref}
     >
@@ -334,7 +335,7 @@ const { id = 'quote' } = Astro.props;
           if (!res.ok) throw new Error('CRM ' + res.status);
         } else {
           var body = encodeURIComponent(Object.entries(payload).filter(function (kv) { return kv[1]; }).map(function (kv) { return kv[0] + ': ' + kv[1]; }).join('\n'));
-          location.href = 'mailto:Paragonexteriors.co@gmail.com?subject=' + encodeURIComponent('Instant quote request') + '&body=' + body;
+          location.href = 'mailto:' + (root.dataset.email || '') + '?subject=' + encodeURIComponent('Instant quote request') + '&body=' + body;
         }
         if (window.gtag) window.gtag('event', 'generate_lead', { method: 'quote_calculator' });
         location.href = '/thank-you/';
