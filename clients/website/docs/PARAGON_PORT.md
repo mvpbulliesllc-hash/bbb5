@@ -10,7 +10,8 @@
 |---|---|
 | Paragon Home Improvement section (hubs + town pages + schema) | ✅ Built on `claude/full-buildout` |
 | Portable module contract (this document) | ✅ Complete |
-| One Day → Paragon component import | ⛔ **Blocked** — the One Day repo (`mvpbulliesllc-hash/onedayhomeimprovements`) is not accessible to this session (not found / no access). The Paragon side is built to receive it; the actual import runs once the repo is added. |
+| One Day repo — parity (Brief #2) | ✅ Built — the One Day repo is **`mvpbulliesllc-hash/compute-the-platform-to-build-1l`** (a Next.js app), branch `claude/full-buildout`, PR #4. Real NAP, fabricated reviews removed, robots/sitemap/llms/JSON-LD added, leads wired to the CRM. |
+| One Day → Paragon component import | ▶ **Executable recipe below** — One Day's modules are now real and portable (`lib/business.ts` `serviceModules`). Import is a business-scope decision (see note) since One Day serves **North NJ** and Paragon serves **Ocean/Monmouth**. |
 
 ## What "portable" means here
 
@@ -55,26 +56,36 @@ One Day module becomes (a) a Paragon `services/*.md` hub and (b) optional `combo
 reusing Paragon's generic routing/schema. One Day's **AI photo-visualizer / Glow Up Studio** should
 port as a shared component embedded in the relevant hub bodies.
 
-| One Day module (expected) | → Paragon target | Action on import |
+One Day's real, portable module source is **`lib/business.ts` → `serviceModules`** (each has
+`slug, name, blurb, description, image, highlight`), consumed by `components/home/services.tsx` and
+`components/json-ld.tsx`. The lead contract is **`app/api/lead/route.ts`** (POST → CRM with a
+`tenant` header — identical to Paragon's `LeadForm`). The AI visualizer is
+**`components/home/glow-up-studio.tsx`** + **`app/api/glow-up/route.ts`**.
+
+| One Day module (real source) | → Paragon target | Action on import |
 |---|---|---|
-| Decks | `services/decks.md` (exists) | merge best copy; keep Paragon schema |
-| Windows | `services/windows.md` (exists) | merge |
-| Exterior paint | `services/exterior-paint.md` (built) | merge |
-| Interior (doors/trim) | `services/interior-doors.md` (built) | merge |
-| Kitchen | `services/kitchen-remodel.md` (built) | merge |
-| Bath | `services/bathroom-remodel.md` (built) | merge |
-| Flooring | `services/flooring.md` (built) | merge |
-| Glow Up Studio / AI visualizer | new shared component `src/components/Visualizer.astro` | embed in hub hero/CTA; wire to same lead flow |
+| `serviceModules['decks']` | `services/decks.md` (exists) | reconcile copy; keep Paragon frontmatter/schema |
+| `serviceModules['windows']` | `services/windows.md` (exists) | reconcile copy |
+| `serviceModules['doors']` | `services/doors.md` (exists) | reconcile copy |
+| `serviceModules['window-treatments']` | **new** `services/window-treatments.md` | only if Paragon offers it in Ocean/Monmouth — see note |
+| Glow Up Studio (`glow-up-studio.tsx` + `/api/glow-up`) | Paragon `Visualizer` component (Paragon already surfaces AI viz via the CTO bio + Eli widget) | port UX; reuse Paragon `LeadForm` + `business.ts` NAP |
+| `/api/lead` CRM contract | Paragon `LeadForm` → `PUBLIC_LEADS_API` | already identical (`tenant` header) — no change |
 
-### Import procedure (once One Day repo is accessible)
+### Import procedure
 
-1. Add the repo to the session and read its module components + content.
-2. For each One Day module, reconcile copy into the matching Paragon `services/*.md` (Paragon
-   frontmatter schema wins; take the stronger prose).
-3. Port the AI visualizer as `src/components/Visualizer.astro`, keeping One Day's UX but Paragon's
-   `LeadForm` → CRM webhook and `business.ts` NAP.
-4. Run `npm run build` in `clients/website`; validate JSON-LD in Rich Results Test.
-5. No routing or schema changes required — the generic `[service]` routes already serve new hubs.
+1. `serviceModules` in One Day is framework-agnostic data — copy the object into a Paragon
+   `services/*.md` frontmatter/body (Paragon's Zod schema wins; take the stronger prose).
+2. For the visualizer, port `glow-up-studio.tsx` UX into a Paragon Astro/React island, keeping
+   Paragon's `LeadForm` → CRM webhook and `business.ts` NAP.
+3. `npm run build` in `clients/website`; validate JSON-LD in Rich Results Test.
+4. No routing/schema changes — the generic `[service]` routes already serve new hubs.
+
+> **Business-scope note (owner decision):** One Day serves **North NJ** (Bergen/Essex/Morris/Passaic/
+> Union/Hudson); Paragon serves **Ocean/Monmouth**. Decks/windows/doors already exist on Paragon, so
+> the only *new* import is **window treatments** — do not add it to Paragon unless Paragon actually
+> offers it in its territory (adding it silently would misrepresent scope/area). The two sites
+> already cross-link as sister companies (One Day's footer → Paragon). Confirm before importing
+> window-treatments or the visualizer as public Paragon pages.
 
 ## Guardrails carried into any port
 

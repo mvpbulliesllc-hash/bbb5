@@ -4,14 +4,15 @@ Branch: `claude/full-buildout`. This is the placeholder/owner-action list for th
 (Paragon service expansion + priority-town pages + GEO/schema). **Nothing here blocks the build or
 deploy** — every item is a real-world value to confirm or an asset to drop in.
 
-## ⛔ Hard blocker (out of my control)
+## ✅ One Day repo — resolved
 
-- **One Day repo inaccessible.** `mvpbulliesllc-hash/onedayhomeimprovements` is not found / not
-  accessible to this session, and no accessible repo maps to it. Brief #2 (One Day parity: phone
-  fix, robots/sitemap/llms/schema, portable modules, CRM wiring) and the One-Day **source** side of
-  brief #3 (bolt-on) could not be built. The **Paragon side** is built and ready to receive it — see
-  `PARAGON_PORT.md`. **Owner action:** grant this session access to the One Day repo (or confirm its
-  exact name), then I complete brief #2 and the import.
+- The One Day site is **`mvpbulliesllc-hash/compute-the-platform-to-build-1l`** (a Next.js app), not
+  a repo named "onedayhomeimprovements". Brief #2 (One Day parity) is **built** on its
+  `claude/full-buildout` branch, **PR #4** — real NAP (848-633-6440 + HIC), fabricated reviews
+  removed, robots/sitemap/llms.txt/JSON-LD added, portable `serviceModules`, and leads wired to the
+  CRM. Vercel preview deploys green. The bolt-on recipe in `PARAGON_PORT.md` is now concrete and
+  executable; the only open item is the **business-scope decision** on whether to import One Day's
+  window-treatments / visualizer as public Paragon pages (different company + service area).
 
 ## Placeholders — confirm before publish
 
