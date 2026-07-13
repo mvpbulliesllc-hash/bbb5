@@ -15,11 +15,20 @@ deploy** — every item is a real-world value to confirm or an asset to drop in.
 
 ## Placeholders — confirm before publish
 
-1. **Service hero images** (build is green via graceful `<img>` fallback; these 404 until added to
-   `src/assets/media/`): `service-hvac.jpg`, `service-flooring.jpg`, `service-exterior-paint.jpg`,
-   `service-kitchen-remodel.jpg`, `service-bathroom-remodel.jpg`, `service-interior-doors.jpg`,
-   `service-full-home-renovation.jpg`. (Use the Fetch Website Assets action or drop real project
-   photos.)
+1. **Service hero images — GENERATED via Higgsfield, pending placement.** All 7 were generated
+   (1376×768, consistent brand style) and live in the Higgsfield account, but the **workspace egress
+   policy blocks the Higgsfield CDN host** (403 CONNECT policy denial), so this session could not
+   download them into the repo. Build stays green via the graceful `<img>` fallback; they 404 until
+   the files are dropped at these exact paths (convert PNG→JPG):
+   - `src/assets/media/service-hvac.jpg` ← `hf_20260713_045622_febf59a7-2419-4de5-861f-00a2553d8010.png`
+   - `src/assets/media/service-flooring.jpg` ← `hf_20260713_045640_9da65b44-7a51-461c-a286-987ed6cd26b9.png`
+   - `src/assets/media/service-exterior-paint.jpg` ← `hf_20260713_045642_3b39bae2-83c3-4bf4-aa5d-b47ce723b4dd.png`
+   - `src/assets/media/service-kitchen-remodel.jpg` ← `hf_20260713_045643_10d1883a-6223-4c5c-97fd-abcd807e9f1b.png`
+   - `src/assets/media/service-bathroom-remodel.jpg` ← `hf_20260713_045645_d2b2239b-2d42-4cce-8a96-ee8c138fd485.png`
+   - `src/assets/media/service-interior-doors.jpg` ← `hf_20260713_045646_75b87b20-d473-4d49-b924-5116041c228f.png`
+   - `src/assets/media/service-full-home-renovation.jpg` ← `hf_20260713_045648_24c464e4-bc78-4c06-977f-de9184c21544.png`
+   All hosted under `https://d8j0ntlcm91z4.cloudfront.net/user_3ED6xnZ2xEkMGGMYm4NpnnVJo2K/`. Drop
+   them in from a network-unrestricted environment, or hand me the files and I'll place them.
 2. **HVAC licensing.** NJ HVACR work generally requires a **separate state HVACR license** distinct
    from HIC #13VH13814500. The HVAC hub currently says "licensed HVAC installation" generically.
    **Confirm** the HVACR license number (or whether HVAC is performed by a licensed subcontractor)
