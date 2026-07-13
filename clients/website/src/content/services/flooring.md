@@ -1,7 +1,7 @@
 ---
 title: 'Flooring Installation'
 metaTitle: 'Flooring Installation NJ | LVP, Hardwood & Tile — Paragon Exteriors'
-metaDescription: 'Luxury vinyl plank, hardwood, and tile flooring installed across Ocean & Monmouth County NJ. Coastal-smart, moisture-aware installs, financing available. Free estimate: 848-633-6440.'
+metaDescription: 'Luxury vinyl plank, hardwood & tile flooring installed across Ocean & Monmouth County NJ. Moisture-aware, coastal-smart installs. Free estimate: 848-633-6440.'
 heroTagline: 'Luxury vinyl plank, hardwood, and tile installed level, tight, and built for shore-home moisture — floor by floor or whole home.'
 serviceName: 'Flooring Installation'
 image: '/media/service-flooring.jpg'

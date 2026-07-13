@@ -1,7 +1,7 @@
 ---
 title: 'Kitchen Remodeling'
 metaTitle: 'Kitchen Remodeling NJ | Full Kitchen Renovation — Paragon Exteriors'
-metaDescription: 'Full kitchen remodels across Ocean & Monmouth County NJ: cabinets, counters, layout, lighting, and licensed trades under one GC. Financing available. Free estimate: 848-633-6440.'
+metaDescription: 'Full kitchen remodels across Ocean & Monmouth County NJ: cabinets, counters, layout & licensed trades under one GC. Free estimate: 848-633-6440.'
 heroTagline: 'Cabinets, counters, layout, lighting, and every licensed trade under one general contractor — managed start to finish.'
 serviceName: 'Kitchen Remodeling'
 image: '/media/service-kitchen-remodel.jpg'

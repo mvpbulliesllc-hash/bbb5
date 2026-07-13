@@ -1,7 +1,7 @@
 ---
 title: 'Full Home Renovation'
 metaTitle: 'Full Home Renovation NJ | Whole-House Remodel — Paragon Exteriors'
-metaDescription: 'Whole-house renovations across Ocean & Monmouth County NJ: one general contractor for exterior and interior, permits and trades managed. Financing available. Free estimate: 848-633-6440.'
+metaDescription: 'Whole-house renovations across Ocean & Monmouth County NJ: one general contractor for exterior & interior, permits & trades managed. Free estimate: 848-633-6440.'
 heroTagline: 'One general contractor for the whole house — exterior and interior, permits and trades managed start to finish.'
 serviceName: 'Full Home Renovation'
 image: '/media/service-full-home-renovation.jpg'

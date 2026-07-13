@@ -1,7 +1,7 @@
 ---
 title: 'Bathroom Remodeling'
 metaTitle: 'Bathroom Remodeling NJ | Full Bath Renovation — Paragon Exteriors'
-metaDescription: 'Full bathroom remodels across Ocean & Monmouth County NJ: waterproofing done right, tile, vanities, and licensed trades under one GC. Financing available. Free estimate: 848-633-6440.'
+metaDescription: 'Full bathroom remodels across Ocean & Monmouth County NJ: waterproofing done right, tile, vanities & licensed trades. Free estimate: 848-633-6440.'
 heroTagline: 'Waterproofing done right the first time, then tile, vanities, and fixtures that last — managed by one contractor.'
 serviceName: 'Bathroom Remodeling'
 image: '/media/service-bathroom-remodel.jpg'
