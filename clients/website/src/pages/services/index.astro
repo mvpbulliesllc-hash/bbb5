@@ -8,20 +8,21 @@ import { breadcrumbSchema } from '@/lib/schema';
 ---
 
 <Base
-  title="Roofing, Siding, Windows, Doors & Decks in NJ | Paragon Exteriors Services"
-  description="Full-service exterior contractor for Ocean & Monmouth County NJ: roof replacement, roof repair, siding, windows, doors, decks, gutters and commercial roofing. Free estimates."
+  title="Home Improvement & Exterior Services in NJ | Paragon Exteriors"
+  description="Full-scope contractor for Ocean & Monmouth County NJ: roofing, siding, windows, doors, decks, gutters, plus HVAC, flooring, painting, kitchen & bath remodels and full home renovation. Free estimates."
   schemas={[breadcrumbSchema([{ name: 'Home', url: '/' }, { name: 'Services', url: '/services/' }])]}
 >
   <section class="bg-navy-950 py-16 text-white">
     <div class="mx-auto max-w-7xl px-4 sm:px-6">
-      <h1 class="h-display text-4xl sm:text-5xl">One trusted crew for your whole exterior</h1>
+      <h1 class="h-display text-4xl sm:text-5xl">One trusted contractor for your whole home</h1>
       <p class="mt-4 max-w-2xl text-lg text-white/80">
-        Residential and commercial. Repair or full replacement. If it protects your home from the weather, we build it —
-        and we build it right.
+        Exterior and interior, residential and commercial, repair or full renovation. Roofing and siding to kitchens,
+        baths, and whole-house builds — one licensed crew, one point of accountability. If it makes your home better,
+        we build it, and we build it right.
       </p>
     </div>
   </section>
-  <ServicesGrid heading="Explore our services" />
+  <ServicesGrid heading="Explore our services" limit={99} />
   <ProcessSteps />
   <FinancingBand />
   <CtaBand />

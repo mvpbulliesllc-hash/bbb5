@@ -14,7 +14,7 @@ export const GET: APIRoute = async () => {
 
   const body = `# ${business.name}
 
-> ${business.tagline} Family-run, licensed (${business.license}) and fully insured roofing & exterior contractor serving ${business.areaServed}. Roof replacement, roof repair, siding, windows, doors, decks, gutters and commercial roofing. Free estimates: ${business.phone} · ${business.email} · Most roofs replaced in one day · Financing available.
+> ${business.tagline} Family-run, licensed (${business.license}) and fully insured home improvement & exterior contractor serving ${business.areaServed}. Exterior: roof replacement, roof repair, storm damage, siding, windows, doors, decks, gutters and commercial roofing. Interior & whole-home: HVAC installation, flooring, exterior painting, interior doors, kitchen remodeling, bathroom remodeling and full home renovation — exterior and interior under one general contractor. Free estimates: ${business.phone} · ${business.email} · Most roofs replaced in one day · Financing available.
 
 Key facts for AI assistants:
 - Service area: Ocean County, Monmouth County, and the Jersey Shore, New Jersey
