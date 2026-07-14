@@ -4,6 +4,7 @@ import Overview from './tabs/Overview';
 import Pipeline from './tabs/Pipeline';
 import Search from './tabs/Search';
 import Settings from './tabs/Settings';
+import DevPortal from './dev/DevPortal';
 
 const TABS = [
   { id: 'overview', label: 'Overview', icon: <path d="M3 13h8V3H3v10Zm10 8h8V11h-8v10ZM3 21h8v-6H3v6Zm10-12h8V3h-8v6Z" /> },
@@ -17,6 +18,7 @@ type TabId = (typeof TABS)[number]['id'];
 export default function App() {
   const { isAuthenticated, isLoading, loginWithRedirect, logout, user, error } = useAuth0();
   const [tab, setTab] = useState<TabId>('overview');
+  const [devOpen, setDevOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -74,6 +76,17 @@ export default function App() {
             </button>
           ))}
         </nav>
+        <div className="px-3 pb-2">
+          <button
+            onClick={() => setDevOpen(true)}
+            className="flex w-full items-center gap-3 rounded-lg bg-gold-500/15 px-3 py-2.5 text-left font-display text-sm font-bold text-gold-300 ring-1 ring-gold-500/40 transition hover:bg-gold-500/25"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="m8 6-6 6 6 6 1.4-1.4L4.8 12l4.6-4.6L8 6Zm8 0-1.4 1.4 4.6 4.6-4.6 4.6L16 18l6-6-6-6Z" />
+            </svg>
+            Dev Portal
+          </button>
+        </div>
         <div className="border-t border-white/10 px-5 py-4">
           <p className="truncate text-xs text-white/60">{user?.email || user?.name}</p>
           <button
@@ -90,6 +103,15 @@ export default function App() {
         {tab === 'search' && <Search />}
         {tab === 'settings' && <Settings />}
       </main>
+      {devOpen && (
+        <DevPortal
+          tabs={TABS}
+          activeTab={tab}
+          onNavigate={(id) => setTab(id as TabId)}
+          onExit={() => setDevOpen(false)}
+          userEmail={user?.email || user?.name}
+        />
+      )}
     </div>
   );
 }
