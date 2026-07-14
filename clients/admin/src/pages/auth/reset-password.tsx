@@ -120,23 +120,23 @@ export function ResetPasswordPage() {
         <div className="mb-8 flex flex-col items-center">
           <div className="flex items-center gap-2.5">
             <img
-              src="/logo-fullstackhero.png"
-              alt="fullstackhero"
+              src="/mvp-logo.png"
+              alt="MVP Built Bullies"
               className="size-9 object-contain"
             />
             <span className="font-display text-[26px] font-semibold tracking-tight text-[var(--color-foreground)]">
-              fullstack<span className="text-[var(--color-primary)]">hero</span>
+              MVP <span className="text-[var(--color-primary)]">Built Bullies</span>
             </span>
           </div>
           <div className="mt-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[oklch(from_var(--color-muted-foreground)_l_c_h_/_0.7)]">
             <span aria-hidden className="h-px w-6 bg-[var(--color-border)]" />
-            <span>.NET 10 Starter Kit</span>
+            <span>Platform Admin</span>
             <span aria-hidden className="h-px w-6 bg-[var(--color-border)]" />
           </div>
         </div>
 
         {/* Form card */}
-        <div className="rounded-xl border border-[var(--color-border)] bg-[oklch(from_var(--color-card)_l_c_h_/_0.85)] shadow-[0_1px_3px_oklch(0_0_0_/_0.04),0_8px_24px_oklch(0_0_0_/_0.06)] backdrop-blur-xl">
+        <div className="rounded-xl liquid-glass">
           <div className="px-6 py-7 sm:px-8 sm:py-9">
             {malformed ? (
               <div className="space-y-4">

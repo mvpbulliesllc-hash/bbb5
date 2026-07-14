@@ -19,7 +19,10 @@ export function KpiTile({ label, value, subtitle, className }: KpiTileProps) {
   return (
     <Card className={cn("card-shell-interactive", className)}>
       <CardContent className="px-5 pb-5 pt-5">
-        <div className="font-mono text-[10.5px] font-medium uppercase tracking-[0.18em] text-[var(--color-muted-foreground)]">
+        <div
+          data-slot="kpi-label"
+          className="font-mono text-[10.5px] font-medium uppercase tracking-[0.18em] text-[var(--color-muted-foreground)]"
+        >
           {label}
         </div>
         <div className="text-display mt-3 text-3xl font-semibold leading-none tabular-nums">

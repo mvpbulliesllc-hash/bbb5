@@ -17,13 +17,13 @@ const TOKEN_RESPONSE = {
 };
 
 test.describe("admin login", () => {
-  test("renders the FSH brand lockup + the welcome form", async ({ page }) => {
+  test("renders the MVP brand lockup + the welcome form", async ({ page }) => {
     await page.goto("/login");
 
-    // Brand lockup: logo image, the fullstackhero wordmark, and the
+    // Brand lockup: logo image, the MVP Built Bullies wordmark, and the
     // "Platform Admin" divider label that marks this as the operator app.
-    await expect(page.getByRole("img", { name: /fullstackhero/i }).first()).toBeVisible();
-    await expect(page.getByText("fullstackhero").first()).toBeVisible();
+    await expect(page.getByRole("img", { name: /MVP Built Bullies/i }).first()).toBeVisible();
+    await expect(page.getByText("Built Bullies").first()).toBeVisible();
     await expect(page.getByText("Platform Admin").first()).toBeVisible();
 
     // Card heading.

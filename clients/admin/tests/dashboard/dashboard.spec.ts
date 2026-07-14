@@ -114,11 +114,11 @@ test.describe("admin dashboard", () => {
     // also appear in the sidebar nav, so an unscoped getByText collides.
     const main = page.getByRole("main");
 
-    // KPI tile labels render as the Stat component's mono-caps ".meta" crumb.
-    // "Tenants"/"Plans" also appear as pivot-card titles, so target the label
-    // element by its class rather than a bare text match.
+    // KPI tile labels render as KpiTile's mono-caps crumb, tagged with
+    // data-slot="kpi-label". "Tenants"/"Plans" also appear as pivot-card
+    // titles, so target the slot rather than a bare text match.
     const kpiLabel = (text: string) =>
-      main.locator("div.meta", { hasText: text });
+      main.locator('[data-slot="kpi-label"]', { hasText: text });
     await expect(kpiLabel("Tenants")).toBeVisible({ timeout: 10_000 });
     await expect(kpiLabel("Plans")).toBeVisible();
     await expect(kpiLabel("Invoices")).toBeVisible();

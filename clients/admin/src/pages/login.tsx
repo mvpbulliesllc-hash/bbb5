@@ -117,12 +117,12 @@ export function LoginPage() {
           <div className="mb-8 flex flex-col items-center">
             <div className="flex items-center gap-2.5">
               <img
-                src="/logo-fullstackhero.png"
-                alt="fullstackhero"
+                src="/mvp-logo.png"
+                alt="MVP Built Bullies"
                 className="size-9 object-contain"
               />
               <span className="font-display text-[26px] font-semibold tracking-tight text-[var(--color-foreground)]">
-                fullstack<span className="text-[var(--color-primary)]">hero</span>
+                MVP <span className="text-[var(--color-primary)]">Built Bullies</span>
               </span>
             </div>
             <div className="mt-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[oklch(from_var(--color-muted-foreground)_l_c_h_/_0.7)]">
@@ -133,7 +133,7 @@ export function LoginPage() {
           </div>
 
           {/* Form card */}
-          <div className="rounded-xl border border-[var(--color-border)] bg-[oklch(from_var(--color-card)_l_c_h_/_0.85)] shadow-[0_1px_3px_oklch(0_0_0_/_0.04),0_8px_24px_oklch(0_0_0_/_0.06)] backdrop-blur-xl">
+          <div className="rounded-xl liquid-glass">
             <div className="px-6 py-7 sm:px-8 sm:py-9">
               <div className="mb-6 sm:mb-8">
                 <h1 className="mb-1.5 font-display text-[22px] font-semibold tracking-tight text-[var(--color-foreground)]">
@@ -298,7 +298,7 @@ export function LoginPage() {
             <span>Encrypted in transit · JWT-secured session</span>
           </div>
           <p className="mt-4 text-center text-[10px] font-medium uppercase tracking-wider text-[oklch(from_var(--color-muted-foreground)_l_c_h_/_0.5)]">
-            fullstackhero Administration
+            MVP Built Bullies Administration
           </p>
         </div>
       </div>

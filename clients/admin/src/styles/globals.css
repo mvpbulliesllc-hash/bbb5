@@ -38,21 +38,22 @@
   --neutral-950:  oklch(0.110 0  0);
   --neutral-1000: oklch(0.075 0  0);
 
-  /* Brand — confident rose (#f91942 at the 600 stop). 600 is the
-     workhorse; 500 is for dark mode. Override these eleven stops via
-     an `accent-{id}` class on :root (defined further down) to swap the
+  /* Brand — MVP Built Bullies gold (#FFC700 at the 500 stop), matching
+     the marketing frontend's --primary. 500 is the workhorse since the
+     admin is dark-pinned. Override these eleven stops via an
+     `accent-{id}` class on :root (defined further down) to swap the
      entire brand palette. */
-  --brand-50:   oklch(0.972 0.022  13);
-  --brand-100:  oklch(0.945 0.045  13);
-  --brand-200:  oklch(0.895 0.090  13);
-  --brand-300:  oklch(0.825 0.145  13);
-  --brand-400:  oklch(0.720 0.195  13);
-  --brand-500:  oklch(0.640 0.225  13);
-  --brand-600:  oklch(0.575 0.232  13);
-  --brand-700:  oklch(0.495 0.215  13);
-  --brand-800:  oklch(0.410 0.180  13);
-  --brand-900:  oklch(0.330 0.140  13);
-  --brand-950:  oklch(0.235 0.095  13);
+  --brand-50:   oklch(0.980 0.030  95);
+  --brand-100:  oklch(0.955 0.060  95);
+  --brand-200:  oklch(0.920 0.100  94);
+  --brand-300:  oklch(0.900 0.130  92);
+  --brand-400:  oklch(0.880 0.155  91);
+  --brand-500:  oklch(0.860 0.171  90);
+  --brand-600:  oklch(0.760 0.160  85);
+  --brand-700:  oklch(0.640 0.135  80);
+  --brand-800:  oklch(0.520 0.110  78);
+  --brand-900:  oklch(0.410 0.085  76);
+  --brand-950:  oklch(0.300 0.060  74);
 
   /* Saffron — secondary warm accent. Used sparingly for the second
      channel of warmth against rose (gradient endpoints, hero numerals,
@@ -83,8 +84,10 @@
 
   --primary:                    var(--brand-600);
   /* Derive from the active brand stop so accent swaps re-tone these
-     too. The `from <color>` relative-color syntax resolves at runtime. */
-  --primary-foreground:         oklch(from var(--brand-600) 0.990 0.005 h);
+     too. The `from <color>` relative-color syntax resolves at runtime.
+     Gold is a light accent, so filled-primary text is near-black (the
+     frontend renders dark text on its #FFC700 CTAs). */
+  --primary-foreground:         oklch(from var(--brand-600) 0.170 0.040 h);
   --primary-hover:              var(--brand-700);
   --primary-soft:               oklch(from var(--brand-600) l c h / 0.10);
 
@@ -152,12 +155,13 @@
   --chart-grid: oklch(0.895 0  0 / 0.6);
 
   /* ── 4. SYSTEM ─────────────────────────────────────────────────────── */
-  /* Display = Outfit (rounded geometric, headings + hero numerals).
-     Body = Figtree (warm open sans-serif, everything else).
-     Mono = JetBrains Mono (terminal/console flourishes, tabular data). */
-  --font-display: "Outfit", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-sans: "Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  /* Typography mirrors the marketing frontend:
+     Display = Sentient (extralight serif, the hero's "Built Bullies" face).
+     Body = Arial/Helvetica (the frontend's body stack).
+     Mono = Geist Mono (nav, labels, tabular data — the frontend's UI face). */
+  --font-display: "Sentient", Georgia, "Times New Roman", serif;
+  --font-sans: Arial, Helvetica, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   /* Body uses tabular numerals so times, tokens, and costs don't jitter
      between digits. Display reads with default proportional numerals
      except where overridden (.text-display, mono numerics in lists). */
@@ -209,12 +213,25 @@
    different hue, keeping the L/C ramp identical. Apply by toggling a
    single class on :root (e.g. `accent-violet`).
    Hue chosen per accent:
-     rose (default) → 13 · indigo → 268 · violet → 305 · sky → 232
-     emerald → 152 · amber → 76
-   Rose is the default in :root above so no `.accent-rose` is needed
-   unless an upstream selection persists. Indigo is an opt-in for
-   teams that prefer the cool Linear chassis.
+     gold (default) → 90 · rose → 13 · indigo → 268 · violet → 305
+     sky → 232 · emerald → 152 · amber → 76
+   Gold (the MVP Built Bullies brand) is the default in :root above so
+   no `.accent-gold` is strictly needed unless an upstream selection
+   persists. The others remain as opt-ins.
    ─────────────────────────────────────────────────────────────────────── */
+.accent-gold {
+  --brand-50:   oklch(0.980 0.030  95);
+  --brand-100:  oklch(0.955 0.060  95);
+  --brand-200:  oklch(0.920 0.100  94);
+  --brand-300:  oklch(0.900 0.130  92);
+  --brand-400:  oklch(0.880 0.155  91);
+  --brand-500:  oklch(0.860 0.171  90);
+  --brand-600:  oklch(0.760 0.160  85);
+  --brand-700:  oklch(0.640 0.135  80);
+  --brand-800:  oklch(0.520 0.110  78);
+  --brand-900:  oklch(0.410 0.085  76);
+  --brand-950:  oklch(0.300 0.060  74);
+}
 .accent-rose {
   --brand-50:   oklch(0.972 0.022  13);
   --brand-100:  oklch(0.945 0.045  13);
@@ -297,10 +314,10 @@
    DARK MODE — values flip; semantic names stay.
    ─────────────────────────────────────────────────────────────────────── */
 .dark {
-  /* Deep graphite, untinted. Earlier value carried a warm undertone
-     (h≈66) that read as a yellow cast across every dark surface;
-     neutralised so the chosen accent is the only hue on screen. */
-  --background:                 var(--neutral-1000);
+  /* Pure black chassis, matching the marketing frontend's #000000
+     canvas so the two surfaces read as one product. Cards and
+     elevated surfaces step up through the untinted neutral scale. */
+  --background:                 oklch(0 0 0);
   --foreground:                 oklch(0.925 0  0);
 
   --card:                       var(--neutral-900);
@@ -309,7 +326,9 @@
   --popover-foreground:         oklch(0.925 0  0);
 
   --primary:                    var(--brand-500);
-  --primary-foreground:         oklch(from var(--brand-500) 0.990 0.005 h);
+  /* Gold is light (L=0.86): filled-primary text goes near-black, the
+     same treatment the frontend gives its #FFC700 CTAs. */
+  --primary-foreground:         oklch(from var(--brand-500) 0.170 0.040 h);
   --primary-hover:              var(--brand-400);
   --primary-soft:               oklch(from var(--brand-500) l c h / 0.18);
 
@@ -1398,19 +1417,21 @@
         treatment, so every page inherits the aesthetic for free.
    ═══════════════════════════════════════════════════════════════════════════ */
 :root {
-  /* Deep teal-black base painted behind the particle canvas. */
-  --gl-base: oklch(0.13 0.018 195);
+  /* Pure black base painted behind the particle canvas — the marketing
+     frontend's #000000 canvas. */
+  --gl-base: oklch(0 0 0);
 
-  /* Emerald signal accent — the single hue on screen. */
-  --brand-500:          oklch(0.78 0.15 162);
-  --brand-400:          oklch(0.84 0.14 162);
-  --primary:            oklch(0.78 0.15 162);
-  --primary-hover:      oklch(0.85 0.14 162);
-  --primary-foreground: oklch(0.17 0.03 160);
-  --primary-soft:       oklch(0.78 0.15 162 / 0.16);
-  --ring:               oklch(0.80 0.14 162);
-  --accent-signal:      oklch(0.78 0.15 162);
-  --accent-signal-soft: oklch(0.78 0.15 162 / 0.16);
+  /* Gold signal accent (#FFC700, the MVP Built Bullies brand) — the
+     single hue on screen. */
+  --brand-500:          oklch(0.860 0.171 90);
+  --brand-400:          oklch(0.880 0.155 91);
+  --primary:            oklch(0.860 0.171 90);
+  --primary-hover:      oklch(0.895 0.145 92);
+  --primary-foreground: oklch(0.170 0.030 85);
+  --primary-soft:       oklch(0.860 0.171 90 / 0.16);
+  --ring:               oklch(0.870 0.160 90);
+  --accent-signal:      oklch(0.860 0.171 90);
+  --accent-signal-soft: oklch(0.860 0.171 90 / 0.16);
 
   /* Opaque near-black body base; the fixed canvas paints over it. */
   --background:        var(--gl-base);
@@ -1419,9 +1440,9 @@
   /* Translucent glass surfaces + edges. */
   --card:              oklch(1 0 0 / 0.06);
   --card-foreground:   oklch(0.97 0 0);
-  --popover:           oklch(0.16 0.015 195);
+  --popover:           oklch(0.155 0.005 90);
   --muted:             oklch(1 0 0 / 0.06);
-  --muted-foreground:  oklch(0.78 0.008 200);
+  --muted-foreground:  oklch(0.780 0.005 90);
   --accent:            oklch(1 0 0 / 0.09);
   --accent-foreground: oklch(0.98 0 0);
   --secondary:         oklch(1 0 0 / 0.07);
@@ -1435,12 +1456,13 @@
   --surface-4: oklch(1 0 0 / 0.10);
 }
 
-/* Static backdrop fallback — a calm emerald-tinted vignette, always painted
-   under the canvas and the sole backdrop under prefers-reduced-motion. */
+/* Static backdrop fallback — a calm gold-and-silver vignette matching the
+   frontend hero, always painted under the canvas and the sole backdrop
+   under prefers-reduced-motion. */
 .gl-fallback {
   background:
-    radial-gradient(120% 90% at 15% 0%, oklch(0.30 0.06 168 / 0.55) 0%, transparent 55%),
-    radial-gradient(120% 110% at 100% 100%, oklch(0.24 0.05 210 / 0.55) 0%, transparent 50%),
+    radial-gradient(120% 90% at 15% 0%, oklch(0.28 0.045 88 / 0.50) 0%, transparent 55%),
+    radial-gradient(120% 110% at 100% 100%, oklch(0.24 0.005 260 / 0.55) 0%, transparent 50%),
     var(--gl-base);
 }
 
@@ -1525,10 +1547,47 @@
     0 30px 70px oklch(0 0 0 / 0.50);
 }
 
-/* Brand tile → emerald glass chip to match the source logo mark. */
+/* Brand tile → gold glass chip to match the MVP Built Bullies mark. */
 .brand-mark {
-  background: oklch(0.78 0.15 162 / 0.16);
-  border: 1px solid oklch(0.78 0.15 162 / 0.32);
-  color: oklch(0.90 0.12 162);
+  background: oklch(from var(--brand-500) l c h / 0.16);
+  border: 1px solid oklch(from var(--brand-500) l c h / 0.32);
+  color: var(--brand-300);
   box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.18);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   BRAND TYPE & TREATMENTS — ported from the marketing frontend so the
+   admin reads as the same product (see bbbox-site app/globals.css).
+   ─────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: "Sentient";
+  src: url("/fonts/Sentient-Extralight.woff") format("woff");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sentient";
+  src: url("/fonts/Sentient-LightItalic.woff") format("woff");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Metallic text treatments matched to the hero logo. */
+.text-chrome {
+  background: linear-gradient(180deg, #ffffff 0%, #e8e8ec 30%, #9a9aa2 50%, #f4f4f7 62%, #6f6f78 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.text-gold {
+  background: linear-gradient(180deg, #fff3c4 0%, #f5d061 35%, #b4801c 55%, #ffe9a8 70%, #8a5f10 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(245, 208, 97, 0.9) 50%, transparent 100%);
 }

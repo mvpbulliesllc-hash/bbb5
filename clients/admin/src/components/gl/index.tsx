@@ -51,7 +51,6 @@ export const GL = ({ hovering = false }: { hovering?: boolean }) => {
           introspect={hovering}
         />
         <Effects multisamping={0} disableGamma>
-          {/* @ts-ignore - shaderPass is provided by drei's Effects extension */}
           <shaderPass
             args={[VignetteShader]}
             uniforms-darkness-value={CONFIG.vignetteDarkness}
