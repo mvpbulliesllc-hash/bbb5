@@ -138,7 +138,7 @@ export default function Pipeline() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-display text-2xl font-extrabold text-navy-950">Pipeline</h1>
-          <p className="mt-1 text-sm text-navy-900/60">Every lead from Eli, the quote calculator, and manual entry — live.</p>
+          <p className="mt-1 text-sm text-navy-900/60">Every lead from Ellianna, the quote calculator, and manual entry — live.</p>
         </div>
         <div className="flex gap-2">
           <input

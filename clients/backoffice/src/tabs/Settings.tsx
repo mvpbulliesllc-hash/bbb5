@@ -1,9 +1,9 @@
 const INTEGRATIONS: Array<{ name: string; status: 'live' | 'ready' | 'waiting'; detail: string }> = [
   { name: 'Convex (database)', status: 'live', detail: 'Production deployment sincere-curlew-165 — leads and contact lists.' },
   { name: 'Auth0 (login)', status: 'live', detail: 'This dashboard is gated by Auth0; Convex functions require a signed-in user.' },
-  { name: 'Website lead ingest', status: 'live', detail: 'Eli chat + quote calculator leads flow into the Pipeline automatically (and still email via AgentMail).' },
+  { name: 'Website lead ingest', status: 'live', detail: 'Ellianna chat + quote calculator leads flow into the Pipeline automatically (and still email via AgentMail).' },
   { name: 'AgentMail (lead emails)', status: 'live', detail: 'Leads email from eli-paragon@agentmail.to.' },
-  { name: 'Hume (Eli voice)', status: 'live', detail: 'Expressive TTS on the marketing site, Ava Song voice.' },
+  { name: 'Hume (Ellianna voice)', status: 'live', detail: 'Expressive TTS on the marketing site — "Cool Journalist", the same voice as her EVI phone config.' },
   { name: 'Mux (hero video)', status: 'live', detail: 'Homepage hook video streams via Mux.' },
   { name: 'Meilisearch (search engine)', status: 'waiting', detail: 'Keys received — needs the server/host URL of your Meilisearch instance to connect.' },
   { name: 'Knock (notifications)', status: 'ready', detail: 'Keys received — say the word to add push/SMS lead alerts.' },

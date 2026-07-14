@@ -1,10 +1,10 @@
 /**
- * Eli lead endpoint — emails captured leads via AgentMail (https://agentmail.to).
+ * Ellianna lead endpoint — emails captured leads via AgentMail (https://agentmail.to).
  *
  * POST { name?, firstName?, lastName?, phone?, email?, address?, town?,
  *        service?, serviceType?, message?, ... } → { ok: true }
  *
- * Serves both lead sources on the site: the Ask Eli chat intake (POSTs here
+ * Serves both lead sources on the site: the Ask Ellianna chat intake (POSTs here
  * first) and the Instant Quote calculator (via PUBLIC_LEADS_API). Any JSON
  * fields it receives are included in the email, so the two payload shapes —
  * and future ones — need no mapping.

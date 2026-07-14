@@ -65,7 +65,7 @@ export const integrations = {
   /** ElevenLabs Conversational AI agent id — enables the web voice widget. */
   elevenLabsAgentId: import.meta.env.PUBLIC_ELEVENLABS_AGENT_ID ?? '',
   /**
-   * Eli assistant backend base URL (`/chat`, `/voice`, `/lead`). Defaults to
+   * Ellianna assistant backend base URL (`/chat`, `/voice`, `/lead`). Defaults to
    * the site's own /api/eli serverless functions (Hume TTS voice); endpoints
    * that are missing or unconfigured degrade gracefully in the widget.
    */

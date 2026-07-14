@@ -1,24 +1,37 @@
 /**
- * Eli voice endpoint — expressive TTS via Hume (https://dev.hume.ai).
+ * Ellianna voice endpoint — expressive TTS via Hume (https://dev.hume.ai).
  *
  * POST { text: string } → audio/mpeg
  *
  * Runs as a Vercel serverless function on the site's own origin, so the
  * Hume API key stays server-side (this repo is public — never commit keys).
  * Configure in Vercel → Settings → Environment Variables:
- *   HUME_API_KEY     required — Hume API key
- *   HUME_VOICE_NAME  optional — a Hume Voice Library / custom voice name;
- *                    when unset, Hume generates a voice from ELI_DESCRIPTION
- *   HUME_VOICE_ID    optional — takes precedence over HUME_VOICE_NAME
+ *   HUME_API_KEY        required — Hume API key
+ *   HUME_VOICE_ID       optional — overrides the default voice id below
+ *   HUME_VOICE_NAME     optional — a saved voice name instead of an id
+ *   HUME_VOICE_PROVIDER optional — 'HUME_AI' (default, Voice Library) or
+ *                       'CUSTOM_VOICE' (your own saved/cloned voices)
+ *
+ * By default this uses the same voice as Ellianna's Hume EVI phone config
+ * ("Cool Journalist"), so she sounds identical on the site and on calls.
  *
  * Without HUME_API_KEY the endpoint returns 503 and the chat widget falls
  * back to browser speech synthesis — degraded, never broken.
  */
 
-const ELI_DESCRIPTION =
-  'Eli, a warm, upbeat woman in her early thirties from the Jersey Shore. ' +
-  'A friendly, confident roofing company assistant: natural conversational pace, ' +
-  'reassuring and helpful, never salesy or robotic.';
+// "Cool Journalist" — the voice on Ellianna's Hume EVI config (config "bbbox").
+const ELLIANNA_VOICE_ID = 'f3f69312-095c-4ec3-8e50-6961c676e898';
+
+const ELLIANNA_DESCRIPTION =
+  'Ellianna (pronounced "el-ee-AH-nah"), a warm, upbeat woman in her early ' +
+  'thirties from the Jersey Shore. A friendly, confident roofing company ' +
+  'assistant: natural conversational pace, reassuring and helpful, never ' +
+  'salesy or robotic.';
+
+// Hume reads text literally — respell her name so it's spoken el-ee-AH-nah.
+function phonetic(text) {
+  return text.replace(/ell?e?i[ae]nn?a/gi, 'Ellie-Ahna');
+}
 
 const MAX_TEXT = 1000;
 
@@ -46,9 +59,10 @@ module.exports = async (req, res) => {
     return res.status(200).send(Buffer.from(cached));
   }
 
-  const utterance = { text, description: ELI_DESCRIPTION };
-  if (process.env.HUME_VOICE_ID) utterance.voice = { id: process.env.HUME_VOICE_ID };
-  else utterance.voice = { name: process.env.HUME_VOICE_NAME || 'Ava Song', provider: 'HUME_AI' };
+  const provider = process.env.HUME_VOICE_PROVIDER || 'HUME_AI';
+  const utterance = { text: phonetic(text), description: ELLIANNA_DESCRIPTION };
+  if (process.env.HUME_VOICE_NAME) utterance.voice = { name: process.env.HUME_VOICE_NAME, provider };
+  else utterance.voice = { id: process.env.HUME_VOICE_ID || ELLIANNA_VOICE_ID, provider };
 
   try {
     const r = await fetch('https://api.hume.ai/v0/tts/file', {
