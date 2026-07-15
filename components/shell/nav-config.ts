@@ -23,9 +23,11 @@ import {
   Inbox,
   Video,
   Users,
+  Workflow,
   type LucideIcon,
 } from "lucide-react"
 import type { ModuleId } from "./module-registry"
+import type { BrandSlug } from "./brand-icon"
 
 export type NavItem = {
   id: string
@@ -34,6 +36,8 @@ export type NavItem = {
   badge?: string
   /** If set, selecting this item opens the module in the main surface. */
   module?: ModuleId
+  /** If set, the rail renders the real brand logo instead of the lucide icon. */
+  brand?: BrandSlug
 }
 
 export type NavSection = {
@@ -58,12 +62,19 @@ export const HUBS: Hub[] = [
     icon: Briefcase,
     rail: [
       {
+        id: "pipeline",
+        title: "Pipeline",
+        items: [
+          { id: "ws-pipeline", label: "CRM · Inbound · Outbound", icon: Workflow, module: "pipeline", badge: "79" },
+        ],
+      },
+      {
         id: "comms",
         title: "Comms",
         items: [
-          { id: "ws-gmail", label: "Gmail", icon: Mail, module: "gmail", badge: "12" },
-          { id: "ws-gchat", label: "Google Chat", icon: MessageCircle, module: "gchat" },
-          { id: "ws-gvoice", label: "Google Voice", icon: Phone, module: "gvoice" },
+          { id: "ws-gmail", label: "Gmail", icon: Mail, module: "gmail", badge: "12", brand: "gmail" },
+          { id: "ws-gchat", label: "Google Chat", icon: MessageCircle, module: "gchat", brand: "google-chat" },
+          { id: "ws-gvoice", label: "Google Voice", icon: Phone, module: "gvoice", brand: "google-voice" },
           { id: "ws-messages", label: "Message Hub", icon: Inbox, module: "messages", badge: "5" },
         ],
       },
@@ -72,7 +83,7 @@ export const HUBS: Hub[] = [
         title: "Virtual Office",
         items: [
           { id: "ws-office", label: "Office / Rooms", icon: Users, module: "office" },
-          { id: "ws-meet", label: "Meet & Zoom", icon: Video, module: "meet" },
+          { id: "ws-meet", label: "Meet & Zoom", icon: Video, module: "meet", brand: "google-meet" },
         ],
       },
       {
@@ -80,8 +91,8 @@ export const HUBS: Hub[] = [
         title: "Knowledge",
         items: [
           { id: "ws-contacts", label: "Contacts / CRM", icon: Contact, module: "contacts" },
-          { id: "ws-notion", label: "Notion", icon: NotebookPen, module: "notion" },
-          { id: "ws-drive", label: "Drive", icon: HardDrive, module: "drive" },
+          { id: "ws-notion", label: "Notion", icon: NotebookPen, module: "notion", brand: "notion" },
+          { id: "ws-drive", label: "Drive", icon: HardDrive, module: "drive", brand: "google-drive" },
         ],
       },
     ],

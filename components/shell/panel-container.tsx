@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { ChevronDown, Check, PanelLeftClose, X } from "lucide-react"
+import { ChevronDown, Check, PanelLeftClose, X, Volume2, VolumeX, Volume1 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { MODULES, MODULE_MAP, type ModuleId, type ModuleGroup } from "./module-registry"
 
@@ -60,6 +60,7 @@ export function PanelContainer({
         </button>
 
         <div className="ml-auto flex items-center gap-0.5">
+          <VolumeControl />
           {onCollapse ? (
             <button
               onClick={onCollapse}
@@ -105,6 +106,70 @@ export function PanelContainer({
 
       {/* Container body — the active module */}
       <div className="min-h-0 flex-1 overflow-hidden">{current.render()}</div>
+    </div>
+  )
+}
+
+/** Per-container audio control — mute/unmute toggle + volume slider on hover. */
+function VolumeControl() {
+  const [volume, setVolume] = useState(70)
+  const [muted, setMuted] = useState(false)
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    function onDocClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener("mousedown", onDocClick)
+    return () => document.removeEventListener("mousedown", onDocClick)
+  }, [open])
+
+  const effective = muted ? 0 : volume
+  const Icon = effective === 0 ? VolumeX : effective < 50 ? Volume1 : Volume2
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setMuted((m) => !m)}
+        onContextMenu={(e) => {
+          e.preventDefault()
+          setOpen((v) => !v)
+        }}
+        onDoubleClick={() => setOpen((v) => !v)}
+        title={muted ? "Unmute" : "Mute (double-click for volume)"}
+        className={cn(
+          "grid size-7 place-items-center rounded-md transition-colors hover:bg-hover hover:text-text",
+          muted ? "text-text-faint" : "text-text-muted",
+        )}
+      >
+        <Icon className="size-3.5" />
+      </button>
+
+      {open ? (
+        <div className="absolute right-0 top-full z-40 mt-1 flex w-40 items-center gap-2 rounded-lg border border-line-strong bg-elevated px-3 py-2.5 shadow-2xl shadow-black/60">
+          <button
+            onClick={() => setMuted((m) => !m)}
+            className="grid size-6 shrink-0 place-items-center rounded text-text-muted hover:text-text"
+          >
+            <Icon className="size-3.5" />
+          </button>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={effective}
+            onChange={(e) => {
+              setMuted(false)
+              setVolume(Number(e.target.value))
+            }}
+            className="h-1 flex-1 cursor-pointer appearance-none rounded-full bg-line accent-accent"
+            aria-label="Volume"
+          />
+          <span className="w-6 shrink-0 text-right font-mono text-[10px] text-text-faint">{effective}</span>
+        </div>
+      ) : null}
     </div>
   )
 }

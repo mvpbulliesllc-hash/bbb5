@@ -5,6 +5,7 @@ import { ChevronsUpDown, PanelLeftClose, Plus, Search, Check } from "lucide-reac
 import { cn } from "@/lib/utils"
 import { HUBS, NAV_SECTIONS, NAV_FOOTER, type NavItem } from "./nav-config"
 import type { ModuleId } from "./module-registry"
+import { BrandIcon } from "./brand-icon"
 
 const TENANTS = ["EcoMVP LLC", "Skal Ventures", "Paragon Group", "MVP Management"]
 
@@ -158,12 +159,16 @@ export function LeftNav({
                         isActive ? "bg-hover text-text" : "text-text-muted hover:bg-hover/60 hover:text-text",
                       )}
                     >
-                      <Icon
-                        className={cn(
-                          "size-4 shrink-0",
-                          isActive ? "text-accent" : "text-text-faint group-hover:text-text-muted",
-                        )}
-                      />
+                      {item.brand ? (
+                        <BrandIcon slug={item.brand} size={16} className="shrink-0" />
+                      ) : (
+                        <Icon
+                          className={cn(
+                            "size-4 shrink-0",
+                            isActive ? "text-accent" : "text-text-faint group-hover:text-text-muted",
+                          )}
+                        />
+                      )}
                       <span className="truncate">{item.label}</span>
                       {item.badge ? (
                         <span className="ml-auto rounded bg-elevated px-1.5 py-0.5 text-[10px] text-text-muted">
