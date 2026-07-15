@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import { SessionProvider } from "next-auth/react"
+import { ClerkProvider } from "@clerk/nextjs"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -31,10 +31,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`dark bg-background ${geistSans.variable} ${geistMono.variable}`}>
-      <body className="font-sans antialiased">
-        <SessionProvider>{children}</SessionProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className={`dark bg-background ${geistSans.variable} ${geistMono.variable}`}>
+        <body className="font-sans antialiased">{children}</body>
+      </html>
+    </ClerkProvider>
   )
 }

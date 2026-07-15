@@ -1,10 +1,11 @@
-import { auth } from "@/lib/next-auth"
+import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 import { Workbench } from "@/components/shell/workbench"
 
-// Server Component — auth check happens on the server, zero flash.
+// Server Component — middleware already guards this route,
+// but we double-check here for zero-flash protection.
 export default async function Page() {
-  const session = await auth()
-  if (!session?.user) redirect("/login")
+  const { userId } = await auth()
+  if (!userId) redirect("/login")
   return <Workbench />
 }
