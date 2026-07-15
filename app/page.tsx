@@ -1,24 +1,10 @@
-"use client"
-
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { useAuth } from "@/lib/auth"
+import { auth } from "@/lib/next-auth"
+import { redirect } from "next/navigation"
 import { Workbench } from "@/components/shell/workbench"
 
-export default function Page() {
-  const { user } = useAuth()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (user === null) {
-      router.replace("/login")
-    }
-  }, [user, router])
-
-  if (!user) {
-    // render nothing while redirecting — avoids a flash of the workbench
-    return <div className="min-h-screen bg-background" />
-  }
-
+// Server Component — auth check happens on the server, zero flash.
+export default async function Page() {
+  const session = await auth()
+  if (!session?.user) redirect("/login")
   return <Workbench />
 }

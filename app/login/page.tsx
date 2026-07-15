@@ -1,142 +1,88 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { useRouter } from "next/navigation"
-import { Hexagon, Eye, EyeOff, LogIn, AlertCircle } from "lucide-react"
-import { useAuth } from "@/lib/auth"
-import { cn } from "@/lib/utils"
+import { signIn } from "next-auth/react"
+import { useState, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 
-export default function LoginPage() {
-  const { signIn } = useAuth()
-  const router = useRouter()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPw, setShowPw] = useState(false)
+function LoginCard() {
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const emailRef = useRef<HTMLInputElement>(null)
+  const params = useSearchParams()
+  const denied = params.get("error") === "AccessDenied"
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError(null)
-    if (!email.trim() || !password.trim()) {
-      setError("Please enter your workspace email and password.")
-      return
-    }
+  async function handleGoogle() {
     setLoading(true)
-    const result = await signIn(email.trim().toLowerCase(), password)
-    setLoading(false)
-    if (result.ok) {
-      router.replace("/")
-    } else {
-      setError(result.error ?? "Sign in failed.")
-      emailRef.current?.focus()
-    }
+    await signIn("google", { callbackUrl: "/" })
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
-      {/* card */}
-      <div className="w-full max-w-sm rounded-2xl border border-line bg-panel shadow-2xl shadow-black/60">
-        {/* brand header */}
-        <div className="flex flex-col items-center gap-3 border-b border-line px-8 py-8">
-          <span className="grid size-10 place-items-center rounded-xl bg-accent text-void shadow-[0_0_20px_var(--color-accent)/30]">
-            <Hexagon className="size-5" />
-          </span>
-          <div className="text-center">
-            <h1 className="text-base font-semibold tracking-tight text-text">Paragon Exterior NJ</h1>
-            <p className="mt-0.5 text-[13px] text-text-faint">Back Office</p>
-          </div>
-        </div>
-
-        {/* form */}
-        <form onSubmit={handleSubmit} noValidate className="px-8 py-7">
-          <div className="space-y-4">
-            {/* email */}
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="email" className="text-[11px] font-medium uppercase tracking-wide text-text-faint">
-                Workspace Email
-              </label>
-              <input
-                ref={emailRef}
-                id="email"
-                type="email"
-                autoComplete="email"
-                autoFocus
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@paragonexteriornj.com"
-                className={cn(
-                  "rounded-lg border bg-void px-3.5 py-2.5 text-sm text-text placeholder:text-text-faint focus:outline-none focus:ring-1 focus:ring-line-strong",
-                  error ? "border-warn" : "border-line",
-                )}
-              />
-            </div>
-
-            {/* password */}
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="password" className="text-[11px] font-medium uppercase tracking-wide text-text-faint">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPw ? "text" : "password"}
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••"
-                  className={cn(
-                    "w-full rounded-lg border bg-void px-3.5 py-2.5 pr-10 text-sm text-text placeholder:text-text-faint focus:outline-none focus:ring-1 focus:ring-line-strong",
-                    error ? "border-warn" : "border-line",
-                  )}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPw((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-text-faint hover:text-text-muted"
-                  aria-label={showPw ? "Hide password" : "Show password"}
-                >
-                  {showPw ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                </button>
-              </div>
-            </div>
-
-            {/* error */}
-            {error ? (
-              <div className="flex items-start gap-2 rounded-lg border border-warn/40 bg-warn/5 px-3 py-2.5 text-xs text-warn">
-                <AlertCircle className="mt-0.5 size-3.5 shrink-0" />
-                {error}
-              </div>
-            ) : null}
-
-            {/* submit */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent py-2.5 text-sm font-medium text-void transition-opacity disabled:opacity-50"
-            >
-              {loading ? (
-                <span className="size-4 animate-spin rounded-full border-2 border-void/30 border-t-void" />
-              ) : (
-                <LogIn className="size-4" />
-              )}
-              {loading ? "Signing in…" : "Sign In"}
-            </button>
-          </div>
-
-          <p className="mt-5 text-center text-[11px] text-text-faint">
-            Authorized personnel only.
-            <br />
-            Use your workspace email to access this platform.
-          </p>
-        </form>
+    <div className="w-full max-w-sm px-4">
+      {/* wordmark */}
+      <div className="mb-10 text-center">
+        <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-text-faint">
+          Paragon Exterior NJ
+        </p>
+        <h1 className="text-2xl font-bold tracking-tight text-text">Back Office</h1>
+        <p className="mt-1.5 text-sm text-text-faint">Authorized workspace access only.</p>
       </div>
 
-      {/* footer */}
-      <p className="mt-6 text-[11px] text-text-faint">
-        &copy; {new Date().getFullYear()} Paragon Exterior NJ. All rights reserved.
+      {/* card */}
+      <div className="rounded-2xl border border-line bg-panel px-8 py-8 shadow-2xl shadow-black/60">
+        {denied && (
+          <div className="mb-6 rounded-lg border border-warn/30 bg-warn/5 px-4 py-3 text-sm text-warn">
+            That account is not authorized. Sign in with your{" "}
+            <strong>@paragonexteriornj.com</strong> or{" "}
+            <strong>@mvpmgmtgroup.com</strong> workspace email.
+          </div>
+        )}
+
+        <p className="mb-6 text-center text-xs text-text-faint">
+          Sign in with your company Google account to continue.
+        </p>
+
+        <button
+          onClick={handleGoogle}
+          disabled={loading}
+          className="flex w-full items-center justify-center gap-3 rounded-xl border border-line bg-void px-4 py-3 text-sm font-semibold text-text transition-all hover:border-line-strong hover:bg-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {/* Google G — inline SVG, no external dep */}
+          <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+            <path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-21 0-1.3-.2-2.7-.5-4z" />
+            <path fill="#34A853" d="M6.3 14.7l7 5.1C15.1 16 19.2 13 24 13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2c-7.6 0-14.1 4.5-17.7 11.3z" />
+            <path fill="#FBBC05" d="M24 46c5.5 0 10.6-1.9 14.5-5.1l-6.7-5.5C29.8 37 27 38 24 38c-6.1 0-10.7-3.9-11.8-9.1L5.1 34.1C8.7 41.3 15.7 46 24 46z" />
+            <path fill="#EA4335" d="M44.5 20H24v8.5h11.8c-1.1 3.3-3.8 5.8-7.2 7l6.7 5.5C39.9 37.6 44 31.4 44 24c0-1.3-.2-2.7-.5-4z" />
+          </svg>
+          {loading ? "Redirecting…" : "Sign in with Google"}
+        </button>
+
+        <p className="mt-5 text-center text-[11px] text-text-faint">
+          Only <strong className="text-text-muted">@paragonexteriornj.com</strong> &amp;{" "}
+          <strong className="text-text-muted">@mvpmgmtgroup.com</strong> accounts are permitted.
+        </p>
+      </div>
+
+      <p className="mt-6 text-center text-[11px] text-text-faint">
+        &copy; {new Date().getFullYear()} Paragon Exterior NJ &mdash; Powered by MVP Management Group
       </p>
-    </main>
+    </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <div className="relative grid min-h-screen place-items-center bg-void">
+      {/* grid texture */}
+      <div
+        className="pointer-events-none fixed inset-0 opacity-[0.025]"
+        style={{
+          backgroundImage:
+            "linear-gradient(var(--color-line) 1px,transparent 1px),linear-gradient(90deg,var(--color-line) 1px,transparent 1px)",
+          backgroundSize: "40px 40px",
+        }}
+        aria-hidden="true"
+      />
+      <Suspense>
+        <LoginCard />
+      </Suspense>
+    </div>
   )
 }
