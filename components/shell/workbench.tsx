@@ -2,33 +2,41 @@
 
 import { useRef, useState } from "react"
 import type { ImperativePanelHandle } from "react-resizable-panels"
-import { PanelLeftOpen } from "lucide-react"
+import { PanelLeftOpen, PanelRightOpen, PanelBottomOpen } from "lucide-react"
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable"
 import { LeftNav } from "./left-nav"
 import { AgentPanel } from "./agent-panel"
-import { BrowserView } from "./browser-view"
-import { ConfigDock } from "./config-dock"
+import { PanelContainer } from "./panel-container"
 import { TopBar } from "./top-bar"
 
 export function Workbench() {
   const leftRef = useRef<ImperativePanelHandle>(null)
-  const [collapsed, setCollapsed] = useState(false)
+  const rightRef = useRef<ImperativePanelHandle>(null)
+  const dockRef = useRef<ImperativePanelHandle>(null)
+
+  const [leftCollapsed, setLeftCollapsed] = useState(false)
+  const [rightCollapsed, setRightCollapsed] = useState(true)
+  const [dockCollapsed, setDockCollapsed] = useState(false)
   const [active, setActive] = useState("agents")
 
   return (
     <div className="flex h-dvh w-full flex-col overflow-hidden bg-background">
-      <TopBar />
+      <TopBar
+        rightCollapsed={rightCollapsed}
+        onToggleRight={() => (rightCollapsed ? rightRef.current?.expand() : rightRef.current?.collapse())}
+      />
 
       <div className="relative min-h-0 flex-1">
-        {/* Floating opener when the nav is collapsed */}
-        {collapsed ? (
-          <button
-            onClick={() => leftRef.current?.expand()}
-            title="Open sidebar"
-            className="gloss-elevated absolute left-2 top-2 z-40 grid size-8 place-items-center rounded-md border border-line text-text-muted transition-colors hover:text-text"
-          >
+        {/* Floating openers when a side pane is collapsed */}
+        {leftCollapsed ? (
+          <FloatingOpener side="left" onClick={() => leftRef.current?.expand()}>
             <PanelLeftOpen className="size-4" />
-          </button>
+          </FloatingOpener>
+        ) : null}
+        {rightCollapsed ? (
+          <FloatingOpener side="right" onClick={() => rightRef.current?.expand()}>
+            <PanelRightOpen className="size-4" />
+          </FloatingOpener>
         ) : null}
 
         <ResizablePanelGroup direction="horizontal" autoSaveId="obsidian-shell-h">
@@ -42,8 +50,8 @@ export function Workbench() {
             maxSize={20}
             collapsible
             collapsedSize={0}
-            onCollapse={() => setCollapsed(true)}
-            onExpand={() => setCollapsed(false)}
+            onCollapse={() => setLeftCollapsed(true)}
+            onExpand={() => setLeftCollapsed(false)}
           >
             <LeftNav active={active} onSelect={setActive} onCollapse={() => leftRef.current?.collapse()} />
           </ResizablePanel>
@@ -51,26 +59,102 @@ export function Workbench() {
           <ResizableHandle />
 
           {/* MIDDLE — agent chat (10–35%) */}
-          <ResizablePanel id="agents" order={2} defaultSize={26} minSize={10} maxSize={35}>
+          <ResizablePanel id="agents" order={2} defaultSize={24} minSize={10} maxSize={35}>
             <AgentPanel />
           </ResizablePanel>
 
           <ResizableHandle withHandle />
 
-          {/* RIGHT — main surface (~60%) with a configurable split dock */}
-          <ResizablePanel id="main" order={3} defaultSize={58} minSize={40}>
+          {/* CENTER — main surface: stacked configurable containers */}
+          <ResizablePanel id="main" order={3} defaultSize={42} minSize={30}>
             <ResizablePanelGroup direction="vertical" autoSaveId="obsidian-shell-v">
-              <ResizablePanel id="browser" order={1} defaultSize={64} minSize={30}>
-                <BrowserView />
+              <ResizablePanel id="surface" order={1} defaultSize={64} minSize={20}>
+                <PanelContainer defaultModule="browser" />
               </ResizablePanel>
+
               <ResizableHandle withHandle />
-              <ResizablePanel id="dock" order={2} defaultSize={36} minSize={12} collapsible collapsedSize={0}>
-                <ConfigDock />
+
+              {/* BOTTOM DOCK — configurable + collapsible */}
+              <ResizablePanel
+                ref={dockRef}
+                id="dock"
+                order={2}
+                defaultSize={36}
+                minSize={12}
+                collapsible
+                collapsedSize={0}
+                onCollapse={() => setDockCollapsed(true)}
+                onExpand={() => setDockCollapsed(false)}
+              >
+                <PanelContainer
+                  defaultModule="env"
+                  collapseIcon="x"
+                  onCollapse={() => dockRef.current?.collapse()}
+                />
               </ResizablePanel>
             </ResizablePanelGroup>
+
+            {dockCollapsed ? (
+              <button
+                onClick={() => dockRef.current?.expand()}
+                title="Open dock"
+                className="gloss-elevated absolute bottom-2 left-1/2 z-40 flex -translate-x-1/2 items-center gap-1.5 rounded-md border border-line px-2.5 py-1 text-xs text-text-muted transition-colors hover:text-text"
+              >
+                <PanelBottomOpen className="size-3.5" />
+                Dock
+              </button>
+            ) : null}
+          </ResizablePanel>
+
+          <ResizableHandle withHandle />
+
+          {/* RIGHT — configurable slide-in pane (0–25%) */}
+          <ResizablePanel
+            ref={rightRef}
+            id="rightcfg"
+            order={4}
+            defaultSize={18}
+            minSize={12}
+            maxSize={28}
+            collapsible
+            collapsedSize={0}
+            onCollapse={() => setRightCollapsed(true)}
+            onExpand={() => setRightCollapsed(false)}
+          >
+            <PanelContainer
+              defaultModule="config"
+              collapseIcon="panel"
+              onCollapse={() => rightRef.current?.collapse()}
+            />
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
     </div>
   )
+}
+
+function FloatingOpener({
+  side,
+  onClick,
+  children,
+}: {
+  side: "left" | "right"
+  onClick: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <button
+      onClick={onClick}
+      title={side === "left" ? "Open sidebar" : "Open config"}
+      className={cnSide(side)}
+    >
+      {children}
+    </button>
+  )
+}
+
+function cnSide(side: "left" | "right") {
+  const base =
+    "gloss-elevated absolute top-2 z-40 grid size-8 place-items-center rounded-md border border-line text-text-muted transition-colors hover:text-text"
+  return side === "left" ? `${base} left-2` : `${base} right-2`
 }

@@ -1,8 +1,15 @@
 "use client"
 
-import { Hexagon, ChevronRight, Circle, Command, Bell, GitPullRequestArrow } from "lucide-react"
+import { Hexagon, ChevronRight, Circle, Command, Bell, GitPullRequestArrow, PanelRight } from "lucide-react"
+import { cn } from "@/lib/utils"
 
-export function TopBar() {
+export function TopBar({
+  rightCollapsed,
+  onToggleRight,
+}: {
+  rightCollapsed: boolean
+  onToggleRight: () => void
+}) {
   return (
     <header className="gloss flex h-11 shrink-0 items-center gap-3 border-b border-line px-3">
       <div className="flex items-center gap-2">
@@ -32,6 +39,16 @@ export function TopBar() {
         </span>
         <button className="grid size-8 place-items-center rounded-md text-text-muted transition-colors hover:bg-hover hover:text-text">
           <Bell className="size-4" />
+        </button>
+        <button
+          onClick={onToggleRight}
+          title="Toggle config pane"
+          className={cn(
+            "grid size-8 place-items-center rounded-md transition-colors hover:bg-hover hover:text-text",
+            rightCollapsed ? "text-text-muted" : "bg-hover text-text",
+          )}
+        >
+          <PanelRight className="size-4" />
         </button>
         <button className="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-void">
           <GitPullRequestArrow className="size-3.5" />
