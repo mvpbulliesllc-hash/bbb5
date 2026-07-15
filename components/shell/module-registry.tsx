@@ -19,8 +19,22 @@ import {
   Upload,
   Waypoints,
   Webhook,
+  Mail,
+  MessageCircle,
+  Phone,
+  Contact,
+  NotebookPen,
+  HardDrive,
+  Inbox,
+  Users,
+  Star,
+  Paperclip,
+  PhoneCall,
+  Mic,
+  Plus,
 } from "lucide-react"
 import { BrowserView } from "./browser-view"
+import { cn } from "@/lib/utils"
 
 export type ModuleId =
   | "browser"
@@ -38,9 +52,18 @@ export type ModuleId =
   | "connectors"
   | "webhooks"
   | "config"
+  | "gmail"
+  | "gchat"
+  | "gvoice"
+  | "contacts"
+  | "notion"
+  | "drive"
+  | "messages"
+  | "office"
+  | "meet"
   | "empty"
 
-export type ModuleGroup = "Surface" | "Social" | "Dev" | "Creative" | "System"
+export type ModuleGroup = "Surface" | "Workspace" | "Comms" | "Social" | "Dev" | "Creative" | "System"
 
 export type ModuleDef = {
   id: ModuleId
@@ -56,9 +79,20 @@ export type ModuleDef = {
  */
 export const MODULES: ModuleDef[] = [
   { id: "browser", label: "Browser", icon: Globe, group: "Surface", render: () => <BrowserView /> },
+  { id: "office", label: "Virtual Office", icon: Users, group: "Surface", render: () => <OfficeModule /> },
+  { id: "meet", label: "Meet & Zoom", icon: Video, group: "Surface", render: () => <MeetModule /> },
   { id: "video", label: "Video", icon: Video, group: "Surface", render: () => <VideoModule /> },
   { id: "live", label: "Live Feed", icon: Radio, group: "Surface", render: () => <LiveModule /> },
   { id: "analytics", label: "Analytics", icon: BarChart3, group: "Surface", render: () => <AnalyticsModule /> },
+
+  { id: "gmail", label: "Gmail", icon: Mail, group: "Comms", render: () => <GmailModule /> },
+  { id: "gchat", label: "Google Chat", icon: MessageCircle, group: "Comms", render: () => <GChatModule /> },
+  { id: "gvoice", label: "Google Voice", icon: Phone, group: "Comms", render: () => <GVoiceModule /> },
+  { id: "messages", label: "Message Hub", icon: Inbox, group: "Comms", render: () => <MessagesModule /> },
+
+  { id: "contacts", label: "Contacts / CRM", icon: Contact, group: "Workspace", render: () => <ContactsModule /> },
+  { id: "notion", label: "Notion", icon: NotebookPen, group: "Workspace", render: () => <NotionModule /> },
+  { id: "drive", label: "Drive", icon: HardDrive, group: "Workspace", render: () => <DriveModule /> },
 
   { id: "social", label: "Socials", icon: Instagram, group: "Social", render: () => <SocialModule /> },
   { id: "outbound", label: "Outbound", icon: SendHorizontal, group: "Social", render: () => <OutboundModule /> },
@@ -85,6 +119,321 @@ export const MODULE_MAP: Record<ModuleId, ModuleDef> = Object.fromEntries(
 
 function Pad({ children }: { children: React.ReactNode }) {
   return <div className="h-full overflow-auto p-3">{children}</div>
+}
+
+/* ------------------------------- comms suite ------------------------------- */
+
+const GMAIL_ACCOUNTS = [
+  { addr: "jarad@mvpmgmtgroup.com", unread: 4, dot: "bg-accent" },
+  { addr: "ops@ecoaisolutions.com", unread: 6, dot: "bg-info" },
+  { addr: "deals@paragon.vc", unread: 2, dot: "bg-warn" },
+  { addr: "me@skalventures.io", unread: 0, dot: "bg-text-faint" },
+]
+
+const GMAIL_THREADS = [
+  { from: "Stripe", subj: "Payout of $12,480 is on the way", time: "9:02", unread: true, acct: "bg-info" },
+  { from: "Athena (Agent)", subj: "Outreach batch #7 — 41 replies queued for review", time: "8:41", unread: true, acct: "bg-accent" },
+  { from: "Notion", subj: "3 pages shared in Paragon workspace", time: "8:03", unread: true, acct: "bg-warn" },
+  { from: "Zoom", subj: "Recording ready: Discovery — Acme Corp", time: "Yesterday", unread: false, acct: "bg-info" },
+  { from: "Linear", subj: "5 issues moved to In Review", time: "Yesterday", unread: false, acct: "bg-accent" },
+]
+
+function GmailModule() {
+  return (
+    <div className="flex h-full min-h-0 flex-col">
+      {/* Account switcher — many gmails, one app */}
+      <div className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-line px-2 py-1.5">
+        {GMAIL_ACCOUNTS.map((a, i) => (
+          <button
+            key={a.addr}
+            className={cn(
+              "flex shrink-0 items-center gap-1.5 rounded-md border px-2 py-1 text-[11px] transition-colors",
+              i === 0 ? "border-line-strong bg-hover text-text" : "border-line text-text-muted hover:bg-hover/60",
+            )}
+          >
+            <span className={cn("size-1.5 rounded-full", a.dot)} />
+            {a.addr.split("@")[0]}
+            {a.unread > 0 ? <span className="text-text-faint">{a.unread}</span> : null}
+          </button>
+        ))}
+        <button className="grid size-6 shrink-0 place-items-center rounded-md text-text-muted hover:bg-hover hover:text-text">
+          <Plus className="size-3.5" />
+        </button>
+      </div>
+      <div className="flex shrink-0 items-center gap-2 border-b border-line px-3 py-1.5 text-[11px] text-text-faint">
+        <span className="rounded bg-hover px-1.5 py-0.5 text-text-muted">All inboxes</span>
+        <span>Primary</span>
+        <span>Updates</span>
+        <button className="ml-auto flex items-center gap-1 rounded bg-accent px-2 py-1 text-void">
+          <Mail className="size-3" /> Compose
+        </button>
+      </div>
+      <div className="min-h-0 flex-1 overflow-auto">
+        {GMAIL_THREADS.map((t) => (
+          <div
+            key={t.subj}
+            className="flex cursor-pointer items-center gap-2.5 border-b border-line/60 px-3 py-2 transition-colors hover:bg-hover/50"
+          >
+            <Star className="size-3.5 shrink-0 text-text-faint" />
+            <span className={cn("size-1.5 shrink-0 rounded-full", t.acct)} />
+            <span className={cn("w-28 shrink-0 truncate text-xs", t.unread ? "font-semibold text-text" : "text-text-muted")}>
+              {t.from}
+            </span>
+            <span className={cn("min-w-0 flex-1 truncate text-xs", t.unread ? "text-text" : "text-text-faint")}>
+              {t.subj}
+            </span>
+            <span className="shrink-0 text-[10px] text-text-faint">{t.time}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function GChatModule() {
+  const rooms = ["# founders", "# ops-war-room", "# agents-live", "@ Hermes", "@ Athena"]
+  return (
+    <div className="flex h-full">
+      <div className="w-32 shrink-0 space-y-0.5 border-r border-line p-2">
+        {rooms.map((r, i) => (
+          <button
+            key={r}
+            className={cn(
+              "flex w-full items-center rounded-md px-2 py-1 text-left text-[11px] transition-colors",
+              i === 1 ? "bg-hover text-text" : "text-text-muted hover:bg-hover/60",
+            )}
+          >
+            <span className="truncate">{r}</span>
+          </button>
+        ))}
+      </div>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <div className="min-h-0 flex-1 space-y-2 overflow-auto p-3 text-xs">
+          <Bubble who="Hermes" tone="accent">Batch #7 done — 41 replies staged for your review.</Bubble>
+          <Bubble who="You">Approve the top 20, hold the rest.</Bubble>
+          <Bubble who="Hermes" tone="accent">Copy. Dispatching Athena to send now.</Bubble>
+        </div>
+        <ComposerBar placeholder="Message ops-war-room…" />
+      </div>
+    </div>
+  )
+}
+
+function GVoiceModule() {
+  const calls = [
+    { name: "Acme Corp", num: "+1 415 555 0142", dir: "in", time: "9:12" },
+    { name: "Missed — Unknown", num: "+1 702 555 0199", dir: "miss", time: "8:40" },
+    { name: "Athena voicemail", num: "agent", dir: "vm", time: "8:04" },
+  ]
+  return (
+    <Pad>
+      <div className="mb-2 flex items-center gap-2 rounded-md border border-line bg-void px-2.5 py-1.5">
+        <Phone className="size-3.5 text-text-faint" />
+        <input placeholder="Dial or search…" className="flex-1 bg-transparent text-xs text-text placeholder:text-text-faint focus:outline-none" />
+        <button className="grid size-6 place-items-center rounded bg-accent text-void"><PhoneCall className="size-3.5" /></button>
+      </div>
+      <div className="space-y-1">
+        {calls.map((c) => (
+          <div key={c.num} className="flex items-center gap-2 rounded-md border border-line bg-void px-2.5 py-1.5 text-xs">
+            <PhoneCall className={cn("size-3.5", c.dir === "miss" ? "text-warn" : "text-text-faint")} />
+            <span className="min-w-0 flex-1 truncate text-text-muted">{c.name}</span>
+            <span className="shrink-0 text-[10px] text-text-faint">{c.time}</span>
+          </div>
+        ))}
+      </div>
+    </Pad>
+  )
+}
+
+function MessagesModule() {
+  const channels = [
+    { app: "iMessage", who: "Jarad", msg: "Deck looks great, ship it", dot: "bg-info" },
+    { app: "Slack", who: "#clients", msg: "Acme signed the SOW 🎉", dot: "bg-accent" },
+    { app: "Telegram", who: "Vlad", msg: "sent the wallet address", dot: "bg-info" },
+    { app: "WhatsApp", who: "Supplier", msg: "Stock back Monday", dot: "bg-accent" },
+    { app: "Instagram", who: "@lead_42", msg: "interested — send pricing", dot: "bg-warn" },
+  ]
+  return (
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-line px-2 py-1.5 text-[11px] text-text-muted">
+        {["All", "iMessage", "Slack", "Telegram", "WhatsApp", "IG"].map((f, i) => (
+          <button key={f} className={cn("shrink-0 rounded px-2 py-0.5", i === 0 ? "bg-hover text-text" : "hover:bg-hover/60")}>
+            {f}
+          </button>
+        ))}
+      </div>
+      <div className="min-h-0 flex-1 overflow-auto">
+        {channels.map((c) => (
+          <div key={c.app + c.who} className="flex items-center gap-2.5 border-b border-line/60 px-3 py-2 hover:bg-hover/50">
+            <span className={cn("size-2 shrink-0 rounded-full", c.dot)} />
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-xs text-text">{c.who} <span className="text-text-faint">· {c.app}</span></p>
+              <p className="truncate text-[11px] text-text-faint">{c.msg}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <ComposerBar placeholder="Reply from any channel…" />
+    </div>
+  )
+}
+
+/* ------------------------------ office suite ------------------------------- */
+
+function OfficeModule() {
+  const rooms = [
+    { name: "War Room", people: 4, live: true },
+    { name: "Client — Acme", people: 2, live: true },
+    { name: "Focus Room", people: 1, live: false },
+    { name: "Lounge", people: 0, live: false },
+  ]
+  return (
+    <Pad>
+      <div className="grid grid-cols-2 gap-2">
+        {rooms.map((r) => (
+          <button
+            key={r.name}
+            className="flex flex-col gap-2 rounded-lg border border-line bg-void p-3 text-left transition-colors hover:border-line-strong"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-text">{r.name}</span>
+              {r.live ? <span className="size-2 animate-pulse rounded-full bg-accent" /> : null}
+            </div>
+            <div className="flex items-center gap-1 text-[11px] text-text-faint">
+              <Users className="size-3.5" /> {r.people} present
+            </div>
+          </button>
+        ))}
+      </div>
+    </Pad>
+  )
+}
+
+function MeetModule() {
+  return (
+    <Pad>
+      <div className="grid min-h-40 grid-cols-2 gap-1.5">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="grid aspect-video place-items-center rounded-lg border border-line bg-void">
+            <Users className="size-5 text-text-faint" />
+          </div>
+        ))}
+      </div>
+      <div className="mt-2 flex items-center justify-center gap-2">
+        <button className="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-void">
+          <Video className="size-3.5" /> Start Meet
+        </button>
+        <button className="flex items-center gap-1.5 rounded-md border border-line px-3 py-1.5 text-xs text-text-muted hover:bg-hover hover:text-text">
+          <Video className="size-3.5" /> Join Zoom
+        </button>
+      </div>
+    </Pad>
+  )
+}
+
+/* ---------------------------- knowledge suite ------------------------------ */
+
+function ContactsModule() {
+  const people = [
+    { n: "Sarah Chen", c: "Acme Corp", s: "Deal — $48k", stage: "bg-accent" },
+    { n: "Marcus Vega", c: "Paragon", s: "Warm lead", stage: "bg-warn" },
+    { n: "Lena Ortiz", c: "Skal", s: "Customer", stage: "bg-info" },
+  ]
+  return (
+    <Pad>
+      <div className="mb-2 flex items-center gap-2 rounded-md border border-line bg-void px-2.5 py-1.5">
+        <Search className="size-3.5 text-text-faint" />
+        <input placeholder="Search CRM…" className="flex-1 bg-transparent text-xs text-text placeholder:text-text-faint focus:outline-none" />
+      </div>
+      <div className="space-y-1">
+        {people.map((p) => (
+          <div key={p.n} className="flex items-center gap-2.5 rounded-md border border-line bg-void px-2.5 py-2">
+            <span className="grid size-7 shrink-0 place-items-center rounded-full bg-hover text-[10px] font-semibold text-text">
+              {p.n.split(" ").map((x) => x[0]).join("")}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-xs text-text">{p.n}</p>
+              <p className="truncate text-[11px] text-text-faint">{p.c}</p>
+            </div>
+            <span className="flex items-center gap-1 text-[10px] text-text-faint">
+              <span className={cn("size-1.5 rounded-full", p.stage)} />
+              {p.s}
+            </span>
+          </div>
+        ))}
+      </div>
+    </Pad>
+  )
+}
+
+function NotionModule() {
+  const pages = ["Company Wiki", "Q3 GTM Plan", "Agent Playbooks", "Client — Acme", "SOPs / Ops"]
+  return (
+    <Pad>
+      <div className="space-y-0.5 text-xs">
+        {pages.map((p) => (
+          <div key={p} className="flex items-center gap-2 rounded-md px-2 py-1.5 text-text-muted transition-colors hover:bg-hover">
+            <NotebookPen className="size-3.5 text-text-faint" />
+            {p}
+          </div>
+        ))}
+      </div>
+    </Pad>
+  )
+}
+
+function DriveModule() {
+  const files = [
+    { n: "Pitch Deck v4.key", t: "Presentation" },
+    { n: "Financial Model.xlsx", t: "Sheet" },
+    { n: "Brand Assets", t: "Folder" },
+    { n: "Contracts", t: "Folder" },
+    { n: "Recordings", t: "Folder" },
+  ]
+  return (
+    <Pad>
+      <div className="space-y-0.5 text-xs">
+        {files.map((f) => (
+          <div key={f.n} className="flex items-center gap-2 rounded-md px-2 py-1.5 text-text-muted transition-colors hover:bg-hover">
+            <HardDrive className="size-3.5 text-text-faint" />
+            <span className="min-w-0 flex-1 truncate">{f.n}</span>
+            <span className="shrink-0 text-[10px] text-text-faint">{f.t}</span>
+          </div>
+        ))}
+      </div>
+    </Pad>
+  )
+}
+
+/* ------------------------------- shared bits ------------------------------- */
+
+function Bubble({ who, tone, children }: { who: string; tone?: "accent"; children: React.ReactNode }) {
+  return (
+    <div>
+      <p className={cn("mb-0.5 text-[10px] font-medium", tone === "accent" ? "text-accent" : "text-text-faint")}>{who}</p>
+      <p className="rounded-md rounded-tl-none border border-line bg-void px-2.5 py-1.5 text-text-muted">{children}</p>
+    </div>
+  )
+}
+
+function ComposerBar({ placeholder }: { placeholder: string }) {
+  return (
+    <div className="flex shrink-0 items-center gap-2 border-t border-line px-2.5 py-2">
+      <button className="grid size-7 place-items-center rounded-md text-text-muted hover:bg-hover hover:text-text">
+        <Paperclip className="size-3.5" />
+      </button>
+      <input
+        placeholder={placeholder}
+        className="min-w-0 flex-1 rounded-md border border-line bg-void px-2.5 py-1.5 text-xs text-text placeholder:text-text-faint focus:outline-none"
+      />
+      <button className="grid size-7 place-items-center rounded-md text-text-muted hover:bg-hover hover:text-text">
+        <Mic className="size-3.5" />
+      </button>
+      <button className="grid size-7 place-items-center rounded-md bg-accent text-void">
+        <SendHorizontal className="size-3.5" />
+      </button>
+    </div>
+  )
 }
 
 function VideoModule() {

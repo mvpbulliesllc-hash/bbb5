@@ -5,21 +5,31 @@ import { ChevronDown, Check, PanelLeftClose, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { MODULES, MODULE_MAP, type ModuleId, type ModuleGroup } from "./module-registry"
 
-const GROUP_ORDER: ModuleGroup[] = ["Surface", "Social", "Dev", "Creative", "System"]
+const GROUP_ORDER: ModuleGroup[] = ["Surface", "Comms", "Workspace", "Social", "Dev", "Creative", "System"]
 
 export function PanelContainer({
   defaultModule,
+  module: controlledModule,
+  onModuleChange,
   onCollapse,
   collapseIcon = "chevron",
   className,
 }: {
   defaultModule: ModuleId
+  /** Controlled module — when provided, the parent owns the active module. */
+  module?: ModuleId
+  onModuleChange?: (id: ModuleId) => void
   /** When provided, a collapse button is shown that calls this handler. */
   onCollapse?: () => void
   collapseIcon?: "chevron" | "x" | "panel"
   className?: string
 }) {
-  const [moduleId, setModuleId] = useState<ModuleId>(defaultModule)
+  const [internalModule, setInternalModule] = useState<ModuleId>(defaultModule)
+  const moduleId = controlledModule ?? internalModule
+  const setModuleId = (id: ModuleId) => {
+    setInternalModule(id)
+    onModuleChange?.(id)
+  }
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const current = MODULE_MAP[moduleId]

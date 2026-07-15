@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { ChevronsUpDown, PanelLeftClose, Plus, Search, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { NAV_SECTIONS, NAV_FOOTER } from "./nav-config"
+import { HUBS, NAV_SECTIONS, NAV_FOOTER, type NavItem } from "./nav-config"
+import type { ModuleId } from "./module-registry"
 
 const TENANTS = ["EcoMVP LLC", "Skal Ventures", "Paragon Group", "MVP Management"]
 
@@ -11,13 +12,28 @@ export function LeftNav({
   active,
   onSelect,
   onCollapse,
+  hubId,
+  onHubChange,
+  onOpenModule,
 }: {
   active: string
   onSelect: (id: string) => void
   onCollapse: () => void
+  hubId: string
+  onHubChange: (id: string) => void
+  onOpenModule: (id: ModuleId) => void
 }) {
   const [tenant, setTenant] = useState(TENANTS[0])
   const [tenantOpen, setTenantOpen] = useState(false)
+  const [hubOpen, setHubOpen] = useState(false)
+
+  const hub = HUBS.find((h) => h.id === hubId) ?? HUBS[0]
+  const HubIcon = hub.icon
+
+  function handleRailClick(item: NavItem) {
+    onSelect(item.id)
+    if (item.module) onOpenModule(item.module)
+  }
 
   return (
     <div className="gloss flex h-full flex-col border-r border-line">
@@ -82,8 +98,89 @@ export function LeftNav({
         </button>
       </div>
 
-      {/* Sections */}
+      {/* HUB switcher — fixed tabs, directly below search */}
+      <div className="relative shrink-0 px-2 pb-2">
+        <button
+          onClick={() => setHubOpen((v) => !v)}
+          className="flex w-full items-center gap-2 rounded-md border border-line bg-void px-2.5 py-2 text-left transition-colors hover:border-line-strong"
+        >
+          <HubIcon className="size-4 shrink-0 text-accent" />
+          <span className="flex-1 truncate text-sm font-medium text-text">{hub.label}</span>
+          <ChevronsUpDown className="size-3.5 shrink-0 text-text-faint" />
+        </button>
+
+        {hubOpen ? (
+          <div className="absolute inset-x-2 top-full z-30 mt-1 overflow-hidden rounded-lg border border-line-strong bg-elevated p-1 shadow-2xl shadow-black/60">
+            {HUBS.map((h) => {
+              const Icon = h.icon
+              return (
+                <button
+                  key={h.id}
+                  onClick={() => {
+                    onHubChange(h.id)
+                    setHubOpen(false)
+                  }}
+                  className={cn(
+                    "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors",
+                    h.id === hubId ? "bg-hover text-text" : "text-text-muted hover:bg-hover hover:text-text",
+                  )}
+                >
+                  <Icon className={cn("size-4", h.id === hubId ? "text-accent" : "text-text-faint")} />
+                  <span className="flex-1 truncate">{h.label}</span>
+                  {h.id === hubId ? <Check className="size-3.5 text-accent" /> : null}
+                </button>
+              )
+            })}
+          </div>
+        ) : null}
+      </div>
+
+      {/* Scroll region: hub rail + global nav */}
       <nav className="min-h-0 flex-1 overflow-y-auto px-2 pb-3">
+        {/* Active hub's quick-glance rail */}
+        {hub.rail.map((section) => (
+          <div key={section.id} className="mb-3">
+            {section.title ? (
+              <p className="px-2 pb-1 pt-1 text-[10px] font-semibold uppercase tracking-widest text-text-faint">
+                {section.title}
+              </p>
+            ) : null}
+            <ul className="space-y-0.5">
+              {section.items.map((item) => {
+                const Icon = item.icon
+                const isActive = active === item.id
+                return (
+                  <li key={item.id}>
+                    <button
+                      onClick={() => handleRailClick(item)}
+                      className={cn(
+                        "group flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
+                        isActive ? "bg-hover text-text" : "text-text-muted hover:bg-hover/60 hover:text-text",
+                      )}
+                    >
+                      <Icon
+                        className={cn(
+                          "size-4 shrink-0",
+                          isActive ? "text-accent" : "text-text-faint group-hover:text-text-muted",
+                        )}
+                      />
+                      <span className="truncate">{item.label}</span>
+                      {item.badge ? (
+                        <span className="ml-auto rounded bg-elevated px-1.5 py-0.5 text-[10px] text-text-muted">
+                          {item.badge}
+                        </span>
+                      ) : null}
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        ))}
+
+        <div className="my-2 h-px bg-line" />
+
+        {/* Global platform nav */}
         {NAV_SECTIONS.map((section) => (
           <div key={section.id} className="mb-3">
             {section.title ? (
@@ -101,9 +198,7 @@ export function LeftNav({
                       onClick={() => onSelect(item.id)}
                       className={cn(
                         "group flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
-                        isActive
-                          ? "bg-hover text-text"
-                          : "text-text-muted hover:bg-hover/60 hover:text-text",
+                        isActive ? "bg-hover text-text" : "text-text-muted hover:bg-hover/60 hover:text-text",
                       )}
                     >
                       <Icon
@@ -113,11 +208,6 @@ export function LeftNav({
                         )}
                       />
                       <span className="truncate">{item.label}</span>
-                      {item.badge ? (
-                        <span className="ml-auto rounded bg-elevated px-1.5 py-0.5 text-[10px] text-text-muted">
-                          {item.badge}
-                        </span>
-                      ) : null}
                     </button>
                   </li>
                 )

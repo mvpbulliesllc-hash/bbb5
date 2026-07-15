@@ -23,6 +23,11 @@
   --accent-soft: oklch(0.72 0 0);
   --ring: oklch(0.55 0 0);
 
+  /* restrained status signals — tiny dots only, never fills */
+  --info: oklch(0.72 0.05 235); /* cool steel */
+  --warn: oklch(0.78 0.09 75); /* muted amber */
+  --live: oklch(0.7 0.14 145); /* record/live green */
+
   --radius: 0.625rem;
 
   --background: var(--obsidian-850);
@@ -48,6 +53,10 @@
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
   --color-ring: var(--ring);
+
+  --color-info: var(--info);
+  --color-warn: var(--warn);
+  --color-live: var(--live);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

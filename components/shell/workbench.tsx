@@ -8,6 +8,7 @@ import { LeftNav } from "./left-nav"
 import { AgentPanel } from "./agent-panel"
 import { PanelContainer } from "./panel-container"
 import { TopBar } from "./top-bar"
+import type { ModuleId } from "./module-registry"
 
 export function Workbench() {
   const leftRef = useRef<ImperativePanelHandle>(null)
@@ -17,7 +18,9 @@ export function Workbench() {
   const [leftCollapsed, setLeftCollapsed] = useState(false)
   const [rightCollapsed, setRightCollapsed] = useState(true)
   const [dockCollapsed, setDockCollapsed] = useState(false)
-  const [active, setActive] = useState("agents")
+  const [active, setActive] = useState("ws-gmail")
+  const [hubId, setHubId] = useState("workspace")
+  const [mainModule, setMainModule] = useState<ModuleId>("gmail")
 
   return (
     <div className="flex h-dvh w-full flex-col overflow-hidden bg-background">
@@ -53,7 +56,14 @@ export function Workbench() {
             onCollapse={() => setLeftCollapsed(true)}
             onExpand={() => setLeftCollapsed(false)}
           >
-            <LeftNav active={active} onSelect={setActive} onCollapse={() => leftRef.current?.collapse()} />
+            <LeftNav
+              active={active}
+              onSelect={setActive}
+              onCollapse={() => leftRef.current?.collapse()}
+              hubId={hubId}
+              onHubChange={setHubId}
+              onOpenModule={setMainModule}
+            />
           </ResizablePanel>
 
           <ResizableHandle />
@@ -69,7 +79,11 @@ export function Workbench() {
           <ResizablePanel id="main" order={3} defaultSize={42} minSize={30}>
             <ResizablePanelGroup direction="vertical" autoSaveId="obsidian-shell-v">
               <ResizablePanel id="surface" order={1} defaultSize={64} minSize={20}>
-                <PanelContainer defaultModule="browser" />
+                <PanelContainer
+                  defaultModule="browser"
+                  module={mainModule}
+                  onModuleChange={setMainModule}
+                />
               </ResizablePanel>
 
               <ResizableHandle withHandle />

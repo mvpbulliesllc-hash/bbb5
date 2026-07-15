@@ -12,6 +12,9 @@ import {
   SquareArrowOutUpRight,
   LayoutPanelTop,
   Monitor,
+  Mic,
+  Video,
+  ScreenShare,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -25,6 +28,10 @@ const INITIAL_TABS: Tab[] = [
 export function BrowserView() {
   const [tabs, setTabs] = useState(INITIAL_TABS)
   const [activeTab, setActiveTab] = useState("1")
+  const [recAudio, setRecAudio] = useState(false)
+  const [recVideo, setRecVideo] = useState(false)
+  const [recScreen, setRecScreen] = useState(false)
+  const recording = recAudio || recVideo || recScreen
 
   return (
     <div className="flex h-full flex-col bg-void">
@@ -89,6 +96,25 @@ export function BrowserView() {
           </span>
         </div>
 
+        {/* Record push-buttons — hard-wired capture */}
+        <div className="mx-1 flex items-center gap-0.5 rounded-md border border-line bg-panel px-0.5 py-0.5">
+          <RecBtn title="Record audio" active={recAudio} onClick={() => setRecAudio((v) => !v)}>
+            <Mic className="size-4" />
+          </RecBtn>
+          <RecBtn title="Record video" active={recVideo} onClick={() => setRecVideo((v) => !v)}>
+            <Video className="size-4" />
+          </RecBtn>
+          <RecBtn title="Record screen" active={recScreen} onClick={() => setRecScreen((v) => !v)}>
+            <ScreenShare className="size-4" />
+          </RecBtn>
+          {recording ? (
+            <span className="flex items-center gap-1 pl-1 pr-1.5 text-[10px] font-medium text-live">
+              <span className="size-1.5 animate-pulse rounded-full bg-live" />
+              REC
+            </span>
+          ) : null}
+        </div>
+
         <ChromeBtn title="Share">
           <Share2 className="size-4" />
         </ChromeBtn>
@@ -116,6 +142,31 @@ export function BrowserView() {
         </div>
       </div>
     </div>
+  )
+}
+
+function RecBtn({
+  children,
+  title,
+  active,
+  onClick,
+}: {
+  children: React.ReactNode
+  title: string
+  active: boolean
+  onClick: () => void
+}) {
+  return (
+    <button
+      title={title}
+      onClick={onClick}
+      className={cn(
+        "grid size-7 place-items-center rounded transition-colors",
+        active ? "bg-live/15 text-live" : "text-text-muted hover:bg-hover hover:text-text",
+      )}
+    >
+      {children}
+    </button>
   )
 }
 

@@ -1,28 +1,39 @@
 import {
-  LayoutGrid,
   MessagesSquare,
   Bot,
   FolderGit2,
   Palette,
-  Share2,
   Terminal,
   Sparkles,
-  Megaphone,
-  FlaskConical,
   Plug,
   Cable,
   Webhook,
   Boxes,
   Settings,
   Home,
+  Briefcase,
+  Landmark,
+  Share2,
+  Mail,
+  MessageCircle,
+  Phone,
+  Contact,
+  NotebookPen,
+  HardDrive,
+  Inbox,
+  Video,
+  Users,
   type LucideIcon,
 } from "lucide-react"
+import type { ModuleId } from "./module-registry"
 
 export type NavItem = {
   id: string
   label: string
   icon: LucideIcon
   badge?: string
+  /** If set, selecting this item opens the module in the main surface. */
+  module?: ModuleId
 }
 
 export type NavSection = {
@@ -31,9 +42,111 @@ export type NavSection = {
   items: NavItem[]
 }
 
+/** Fixed hubs — the switcher lives in the left rail, directly below Search. */
+export type Hub = {
+  id: string
+  label: string
+  icon: LucideIcon
+  /** Quick-glance rail shown in the left pane while this hub is active. */
+  rail: NavSection[]
+}
+
+export const HUBS: Hub[] = [
+  {
+    id: "workspace",
+    label: "Work Space",
+    icon: Briefcase,
+    rail: [
+      {
+        id: "comms",
+        title: "Comms",
+        items: [
+          { id: "ws-gmail", label: "Gmail", icon: Mail, module: "gmail", badge: "12" },
+          { id: "ws-gchat", label: "Google Chat", icon: MessageCircle, module: "gchat" },
+          { id: "ws-gvoice", label: "Google Voice", icon: Phone, module: "gvoice" },
+          { id: "ws-messages", label: "Message Hub", icon: Inbox, module: "messages", badge: "5" },
+        ],
+      },
+      {
+        id: "office",
+        title: "Virtual Office",
+        items: [
+          { id: "ws-office", label: "Office / Rooms", icon: Users, module: "office" },
+          { id: "ws-meet", label: "Meet & Zoom", icon: Video, module: "meet" },
+        ],
+      },
+      {
+        id: "knowledge",
+        title: "Knowledge",
+        items: [
+          { id: "ws-contacts", label: "Contacts / CRM", icon: Contact, module: "contacts" },
+          { id: "ws-notion", label: "Notion", icon: NotebookPen, module: "notion" },
+          { id: "ws-drive", label: "Drive", icon: HardDrive, module: "drive" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "financial",
+    label: "Financial",
+    icon: Landmark,
+    rail: [
+      {
+        id: "fin",
+        title: "Ledger",
+        items: [
+          { id: "fin-dash", label: "Dashboard", icon: Landmark, module: "analytics" },
+          { id: "fin-receipts", label: "Receipt Intake", icon: Inbox, module: "files" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "social",
+    label: "Social",
+    icon: Share2,
+    rail: [
+      {
+        id: "soc",
+        title: "Channels",
+        items: [{ id: "soc-feed", label: "Feeds", icon: Share2, module: "social" }],
+      },
+    ],
+  },
+  {
+    id: "creative",
+    label: "Creative",
+    icon: Sparkles,
+    rail: [
+      {
+        id: "cre",
+        title: "Studio",
+        items: [{ id: "cre-image", label: "Image Gen", icon: Sparkles, module: "image" }],
+      },
+    ],
+  },
+  {
+    id: "dev",
+    label: "Dev",
+    icon: Terminal,
+    rail: [
+      {
+        id: "dev",
+        title: "Toolchain",
+        items: [
+          { id: "dev-term", label: "Terminal", icon: Terminal, module: "terminal" },
+          { id: "dev-files", label: "Files", icon: FolderGit2, module: "files" },
+        ],
+      },
+    ],
+  },
+]
+
+/** Global nav shown under every hub's rail. */
 export const NAV_SECTIONS: NavSection[] = [
   {
     id: "primary",
+    title: "Platform",
     items: [
       { id: "home", label: "Home", icon: Home },
       { id: "projects", label: "Projects", icon: FolderGit2 },
@@ -43,19 +156,8 @@ export const NAV_SECTIONS: NavSection[] = [
     ],
   },
   {
-    id: "hubs",
-    title: "Hubs",
-    items: [
-      { id: "social", label: "Social Hub", icon: Share2 },
-      { id: "dev", label: "Dev Hub", icon: Terminal },
-      { id: "creative", label: "Creative Hub", icon: Sparkles },
-      { id: "outbound", label: "Outbound Hub", icon: Megaphone },
-      { id: "research", label: "Research Hub", icon: FlaskConical },
-    ],
-  },
-  {
     id: "platform",
-    title: "Platform",
+    title: "System",
     items: [
       { id: "integrations", label: "Integrations", icon: Plug },
       { id: "connectors", label: "Connectors", icon: Cable },
@@ -66,5 +168,3 @@ export const NAV_SECTIONS: NavSection[] = [
 ]
 
 export const NAV_FOOTER: NavItem[] = [{ id: "settings", label: "Settings", icon: Settings }]
-
-export { LayoutGrid }
