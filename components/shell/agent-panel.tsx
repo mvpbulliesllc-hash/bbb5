@@ -135,14 +135,14 @@ export function AgentPanel() {
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             rows={2}
-            placeholder='Prompt the team, or say "Jarvis"…'
+            placeholder='Prompt the team, or say "Elliana"…'
             className="max-h-40 min-h-9 w-full resize-none bg-transparent px-1.5 py-1 text-sm text-text placeholder:text-text-faint focus:outline-none"
           />
           <div className="mt-1 flex items-center gap-1">
             <IconBtn title="Attach">
               <Paperclip className="size-4" />
             </IconBtn>
-            <IconBtn title="Voice prompt (Jarvis)">
+            <IconBtn title="Voice prompt (Elliana)">
               <Mic className="size-4" />
             </IconBtn>
             <button
@@ -171,7 +171,7 @@ export function AgentPanel() {
         {humeLive ? (
           <div className="mt-1.5 flex items-center gap-2 px-1 text-[11px] text-accent-soft">
             <AudioLines className="size-3.5 animate-pulse" />
-            Hume EVI connected — speak naturally, Hermes is listening.
+            Elliana is live — speak naturally, she&apos;s coordinating the team.
           </div>
         ) : null}
       </div>

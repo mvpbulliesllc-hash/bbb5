@@ -16,7 +16,7 @@ export function TopBar({
         <span className="grid size-6 place-items-center rounded-md bg-accent text-void">
           <Hexagon className="size-3.5" />
         </span>
-        <span className="text-sm font-semibold tracking-tight text-text">Obsidian</span>
+        <span className="text-sm font-semibold tracking-tight text-text">Paragon Exterior</span>
       </div>
 
       <div className="flex items-center gap-1.5 text-xs text-text-muted">
