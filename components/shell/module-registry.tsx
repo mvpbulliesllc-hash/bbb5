@@ -38,6 +38,20 @@ import {
   ArrowUpFromLine,
   Filter,
   Circle,
+  ClipboardList,
+  Archive,
+  Sheet,
+  BookOpen,
+  Tag,
+  Clock,
+  ExternalLink,
+  FolderPlus,
+  Link2,
+  Sparkles,
+  ScanSearch,
+  Globe2,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react"
 import { BrowserView } from "./browser-view"
 import { BrandIcon, type BrandSlug } from "./brand-icon"
@@ -113,7 +127,7 @@ export const MODULES: ModuleDef[] = [
 
   { id: "pipeline", label: "Pipeline (CRM · In · Out)", icon: Workflow, group: "Workspace", render: () => <PipelineModule /> },
   { id: "contacts", label: "Contacts / CRM", icon: Contact, group: "Workspace", render: () => <ContactsModule /> },
-  { id: "notion", label: "Notion", icon: NotebookPen, group: "Workspace", render: () => <NotionModule /> },
+  { id: "notion", label: "NotebookLM", icon: BookOpen, group: "Workspace", render: () => <NotionModule /> },
   { id: "drive", label: "Drive", icon: HardDrive, group: "Workspace", render: () => <DriveModule /> },
 
   { id: "social", label: "Socials", icon: Instagram, group: "Social", render: () => <SocialModule /> },
@@ -786,6 +800,350 @@ function NotesModule() {
     </div>
   )
 }
+
+/* ----------------------- Research Brief Builder ---------------------------- */
+
+const BRIEF_SECTIONS = [
+  {
+    id: "target",
+    title: "Target Profile",
+    fields: ["Industry / Vertical", "Company size", "Geo / Region", "Job title / Persona", "Revenue range"],
+  },
+  {
+    id: "signals",
+    title: "Intent Signals",
+    fields: ["Hiring for...", "Funding round", "Tech stack", "Recent news trigger", "Social activity keywords"],
+  },
+  {
+    id: "scrape",
+    title: "Scrape & Sources",
+    fields: ["Domains to scrape", "LinkedIn filters", "Apollo / Hunter query", "Reddit / Twitter keywords", "Review sites (G2, Capterra)"],
+  },
+  {
+    id: "output",
+    title: "Output Config",
+    fields: ["Export to Sheet", "Auto-enrich (email/phone)", "Tag pipeline stage", "Assign agent", "Drip sequence to trigger"],
+  },
+]
+
+function BriefModule() {
+  const [open, setOpen] = useState<string[]>(["target"])
+  const toggle = (id: string) =>
+    setOpen((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]))
+
+  return (
+    <div className="flex h-full min-h-0 flex-col">
+      {/* header bar */}
+      <div className="flex shrink-0 items-center gap-2 border-b border-line px-3 py-1.5">
+        <ScanSearch className="size-3.5 text-accent" />
+        <span className="text-xs font-medium text-text">Lead Gen Research Brief</span>
+        <div className="ml-auto flex items-center gap-1.5">
+          <button className="flex items-center gap-1 rounded border border-line px-2 py-1 text-[11px] text-text-muted hover:bg-hover hover:text-text">
+            <Sparkles className="size-3" /> Auto-fill AI
+          </button>
+          <button className="flex items-center gap-1 rounded bg-accent px-2 py-1 text-[11px] font-medium text-void">
+            <Globe2 className="size-3" /> Run Scrape
+          </button>
+        </div>
+      </div>
+
+      {/* progress bar */}
+      <div className="flex shrink-0 items-center gap-2 border-b border-line px-3 py-1.5">
+        {BRIEF_SECTIONS.map((s, i) => (
+          <div key={s.id} className="flex items-center gap-1.5">
+            {i > 0 ? <div className="h-px w-4 bg-line" /> : null}
+            <button
+              onClick={() => toggle(s.id)}
+              className={cn(
+                "flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] transition-colors",
+                open.includes(s.id)
+                  ? "bg-accent text-void"
+                  : "border border-line text-text-muted hover:bg-hover hover:text-text",
+              )}
+            >
+              {i + 1} {s.title}
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* accordion fields */}
+      <div className="min-h-0 flex-1 overflow-auto">
+        {BRIEF_SECTIONS.map((s) => (
+          <div key={s.id} className="border-b border-line">
+            <button
+              onClick={() => toggle(s.id)}
+              className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs font-medium text-text transition-colors hover:bg-hover/40"
+            >
+              {open.includes(s.id) ? (
+                <ChevronDown className="size-3.5 text-text-faint" />
+              ) : (
+                <ChevronRight className="size-3.5 text-text-faint" />
+              )}
+              {s.title}
+              <span className="ml-auto text-[10px] text-text-faint">{s.fields.length} fields</span>
+            </button>
+            {open.includes(s.id) ? (
+              <div className="grid grid-cols-2 gap-2 px-4 pb-3">
+                {s.fields.map((f) => (
+                  <div key={f} className="flex flex-col gap-1">
+                    <label className="text-[10px] font-medium uppercase tracking-wide text-text-faint">{f}</label>
+                    <input
+                      className="rounded-md border border-line bg-void px-2.5 py-1.5 text-xs text-text placeholder:text-text-faint focus:border-line-strong focus:outline-none"
+                      placeholder={`Enter ${f.toLowerCase()}…`}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        ))}
+
+        {/* saved briefs */}
+        <div className="p-3">
+          <p className="mb-2 text-[10px] font-medium uppercase tracking-wide text-text-faint">Saved Briefs</p>
+          <div className="space-y-1">
+            {["SaaS CFOs — Series A", "E-com brands $1M–10M", "Agencies scaling headcount"].map((b) => (
+              <div
+                key={b}
+                className="flex items-center gap-2 rounded-md border border-line px-2.5 py-1.5 text-xs text-text-muted hover:bg-hover"
+              >
+                <ClipboardList className="size-3.5 shrink-0 text-text-faint" />
+                <span className="min-w-0 flex-1 truncate">{b}</span>
+                <Globe2 className="size-3.5 shrink-0 text-text-faint hover:text-text" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ----------------------- Asset Vault --------------------------------------- */
+
+const ASSET_TYPES = ["All", "Doc", "Sheet", "Image", "Video", "Audio", "Link", "Brief"] as const
+type AssetType = (typeof ASSET_TYPES)[number]
+
+const VAULT_ITEMS: {
+  name: string
+  type: AssetType
+  tags: string[]
+  source: string
+  ago: string
+}[] = [
+  { name: "Q3 GTM Deck v4", type: "Doc", tags: ["strategy", "deck"], source: "AI generated", ago: "2h" },
+  { name: "Lead list — SaaS CFOs", type: "Sheet", tags: ["leads", "q3"], source: "Brief run", ago: "3h" },
+  { name: "Hero shot — dark bg", type: "Image", tags: ["brand", "creative"], source: "Image gen", ago: "4h" },
+  { name: "Outreach script v2", type: "Doc", tags: ["copy", "outbound"], source: "AI generated", ago: "5h" },
+  { name: "Podcast ep12 raw", type: "Audio", tags: ["content"], source: "Recording", ago: "1d" },
+  { name: "Competitor teardown", type: "Sheet", tags: ["research"], source: "Agent scrape", ago: "1d" },
+  { name: "IG carousel — Aug", type: "Image", tags: ["social", "creative"], source: "Image gen", ago: "2d" },
+  { name: "Loom — product demo", type: "Video", tags: ["sales"], source: "Screen record", ago: "2d" },
+  { name: "SEO keyword map", type: "Sheet", tags: ["seo", "research"], source: "Brief run", ago: "3d" },
+  { name: "Brand voice guide", type: "Doc", tags: ["brand"], source: "AI generated", ago: "4d" },
+]
+
+const TYPE_COLORS: Record<string, string> = {
+  Doc: "text-info",
+  Sheet: "text-live",
+  Image: "text-warn",
+  Video: "text-warn",
+  Audio: "text-accent",
+  Link: "text-text-faint",
+  Brief: "text-accent",
+}
+
+function AssetVaultModule() {
+  const [filter, setFilter] = useState<AssetType>("All")
+  const [search, setSearch] = useState("")
+
+  const visible = VAULT_ITEMS.filter((item) => {
+    const matchType = filter === "All" || item.type === filter
+    const matchSearch =
+      !search ||
+      item.name.toLowerCase().includes(search.toLowerCase()) ||
+      item.tags.some((t) => t.includes(search.toLowerCase()))
+    return matchType && matchSearch
+  })
+
+  return (
+    <div className="flex h-full min-h-0 flex-col">
+      {/* toolbar */}
+      <div className="flex shrink-0 items-center gap-2 border-b border-line px-3 py-1.5">
+        <Archive className="size-3.5 text-accent" />
+        <span className="text-xs font-medium text-text">Asset Vault</span>
+        <span className="text-[11px] text-text-faint">{VAULT_ITEMS.length} assets</span>
+        <div className="ml-auto flex items-center gap-1">
+          <button className="flex items-center gap-1 rounded border border-line px-2 py-1 text-[11px] text-text-muted hover:bg-hover hover:text-text">
+            <FolderPlus className="size-3" /> New folder
+          </button>
+          <button className="flex items-center gap-1 rounded border border-line px-2 py-1 text-[11px] text-text-muted hover:bg-hover hover:text-text">
+            <Link2 className="size-3" /> Import
+          </button>
+        </div>
+      </div>
+
+      {/* search + type filter */}
+      <div className="flex shrink-0 flex-col gap-1.5 border-b border-line px-3 py-2">
+        <div className="flex items-center gap-2 rounded-md border border-line bg-void px-2.5 py-1.5">
+          <Search className="size-3.5 shrink-0 text-text-faint" />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name, tag, source…"
+            className="flex-1 bg-transparent text-xs text-text placeholder:text-text-faint focus:outline-none"
+          />
+          {search ? (
+            <button onClick={() => setSearch("")} className="text-text-faint hover:text-text">
+              <Filter className="size-3" />
+            </button>
+          ) : null}
+        </div>
+        <div className="flex items-center gap-1 overflow-x-auto pb-0.5">
+          {ASSET_TYPES.map((t) => (
+            <button
+              key={t}
+              onClick={() => setFilter(t)}
+              className={cn(
+                "shrink-0 rounded-full px-2 py-0.5 text-[11px] transition-colors",
+                filter === t
+                  ? "bg-hover text-text"
+                  : "border border-line text-text-muted hover:bg-hover/60",
+              )}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* asset list */}
+      <div className="min-h-0 flex-1 overflow-auto">
+        {visible.length === 0 ? (
+          <p className="p-4 text-center text-xs text-text-faint">No assets match.</p>
+        ) : (
+          visible.map((item) => (
+            <div
+              key={item.name}
+              className="group flex items-center gap-2.5 border-b border-line/60 px-3 py-2 transition-colors hover:bg-hover/40"
+            >
+              <span className={cn("w-10 shrink-0 text-[10px] font-medium", TYPE_COLORS[item.type] ?? "text-text-faint")}>
+                {item.type}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-xs text-text">{item.name}</p>
+                <div className="mt-0.5 flex items-center gap-1.5">
+                  <span className="text-[10px] text-text-faint">{item.source}</span>
+                  {item.tags.map((tag) => (
+                    <span key={tag} className="flex items-center gap-0.5 rounded bg-hover px-1 text-[10px] text-text-faint">
+                      <Tag className="size-2.5" />
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <span className="flex shrink-0 items-center gap-1 text-[10px] text-text-faint">
+                <Clock className="size-3" /> {item.ago}
+              </span>
+              <button className="invisible size-6 place-items-center rounded text-text-faint hover:text-text group-hover:grid">
+                <ExternalLink className="size-3.5" />
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  )
+}
+
+/* ----------------------- Sheets / Docs wrappers ---------------------------- */
+
+function SheetsModule() {
+  const sheets = [
+    { name: "Lead list — SaaS CFOs", rows: 412, updated: "2h" },
+    { name: "Competitor teardown", rows: 88, updated: "1d" },
+    { name: "SEO keyword map", rows: 230, updated: "3d" },
+    { name: "Financial model 2026", rows: 540, updated: "5d" },
+  ]
+  return (
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="flex shrink-0 items-center gap-2 border-b border-line px-3 py-1.5">
+        <BrandIcon slug="google-sheets" size={14} />
+        <span className="text-xs font-medium text-text">Sheets</span>
+        <div className="ml-auto flex items-center gap-1">
+          <button className="flex items-center gap-1 rounded bg-accent px-2 py-1 text-[11px] font-medium text-void">
+            <Plus className="size-3" /> New sheet
+          </button>
+        </div>
+      </div>
+      <div className="min-h-0 flex-1 overflow-auto">
+        {sheets.map((s) => (
+          <div
+            key={s.name}
+            className="flex items-center gap-2.5 border-b border-line/60 px-3 py-2 transition-colors hover:bg-hover/40"
+          >
+            <BrandIcon slug="google-sheets" size={16} />
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-xs text-text">{s.name}</p>
+              <p className="text-[11px] text-text-faint">{s.rows} rows</p>
+            </div>
+            <span className="flex items-center gap-1 text-[10px] text-text-faint">
+              <Clock className="size-3" /> {s.updated}
+            </span>
+            <button className="grid size-6 place-items-center rounded text-text-faint hover:text-text">
+              <ExternalLink className="size-3.5" />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function DocsModule() {
+  const docsItems = [
+    { name: "Q3 GTM Deck", type: "Doc", updated: "2h" },
+    { name: "Outreach script v2", type: "Doc", updated: "5h" },
+    { name: "Brand voice guide", type: "Doc", updated: "4d" },
+    { name: "Company Wiki", type: "Doc", updated: "1w" },
+  ]
+  return (
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="flex shrink-0 items-center gap-2 border-b border-line px-3 py-1.5">
+        <BrandIcon slug="google-docs" size={14} />
+        <span className="text-xs font-medium text-text">Docs</span>
+        <div className="ml-auto flex items-center gap-1">
+          <button className="flex items-center gap-1 rounded bg-accent px-2 py-1 text-[11px] font-medium text-void">
+            <Plus className="size-3" /> New doc
+          </button>
+        </div>
+      </div>
+      <div className="min-h-0 flex-1 overflow-auto">
+        {docsItems.map((d) => (
+          <div
+            key={d.name}
+            className="flex items-center gap-2.5 border-b border-line/60 px-3 py-2 transition-colors hover:bg-hover/40"
+          >
+            <BrandIcon slug="google-docs" size={16} />
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-xs text-text">{d.name}</p>
+              <p className="text-[11px] text-text-faint">{d.type}</p>
+            </div>
+            <span className="flex items-center gap-1 text-[10px] text-text-faint">
+              <Clock className="size-3" /> {d.updated}
+            </span>
+            <button className="grid size-6 place-items-center rounded text-text-faint hover:text-text">
+              <ExternalLink className="size-3.5" />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ---------------------- Live Research Results ------------------------------ */
 
 function ResearchModule() {
   return (

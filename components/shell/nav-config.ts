@@ -24,6 +24,11 @@ import {
   Video,
   Users,
   Workflow,
+  ScanSearch,
+  Archive,
+  Sheet,
+  FileText,
+  BookOpen,
   type LucideIcon,
 } from "lucide-react"
 import type { ModuleId } from "./module-registry"
@@ -91,7 +96,7 @@ export const HUBS: Hub[] = [
         title: "Knowledge",
         items: [
           { id: "ws-contacts", label: "Contacts / CRM", icon: Contact, module: "contacts" },
-          { id: "ws-notion", label: "Notion", icon: NotebookPen, module: "notion", brand: "notion" },
+          { id: "ws-notion", label: "NotebookLM", icon: NotebookPen, module: "notion", brand: "notion" },
           { id: "ws-drive", label: "Drive", icon: HardDrive, module: "drive", brand: "google-drive" },
         ],
       },
@@ -108,6 +113,31 @@ export const HUBS: Hub[] = [
         items: [
           { id: "fin-dash", label: "Dashboard", icon: Landmark, module: "analytics" },
           { id: "fin-receipts", label: "Receipt Intake", icon: Inbox, module: "files" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "research",
+    label: "Research",
+    icon: ScanSearch,
+    rail: [
+      {
+        id: "res-tools",
+        title: "Brief & Scrape",
+        items: [
+          { id: "res-brief", label: "Research Brief", icon: ScanSearch, module: "brief" },
+          { id: "res-assets", label: "Asset Vault", icon: Archive, module: "assets" },
+        ],
+      },
+      {
+        id: "res-docs",
+        title: "Sheets & Docs",
+        items: [
+          { id: "res-sheets", label: "Sheets", icon: Sheet, module: "sheets", brand: "google-sheets" },
+          { id: "res-docs", label: "Docs", icon: FileText, module: "docs", brand: "google-docs" },
+          { id: "res-nb", label: "NotebookLM", icon: BookOpen, module: "notion", brand: "notion" },
+          { id: "res-drive", label: "Drive", icon: HardDrive, module: "drive", brand: "google-drive" },
         ],
       },
     ],
