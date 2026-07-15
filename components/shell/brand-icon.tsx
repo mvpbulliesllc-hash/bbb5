@@ -9,6 +9,8 @@ export type BrandSlug =
   | "google-voice"
   | "google-drive"
   | "google-meet"
+  | "google-sheets"
+  | "google-docs"
   | "zoom"
   | "notion"
   | "slack"

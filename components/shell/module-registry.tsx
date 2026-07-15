@@ -56,6 +56,10 @@ export type ModuleId =
   | "env"
   | "outbound"
   | "research"
+  | "brief"
+  | "assets"
+  | "sheets"
+  | "docs"
   | "notes"
   | "analytics"
   | "connectors"
@@ -72,7 +76,15 @@ export type ModuleId =
   | "meet"
   | "empty"
 
-export type ModuleGroup = "Surface" | "Workspace" | "Comms" | "Social" | "Dev" | "Creative" | "System"
+export type ModuleGroup =
+  | "Surface"
+  | "Workspace"
+  | "Comms"
+  | "Social"
+  | "Research"
+  | "Dev"
+  | "Creative"
+  | "System"
 
 export type ModuleDef = {
   id: ModuleId
@@ -114,10 +126,15 @@ export const MODULES: ModuleDef[] = [
   { id: "webhooks", label: "Webhooks", icon: Webhook, group: "Dev", render: () => <WebhooksModule /> },
   { id: "connectors", label: "Connectors", icon: Waypoints, group: "Dev", render: () => <ConnectorsModule /> },
 
+  { id: "brief", label: "Research Brief", icon: ClipboardList, group: "Research", render: () => <BriefModule /> },
+  { id: "assets", label: "Asset Vault", icon: Archive, group: "Research", render: () => <AssetVaultModule /> },
+  { id: "sheets", label: "Sheets", icon: Sheet, group: "Research", render: () => <SheetsModule /> },
+  { id: "docs", label: "Docs", icon: FileText, group: "Research", render: () => <DocsModule /> },
+
   { id: "image", label: "Image Gen", icon: ImagePlus, group: "Creative", render: () => <ImageModule /> },
   { id: "notes", label: "Notes", icon: FileText, group: "Creative", render: () => <NotesModule /> },
 
-  { id: "research", label: "Research", icon: Search, group: "System", render: () => <ResearchModule /> },
+  { id: "research", label: "Live Results", icon: Search, group: "Research", render: () => <ResearchModule /> },
   { id: "config", label: "Config", icon: SlidersHorizontal, group: "System", render: () => <ConfigModule /> },
   { id: "empty", label: "Empty", icon: LayoutGrid, group: "System", render: () => <EmptyModule /> },
 ]
