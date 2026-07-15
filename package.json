@@ -1,0 +1,30 @@
+{
+  "name": "obsidian-workbench-shell",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^16.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-resizable-panels": "^2.1.7",
+    "lucide-react": "^0.475.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
+    "tailwindcss": "^4.1.11",
+    "postcss": "^8.4.49",
+    "typescript": "^5.7.2",
+    "@types/node": "^22.10.1",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0"
+  }
+}
