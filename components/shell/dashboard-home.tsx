@@ -269,32 +269,30 @@ export function DashboardHome({ onEnter }: { onEnter: () => void }) {
           </button>
         </div>
 
-        {/* avatar placeholder — swap in your Hume iframe/component here */}
-        <div className="relative flex aspect-video w-full items-center justify-center bg-void">
-          <div className="flex flex-col items-center gap-4 text-center">
-            {/* avatar circle placeholder */}
-            <div className="grid size-24 place-items-center rounded-full border border-line-strong bg-panel shadow-inner shadow-black/60">
-              <span className="font-mono text-3xl font-bold tracking-tight text-text-faint">E</span>
-            </div>
-            <div className="max-w-sm space-y-2">
-              <p className="text-base font-medium text-text">
-                Hi, I&apos;m Elliana.
-              </p>
-              <p className="text-sm leading-relaxed text-text-muted">
-                I run your back office. Ask me anything — reports, emails,
-                invoices, scheduling. Upload a receipt below and I&apos;ll handle the rest.
-                Or just start talking.
-              </p>
-            </div>
-            {/* Hume EVI mount point — wire your iframe here */}
-            <div
-              id="hume-mount"
-              className="text-[11px] text-text-faint"
-              aria-label="Hume EVI embed point"
-            >
-              {/* <HumeEVI /> */}
-            </div>
+        {/* Elliana avatar — Hume iframe mounts here when wired */}
+        <div className="relative flex aspect-video w-full overflow-hidden bg-void">
+          {/* full-bleed photo */}
+          <img
+            src="/elliana.png"
+            alt="Elliana — Paragon AI Ops Lead"
+            className="h-full w-full object-cover object-top"
+          />
+          {/* subtle dark vignette so text is readable over the photo */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+          {/* name + intro copy pinned to bottom-left */}
+          <div className="absolute bottom-0 left-0 p-5">
+            <p className="text-base font-semibold text-white">Hi, I&apos;m Elliana.</p>
+            <p className="mt-1 max-w-xs text-sm leading-relaxed text-white/70">
+              I run your back office. Ask me anything — reports, emails,
+              invoices, scheduling. Upload a receipt and I&apos;ll handle the rest.
+            </p>
           </div>
+          {/* Hume EVI mount point — drop your iframe here */}
+          <div
+            id="hume-mount"
+            className="absolute inset-0"
+            aria-label="Hume EVI embed point"
+          />
         </div>
       </div>
 
