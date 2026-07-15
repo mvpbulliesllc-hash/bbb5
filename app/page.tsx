@@ -1,11 +1,10 @@
 import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
-import { Workbench } from "@/components/shell/workbench"
+import { HomeShell } from "@/components/shell/home-shell"
 
-// Server Component — middleware already guards this route,
-// but we double-check here for zero-flash protection.
+// Server Component — auth check on the server, zero flash.
 export default async function Page() {
   const { userId } = await auth()
   if (!userId) redirect("/login")
-  return <Workbench />
+  return <HomeShell />
 }
