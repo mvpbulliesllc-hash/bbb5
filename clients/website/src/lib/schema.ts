@@ -16,11 +16,13 @@ export function orgSchema() {
     legalName: business.legalName,
     slogan: business.tagline,
     url: business.url,
-    telephone: business.phone,
+    telephone: business.phoneE164,
     email: business.email,
     logo: `${business.url}/media/logo.png`,
     image: `${business.url}/media/og-default.jpg`,
     priceRange: '$$',
+    paymentAccepted: [...business.paymentAccepted],
+    knowsAbout: [...business.knowsAbout],
     address: {
       '@type': 'PostalAddress',
       addressRegion: business.address.region,
@@ -44,6 +46,14 @@ export function orgSchema() {
       credentialCategory: 'license',
       name: business.license,
     },
+    makesOffer: business.offers.map((name) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name, provider: { '@id': `${business.url}/#organization` } },
+      areaServed: [
+        { '@type': 'AdministrativeArea', name: 'Ocean County, NJ' },
+        { '@type': 'AdministrativeArea', name: 'Monmouth County, NJ' },
+      ],
+    })),
   };
 }
 

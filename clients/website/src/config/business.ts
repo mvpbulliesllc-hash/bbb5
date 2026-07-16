@@ -12,6 +12,8 @@ export const business = {
   legalName: 'Paragon Exteriors LLC',
   tagline: 'Protecting homes. Perfecting exteriors.',
   phone: '848-633-6440',
+  /** E.164 / +1 format for schema.org telephone — the format Google's Knowledge Graph and AI engines expect. */
+  phoneE164: '+1-848-633-6440',
   phoneHref: 'tel:+18486336440',
   email: 'Paragonexteriors.co@gmail.com',
   emailHref: 'mailto:Paragonexteriors.co@gmail.com',
@@ -49,6 +51,43 @@ export const business = {
   hours: 'Mon–Sat 7:00 AM – 7:00 PM',
   openingHoursSpec: [
     { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '07:00', closes: '19:00' },
+  ],
+  /** Payment methods — surfaced in schema.org paymentAccepted; "Financing" is real (see /financing/). */
+  paymentAccepted: ['Cash', 'Check', 'Credit Card', 'Financing'],
+  /**
+   * Entity topics for schema.org knowsAbout. Strengthens the Knowledge-Graph
+   * entity and topical relevance that AI answer engines draw on — list only
+   * things Paragon genuinely does.
+   */
+  knowsAbout: [
+    'Roof replacement',
+    'Roof repair',
+    'Storm damage roofing',
+    'Roof insurance claims',
+    'Commercial roofing',
+    'Siding installation',
+    'Window replacement',
+    'Door installation',
+    'Gutter installation',
+    'Deck building',
+    'Solar',
+    'Coastal and shore-home exterior construction',
+  ],
+  /**
+   * Services offered — emitted as schema.org makesOffer so each real service
+   * is a node in the org graph. Kept in sync with the services content
+   * collection; do not add lines Paragon does not actually perform.
+   */
+  offers: [
+    'Roof Replacement',
+    'Roof Repair',
+    'Storm Damage Roofing',
+    'Commercial Roofing',
+    'Siding Installation',
+    'Window Replacement',
+    'Door Installation',
+    'Gutter Installation',
+    'Deck Building',
   ],
 } as const;
 
