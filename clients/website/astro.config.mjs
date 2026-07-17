@@ -18,8 +18,9 @@ export default defineConfig({
   integrations: [
     sitemap({
       // Exclude /thank-you/ and any index-gated service (see indexGatedServices in
-      // src/config/business.ts — HVAC is gated noindex pending HVACR-license confirmation).
-      filter: (page) => !page.includes('/thank-you/') && !page.includes('/hvac/'),
+      // src/config/business.ts — currently empty; HVAC gate lifted, work is subbed
+      // to a licensed HVACR contractor).
+      filter: (page) => !page.includes('/thank-you/'),
       changefreq: 'weekly',
       priority: 0.7,
     }),

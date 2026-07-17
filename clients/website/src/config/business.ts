@@ -128,8 +128,8 @@ export const integrations = {
  * excluded from the sitemap and llms.txt — until a licensing/authorization detail is confirmed.
  * The work is not deleted; only its indexing is gated.
  *
- * TODO(hvac): NJ HVACR work requires a separate state HVACR license beyond HIC #13VH13814500.
- * Remove 'hvac' from this list once the owner confirms the HVACR license number (or a licensed
- * subcontractor arrangement), so the HVAC hub + town pages can be publicly indexed.
+ * HVAC was gated here pending the HVACR-license question; owner confirmed 2026-07-16 that HVAC
+ * work is subcontracted to a licensed HVACR sub, so the gate is lifted. The list stays as the
+ * seam for any future trade that needs its own license before being publicly indexed.
  */
-export const indexGatedServices: readonly string[] = ['hvac'];
+export const indexGatedServices: readonly string[] = [];
