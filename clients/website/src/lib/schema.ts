@@ -10,17 +10,21 @@ import { business } from '@/config/business';
 export function orgSchema() {
   return {
     '@context': 'https://schema.org',
-    '@type': 'RoofingContractor',
+    // Broadened beyond RoofingContractor so the non-roofing Service nodes (kitchen, bath, flooring,
+    // painting, renovation) sit under a correct provider type, without regressing roofing rich results.
+    '@type': ['HomeAndConstructionBusiness', 'GeneralContractor', 'RoofingContractor'],
     '@id': `${business.url}/#organization`,
     name: business.name,
     legalName: business.legalName,
     slogan: business.tagline,
     url: business.url,
-    telephone: business.phone,
+    telephone: business.phoneE164,
     email: business.email,
     logo: `${business.url}/media/logo.png`,
     image: `${business.url}/media/og-default.jpg`,
     priceRange: '$$',
+    paymentAccepted: [...business.paymentAccepted],
+    knowsAbout: [...business.knowsAbout],
     address: {
       '@type': 'PostalAddress',
       addressRegion: business.address.region,
@@ -44,6 +48,14 @@ export function orgSchema() {
       credentialCategory: 'license',
       name: business.license,
     },
+    makesOffer: business.offers.map((name) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name, provider: { '@id': `${business.url}/#organization` } },
+      areaServed: [
+        { '@type': 'AdministrativeArea', name: 'Ocean County, NJ' },
+        { '@type': 'AdministrativeArea', name: 'Monmouth County, NJ' },
+      ],
+    })),
   };
 }
 

@@ -1,12 +1,50 @@
 ---
 import Base from '@/layouts/Base.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import TrustBar from '@/components/TrustBar.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
 import CtaBand from '@/components/CtaBand.astro';
+import { serviceSchema, faqSchema, breadcrumbSchema } from '@/lib/schema';
 import { business } from '@/config/business';
+import { ogImageUrl } from '@/lib/images';
+
+const crumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Solar', url: '/solar/' },
+];
+const faqs = [
+  {
+    q: 'Should I replace my roof before installing solar panels?',
+    a: 'If your roof has less than about 15 years of life left, yes — replace it first. Solar panels last 25+ years, and taking them off and re-installing them to replace the roof underneath typically costs $2,000–$5,000 on top of the new roof. Doing the roof first, in the right order, avoids paying twice. We give you a straight assessment before anyone sells you panels.',
+  },
+  {
+    q: 'Does Paragon install the solar panels?',
+    a: 'We make your roof solar-ready and coordinate the project; our trusted partner Ray Energy handles the panel design, permits, incentives, and installation. The advantage is that the flashing and roof penetrations are done by roofers who warranty their work, and the roof and solar are scheduled back-to-back — no double mobilization and no finger-pointing between two contractors.',
+  },
+  {
+    q: 'How do I know if my roof qualifies for solar?',
+    a: 'It comes down to remaining roof life, deck condition, orientation, and shading. We start with a free roof assessment and give you an honest answer on whether your roof is ready for a 25-year system or should be replaced first. Ray Energy then evaluates sun exposure and system design on the solar side.',
+  },
+  {
+    q: 'Why coordinate roofing and solar together at the Jersey Shore?',
+    a: 'Shore roofs take salt air and nor’easter wind, so the fastening and flashing under a solar array have to be right the first time. Sequencing the roof and the solar install back-to-back means the penetrations are sealed by the roofers who warranty them, the timeline is one project instead of two, and you are not coordinating two companies yourself.',
+  },
+];
 ---
 
 <Base
   title="Solar for Your NJ Home | Paragon Exteriors + Ray Energy"
   description="Thinking solar at the Jersey Shore? Paragon Exteriors preps your roof for panels and partners with Ray Energy for the solar install — roof and solar coordinated, done once, done right."
+  ogImage={await ogImageUrl('/media/service-roof-replacement.jpg', Astro.site)}
+  schemas={[
+    serviceSchema({
+      name: 'Solar-Ready Roofing',
+      description: 'Roof assessment and solar-ready roof replacement coordinated with solar panel installation across Ocean & Monmouth County, NJ.',
+      url: `${business.url}/solar/`,
+    }),
+    faqSchema(faqs),
+    breadcrumbSchema(crumbs),
+  ]}
 >
   <section class="bg-navy-950 py-16 text-white">
     <div class="mx-auto max-w-7xl px-4 sm:px-6">
@@ -18,13 +56,17 @@ import { business } from '@/config/business';
       </p>
     </div>
   </section>
+  <TrustBar />
+  <Breadcrumbs items={crumbs} />
 
   <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6">
     <div class="prose-paragon">
+      <h2>Should I replace my roof before installing solar?</h2>
       <p>
-        Joe spent over 15 years in solar roofing before co-founding Paragon Exteriors, so we've seen the expensive
-        mistake up close: panels installed on a 15-year-old roof, then removed and re-installed (at $2,000–$5,000
-        extra) when the roof needs replacing five years later.
+        If your roof has less than 15 years of life left, replace it first. Joe spent over 15 years in solar roofing
+        before co-founding Paragon, so we've seen the expensive mistake up close: panels installed on an aging roof,
+        then removed and re-installed (at $2,000–$5,000 extra) when the roof needs replacing a few years later. Getting
+        the order right saves you from paying twice.
       </p>
       <h2>The right order of operations</h2>
       <ol>
@@ -38,5 +80,6 @@ import { business } from '@/config/business';
       </p>
     </div>
   </section>
+  <FaqAccordion faqs={faqs} heading="Solar-ready roofing questions, answered" />
   <CtaBand heading="Get your roof solar-ready" sub="Free assessment. Honest answer on whether your roof is up for it." />
 </Base>

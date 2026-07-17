@@ -12,6 +12,8 @@ export const business = {
   legalName: 'Paragon Exteriors LLC',
   tagline: 'Protecting homes. Perfecting exteriors.',
   phone: '848-633-6440',
+  /** E.164 / +1 format for schema.org telephone — the format the Knowledge Graph and AI engines expect. */
+  phoneE164: '+1-848-633-6440',
   phoneHref: 'tel:+18486336440',
   email: 'Paragonexteriors.co@gmail.com',
   emailHref: 'mailto:Paragonexteriors.co@gmail.com',
@@ -50,6 +52,51 @@ export const business = {
   openingHoursSpec: [
     { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '07:00', closes: '19:00' },
   ],
+  /** Payment methods — schema.org paymentAccepted; "Financing" is real (see /financing/). */
+  paymentAccepted: ['Cash', 'Check', 'Credit Card', 'Financing'],
+  /**
+   * Entity topics for schema.org knowsAbout — strengthens the Knowledge-Graph entity and topical
+   * relevance AI answer engines draw on. List only things Paragon genuinely does.
+   */
+  knowsAbout: [
+    'Roof replacement',
+    'Roof repair',
+    'Storm damage roofing',
+    'Roof insurance claims',
+    'Commercial roofing',
+    'Siding installation',
+    'Window replacement',
+    'Door installation',
+    'Gutter installation',
+    'Deck building',
+    'Kitchen remodeling',
+    'Bathroom remodeling',
+    'Flooring installation',
+    'Exterior painting',
+    'Full home renovation',
+    'Solar-ready roofing',
+    'Coastal and shore-home construction',
+  ],
+  /**
+   * Services offered — emitted as schema.org makesOffer so each real service is a node in the org
+   * graph. Kept in sync with the services content collection; add only services Paragon performs.
+   */
+  offers: [
+    'Roof Replacement',
+    'Roof Repair',
+    'Storm Damage Roofing',
+    'Commercial Roofing',
+    'Siding Installation',
+    'Window Replacement',
+    'Door Installation',
+    'Gutter Installation',
+    'Deck Building',
+    'Kitchen Remodeling',
+    'Bathroom Remodeling',
+    'Flooring Installation',
+    'Exterior Painting',
+    'Full Home Renovation',
+  ],
 } as const;
 
 /** Runtime integration switches — all optional; features degrade gracefully. */
@@ -75,3 +122,14 @@ export const integrations = {
   /** Calendly scheduling URL (optional "book an estimate" flow). */
   calendlyUrl: import.meta.env.PUBLIC_CALENDLY_URL ?? '',
 } as const;
+
+/**
+ * Services whose pages are BUILT but kept out of the public index — `noindex,nofollow`, and
+ * excluded from the sitemap and llms.txt — until a licensing/authorization detail is confirmed.
+ * The work is not deleted; only its indexing is gated.
+ *
+ * HVAC was gated here pending the HVACR-license question; owner confirmed 2026-07-16 that HVAC
+ * work is subcontracted to a licensed HVACR sub, so the gate is lifted. The list stays as the
+ * seam for any future trade that needs its own license before being publicly indexed.
+ */
+export const indexGatedServices: readonly string[] = [];

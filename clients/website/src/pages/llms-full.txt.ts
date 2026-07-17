@@ -1,15 +1,17 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { business } from '@/config/business';
+import { business, indexGatedServices } from '@/config/business';
 
 /**
  * llms-full.txt — full text of every service, town, and guide page in one
  * plain-text document so LLM crawlers can ingest the site in a single fetch.
  */
 export const GET: APIRoute = async () => {
-  const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+  const services = (await getCollection('services'))
+    .filter((s) => !indexGatedServices.includes(s.id))
+    .sort((a, b) => a.data.order - b.data.order);
   const towns = (await getCollection('towns')).sort((a, b) => a.data.town.localeCompare(b.data.town));
-  const combos = await getCollection('combos');
+  const combos = (await getCollection('combos')).filter((c) => !indexGatedServices.includes(c.data.service));
   const posts = (await getCollection('posts')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
   const faqText = (faqs: ReadonlyArray<{ q: string; a: string }>) =>

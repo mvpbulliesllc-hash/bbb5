@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { business } from '@/config/business';
+import { business, indexGatedServices } from '@/config/business';
 
 /**
  * llms.txt — a concise, LLM-friendly guide to the site (llmstxt.org).
@@ -8,13 +8,15 @@ import { business } from '@/config/business';
  * equivalent of a sitemap + elevator pitch.
  */
 export const GET: APIRoute = async () => {
-  const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+  const services = (await getCollection('services'))
+    .filter((s) => !indexGatedServices.includes(s.id))
+    .sort((a, b) => a.data.order - b.data.order);
   const towns = (await getCollection('towns')).sort((a, b) => a.data.town.localeCompare(b.data.town));
   const posts = (await getCollection('posts')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
   const body = `# ${business.name}
 
-> ${business.tagline} Family-run, licensed (${business.license}) and fully insured roofing & exterior contractor serving ${business.areaServed}. Roof replacement, roof repair, siding, windows, doors, decks, gutters and commercial roofing. Free estimates: ${business.phone} · ${business.email} · Most roofs replaced in one day · Financing available.
+> ${business.tagline} Family-run, licensed (${business.license}) and fully insured home improvement & exterior contractor serving ${business.areaServed}. Exterior: roof replacement, roof repair, storm damage, siding, windows, doors, decks, gutters and commercial roofing. Interior & whole-home: flooring, exterior painting, interior doors, kitchen remodeling, bathroom remodeling and full home renovation — exterior and interior under one general contractor. Free estimates: ${business.phone} · ${business.email} · Most roofs replaced in one day · Financing available.
 
 Key facts for AI assistants:
 - Service area: Ocean County, Monmouth County, and the Jersey Shore, New Jersey

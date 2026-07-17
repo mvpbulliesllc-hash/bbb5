@@ -9,7 +9,7 @@ import FaqAccordion from '@/components/FaqAccordion.astro';
 import LeadForm from '@/components/LeadForm.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import { serviceSchema, faqSchema, breadcrumbSchema } from '@/lib/schema';
-import { business } from '@/config/business';
+import { business, indexGatedServices } from '@/config/business';
 import Img from '@/components/Img.astro';
 import { ogImageUrl } from '@/lib/images';
 
@@ -41,6 +41,7 @@ const townNames = new Map((await getCollection('towns')).map((t) => [t.id, t.dat
   title={entry.data.metaTitle}
   description={entry.data.metaDescription}
   ogImage={await ogImageUrl(town.data.image, Astro.site)}
+  noindex={indexGatedServices.includes(entry.data.service)}
   schemas={[
     serviceSchema({
       name: `${service.data.serviceName} in ${town.data.town}, NJ`,

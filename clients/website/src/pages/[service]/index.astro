@@ -11,7 +11,7 @@ import LeadForm from '@/components/LeadForm.astro';
 import TownGrid from '@/components/TownGrid.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import { serviceSchema, faqSchema, breadcrumbSchema } from '@/lib/schema';
-import { business } from '@/config/business';
+import { business, indexGatedServices } from '@/config/business';
 import Img from '@/components/Img.astro';
 import { ogImageUrl } from '@/lib/images';
 
@@ -38,6 +38,13 @@ const leadServiceMap: Record<string, string> = {
   gutters: 'Gutters',
   'commercial-roofing': 'Commercial',
   'storm-damage': 'RoofRepair',
+  hvac: 'HVAC',
+  flooring: 'Flooring',
+  'exterior-paint': 'ExteriorPaint',
+  'kitchen-remodel': 'KitchenRemodel',
+  'bathroom-remodel': 'BathroomRemodel',
+  'interior-doors': 'InteriorDoors',
+  'full-home-renovation': 'FullHomeRenovation',
 };
 ---
 
@@ -45,6 +52,7 @@ const leadServiceMap: Record<string, string> = {
   title={entry.data.metaTitle}
   description={entry.data.metaDescription}
   ogImage={await ogImageUrl(entry.data.image, Astro.site)}
+  noindex={indexGatedServices.includes(entry.id)}
   schemas={[
     serviceSchema({ name: entry.data.serviceName, description: entry.data.metaDescription, url: `${business.url}/${entry.id}/` }),
     faqSchema(entry.data.faqs),
