@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { ChevronDown, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { ChevronDown, ExternalLink, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useAuth } from "@/auth/use-auth";
 import {
@@ -367,6 +367,54 @@ function NavItemLink({
   onNavigate?: () => void;
 }) {
   const Icon = item.icon;
+
+  // External destinations (e.g. the Back Office app) render as a plain anchor
+  // that opens in a new tab, rather than an in-app router route.
+  if (item.href) {
+    return (
+      <a
+        href={item.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        title={collapsed ? item.label : undefined}
+        aria-label={collapsed ? item.label : undefined}
+        onClick={onNavigate}
+        className={cn(
+          "group/nav relative flex h-9 items-center gap-3 rounded-md text-sm font-medium",
+          "transition-colors duration-[var(--duration-fast)] ease-[var(--ease-out-cubic)]",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)]",
+          "text-[var(--color-muted-foreground)] hover:bg-[var(--color-accent)] hover:text-[var(--color-foreground)]",
+          collapsed ? "justify-center px-0" : "px-3",
+        )}
+      >
+        <Icon className="h-4 w-4 shrink-0" aria-hidden />
+        {!collapsed && (
+          <>
+            <span className="whitespace-nowrap">{item.label}</span>
+            <ExternalLink
+              className="ml-auto h-3.5 w-3.5 shrink-0 opacity-60"
+              aria-hidden
+            />
+          </>
+        )}
+        {collapsed && (
+          <span
+            role="tooltip"
+            className={cn(
+              "pointer-events-none absolute left-full top-1/2 z-50 ml-3 -translate-y-1/2 whitespace-nowrap",
+              "rounded-md border border-[var(--color-border)] bg-[var(--color-popover)] px-2 py-1",
+              "text-xs text-[var(--color-popover-foreground)] shadow-[var(--shadow-md)]",
+              "opacity-0 transition-opacity duration-[var(--duration-fast)] ease-[var(--ease-out-cubic)]",
+              "group-hover/nav:opacity-100 group-focus-visible/nav:opacity-100",
+            )}
+          >
+            {item.label}
+          </span>
+        )}
+      </a>
+    );
+  }
+
   return (
     <NavLink
       to={item.to}
