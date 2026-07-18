@@ -103,8 +103,6 @@ const muxId = integrations.muxPlaybackId;
     var iconOn = document.getElementById('feature-sound-on');
     var label = document.getElementById('feature-sound-label');
     var soundOn = false;
-    var decided = false; // latched once the viewer explicitly toggles via the button
-    var EVENTS = ['pointerdown', 'touchstart', 'keydown', 'wheel'];
 
     function render() {
       if (iconOff) iconOff.classList.toggle('hidden', soundOn);
@@ -131,33 +129,16 @@ const muxId = integrations.muxPlaybackId;
       render();
     }
 
-    function stopAuto() {
-      EVENTS.forEach(function (ev) { window.removeEventListener(ev, autoUnmute); });
-    }
-
-    // First interaction ELSEWHERE on the page unmutes once (autoplay-policy
-    // safe: it runs inside a real user gesture). Taps on the button are handled
-    // by the explicit toggle below; skip them here so the two don't fight.
-    function autoUnmute(e) {
-      if (decided) { stopAuto(); return; }
-      if (btn && e.target && btn.contains(e.target)) return;
-      apply(true);
-      if (window.gtag) window.gtag('event', 'feature_video_unmute', { trigger: 'first_interaction' });
-      stopAuto();
-    }
-
-    // The overlay button is the primary, reliable control: an explicit toggle.
+    // Sound is OFF by default and only ever turns on when the viewer explicitly
+    // taps the button. No auto-unmute on page interaction — the clip stays
+    // silent unless the visitor deliberately opts in.
     if (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        decided = true;
         apply(!soundOn);
-        stopAuto();
         if (window.gtag) window.gtag('event', soundOn ? 'feature_video_unmute' : 'feature_video_mute');
       });
     }
-
-    EVENTS.forEach(function (ev) { window.addEventListener(ev, autoUnmute, { passive: true }); });
   })();
 </script>
