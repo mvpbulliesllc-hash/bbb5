@@ -15,8 +15,10 @@ export const business = {
   /** E.164 / +1 format for schema.org telephone — the format the Knowledge Graph and AI engines expect. */
   phoneE164: '+1-848-633-6440',
   phoneHref: 'tel:+18486336440',
-  email: 'Paragonexteriors.co@gmail.com',
-  emailHref: 'mailto:Paragonexteriors.co@gmail.com',
+  // PLACEHOLDER — owner must fill before merge (see PR description). Replaces
+  // the old Paragonexteriors.co@gmail.com address with a branded domain email.
+  email: '{{BRANDED_EMAIL}}',
+  emailHref: 'mailto:{{BRANDED_EMAIL}}',
   license: 'NJ HIC #13VH13814500',
   url: 'https://www.paragonexteriorsnj.com',
   areaServed: 'Ocean County, Monmouth County & the Jersey Shore, NJ',

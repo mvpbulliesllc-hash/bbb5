@@ -8,7 +8,15 @@ import Img from '@/components/Img.astro';
  * Uses hero-home.jpg — a bright daytime shot, deliberately distinct from the
  * sunset clip below — rendered as the LCP image (eager + fetchpriority=high,
  * responsive AVIF/WebP).
+ *
+ * PLACEHOLDER — owner must fill before merge (see PR description). Replaces the
+ * old "55+ yrs combined experience" stat with a stronger, concrete proof point.
+ * Suggested default: total roofs completed (e.g. "500+" / "Roofs completed") or
+ * warranty length (e.g. "50-yr" / "Workmanship warranty"). Update HERO_STAT_LABEL
+ * to match whichever metric you choose. Never fabricate the number.
  */
+const HERO_STAT_VALUE = '{{HERO_STAT_REPLACEMENT}}';
+const HERO_STAT_LABEL = 'Roofs completed';
 ---
 
 <section class="relative isolate overflow-hidden bg-navy-950 text-white">
@@ -67,10 +75,10 @@ import Img from '@/components/Img.astro';
         <dt class="mt-1 text-xs uppercase tracking-wider text-white/60">In 30 days — our record</dt>
       </div>
       <div class="px-5 py-5 sm:px-7">
-        <dd class="font-display text-2xl font-extrabold text-gold-300 [font-variant-numeric:tabular-nums] sm:text-3xl" data-countup="55">
-          55+ yrs
+        <dd class="font-display text-2xl font-extrabold text-gold-300 [font-variant-numeric:tabular-nums] sm:text-3xl">
+          {HERO_STAT_VALUE}
         </dd>
-        <dt class="mt-1 text-xs uppercase tracking-wider text-white/60">Combined experience</dt>
+        <dt class="mt-1 text-xs uppercase tracking-wider text-white/60">{HERO_STAT_LABEL}</dt>
       </div>
       <div class="px-5 py-5 sm:px-7">
         <dd class="font-display text-2xl font-extrabold text-gold-300 sm:text-3xl">Free</dd>
